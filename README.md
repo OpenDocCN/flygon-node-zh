@@ -4,22 +4,22 @@
 > 
 > 我自成佛自度我，佛度凡尘我度佛。
 
-* [在线阅读](https://node.apachecn.org)
+* [在线阅读](https://node.flygon.net)
 ## 下载
 
 ### Docker
 
 ```
-docker pull apachecn0/apachecn-node-zh
-docker run -tid -p <port>:80 apachecn0/apachecn-node-zh
+docker pull apachecn0/flygon-node-zh
+docker run -tid -p <port>:80 apachecn0/flygon-node-zh
 # 访问 http://localhost:{port} 查看文档
 ```
 
 ### NPM
 
 ```
-npm install -g apachecn-node-zh
-apachecn-node-zh <port>
+npm install -g flygon-node-zh
+flygon-node-zh <port>
 # 访问 http://localhost:{port} 查看文档
 ```
 
