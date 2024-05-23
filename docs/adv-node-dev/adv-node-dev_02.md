@@ -34,9 +34,7 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 在`playground`文件夹中，让我们继续创建一个新文件，我们将称这个文件为`mongodb-connect.js`。在这个文件中，我们将通过加载库并连接到数据库来开始。现在，为了做到这一点，我们必须安装库。从终端，我们可以运行`npm install`来完成这项工作。新的库名称是`mongodb`；全部小写，没有连字符。然后，我们将继续指定版本，以确保我们都使用相同的功能，`@3.0.2`。这是写作时的最新版本。在版本号之后，我将使用`--save`标志。这将把它保存为常规依赖项，它已经是：
 
-```js
-npm install mongodb@3.0.2 --save
-```
+[PRE0]
 
 我们需要这个来运行 Todo API 应用程序。
 
@@ -44,9 +42,7 @@ npm install mongodb@3.0.2 --save
 
 现在安装了 MongoDB，我们可以将其移动到我们的`mongodb-connect`文件并开始连接到数据库。我们需要做的第一件事是从我们刚刚安装的库中提取一些东西，那就是`mongodb`库。我们要找的是一个叫做`MongoClient`的构造函数。`MongoClient`构造函数允许您连接到 Mongo 服务器并发出命令来操作数据库。让我们继续创建一个名为`MongoClient`的常量。我们将把它设置为`require`，并且我们将要求我们刚刚安装的库`mongodb`。从那个库中，我们将取出`MongoClient`：
 
-```js
-const MongoClient = require('mongodb').MongoClient; 
-```
+[PRE1]
 
 现在`MongoClient`已经就位，我们可以调用`MongoClient.connect`来连接到数据库。这是一个方法，它接受两个参数：
 
@@ -58,63 +54,35 @@ const MongoClient = require('mongodb').MongoClient;
 
 对于我们的第一个参数，我们将从`mongodb://`开始。当我们连接到 MongoDB 数据库时，我们要使用像这样的 mongodb 协议：
 
-```js
-MongoClient.connect('mongodb://')
-```
+[PRE2]
 
 接下来，它将在本地主机上，因为我们在本地机器上运行它，并且我们已经探索了端口：`27017`。在端口之后，我们需要使用`/`来指定我们要连接的数据库。现在，在上一章中，我们使用了测试数据库。这是 MongoDB 给你的默认数据库，但我们可以继续创建一个新的。在`/`之后，我将称数据库为`TodoApp`，就像这样：
 
-```js
-MongoClient.connect('mongodb://localhost:27017/TodoApp'); 
-```
+[PRE3]
 
 # 将回调函数添加为第二个参数
 
 接下来，我们可以继续提供回调函数。我将使用 ES6 箭头（`=>`）函数，并且我们将通过两个参数。第一个将是一个错误参数。这可能存在，也可能不存在；就像我们过去看到的那样，如果实际发生了错误，它就会存在；否则就不会存在。第二个参数将是`client`对象。这是我们可以用来发出读写数据命令的对象：
 
-```js
-MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => { 
-
-});
-```
+[PRE4]
 
 # mongodb-connect 中的错误处理
 
 现在，在写入任何数据之前，我将继续处理可能出现的任何错误。我将使用一个`if`语句来做到这一点。如果有错误，我们将在控制台上打印一条消息，让查看日志的人知道我们无法连接到数据库服务器，`console.log`，然后在引号内放上类似`Unable to connect to MongoDB server`的内容。在`if`语句之后，我们可以继续记录一个成功的消息，类似于`console.log`。然后，在引号内，我们将使用`Connected to MongoDB server`：
 
-```js
-MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
-  if(err){
-    console.log('Unable to connect to MongoDB server');
-  }
-  console.log('Connected to MongoDB server');
-});
-```
+[PRE5]
 
 现在，当你处理这样的错误时，即使错误块运行，成功代码也会运行。我们要做的是在`console.log('Unable to connect to MongoDB server');`行之前添加一个`return`语句。
 
 这个`return`语句并没有做什么花哨的事情。我们所做的只是使用它来阻止函数的其余部分执行。一旦从函数返回，程序就会停止，这意味着如果发生错误，消息将被记录，函数将停止，我们将永远看不到这条`Connected to MongoDB server`消息：
 
-```js
-if(err) { 
-    return console.log('Unable to connect to MongoDB server'); 
-  } 
-```
+[PRE6]
 
 使用`return`关键字的替代方法是添加一个`else`子句，并将我们的成功代码放在`else`子句中，但这是不必要的。我们可以只使用我更喜欢的`return`语法。
 
 现在，在运行这个文件之前，我还想做一件事。在我们的回调函数的最底部，我们将在 db 上调用一个方法。它叫做`client.close`：
 
-```js
-MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
-  if(err) { 
-    return console.log('Unable to connect to MongoDB server'); 
-  } 
-  console.log('Connected to MongoDB server');
-  const db = client.db('TodoApp');
-  client.close(); 
-}); 
-```
+[PRE7]
 
 这关闭了与 MongoDB 服务器的连接。现在我们已经有了这个设置，我们实际上可以保存`mongodb-connect`文件并在终端内运行它。它现在还没有做太多事情，但它确实会工作。
 
@@ -122,9 +90,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
 
 在终端中，我们可以使用`node playground`作为目录运行文件，文件本身是`mongodb-connect.js`：
 
-```js
-node playground/mongodb-connect.js
-```
+[PRE8]
 
 当我们运行这个文件时，我们会得到`Connected to MongoDB server`打印到屏幕上：
 
@@ -150,9 +116,7 @@ node playground/mongodb-connect.js
 
 我们可以继续通过调用`db.collection`向`Todos`集合添加一些数据。`db.collection`方法以要插入的集合的字符串名称作为其唯一参数。现在，就像实际数据库本身一样，您不需要首先创建此集合。您只需给它一个名称，比如`Todos`，然后可以开始插入。无需运行任何命令来创建它：
 
-```js
-db.collection('Todos')
-```
+[PRE9]
 
 接下来，我们将使用集合中可用的一个方法`insertOne`。`insertOne`方法允许您将新文档插入到集合中。它需要两个参数：
 
@@ -162,57 +126,19 @@ db.collection('Todos')
 
 您将获得一个错误参数，可能存在，也可能不存在，您还将获得结果参数，如果一切顺利，将会提供：
 
-```js
-const MongoClient = require('mongodb').MongoClient;
-
-MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
-  if(err){
-    console.log('Unable to connect to MongoDB server');
-  }
-  console.log('Connected to MongoDB server');
-  const db = client.db('TodoApp');
-  db.collection('Todos').insertOne({
-    text: 'Something to do',
-    completed: false
-  }, (err, result) => {
-
-  });
-  client.close();
-});
-```
+[PRE10]
 
 在错误回调函数本身内部，我们可以添加一些代码来处理错误，然后我们将添加一些代码来在成功添加时将对象打印到屏幕上。首先，让我们添加一个错误处理程序。就像我们之前做的那样，我们将检查错误参数是否存在。如果存在，那么我们将简单地使用`return`关键字打印一条消息，以阻止函数继续执行。接下来，我们可以使用`console.log`打印`无法插入 todo`。我将传递给`console.log`的第二个参数将是实际的`err`对象本身，这样如果有人查看日志，他们可以看到出了什么问题：
 
-```js
-db.collection('Todos').insertOne({ 
-  text: 'Something to do', 
-  completed: false 
-}, (err, result) => { 
-  if(err){ 
-    return console.log('Unable to insert todo', err); 
-  }
-```
+[PRE11]
 
 在我们的`if`语句旁边，我们可以添加我们的成功代码。在这种情况下，我们要做的只是将一些内容漂亮地打印到`console.log`屏幕上，然后我将调用`JSON.stringify`，我们将继续传入`result.ops`。`ops`属性将存储所有插入的文档。在这种情况下，我们使用了`insertOne`，所以它只会是我们的一个文档。然后，我可以添加另外两个参数，对于筛选函数是`undefined`，对于缩进是`2`：
 
-```js
-db.collection('Todos').insertOne({ 
-  text: 'Something to do', 
-  completed: false 
-}, (err, result) => { 
-  if(err){ 
-    return console.log('Unable to insert todo', err); 
-  }
-
-  console.log(JSON.stringify(result.ops, undefined, 2)); 
-}); 
-```
+[PRE12]
 
 有了这个，我们现在可以继续执行我们的文件，看看会发生什么。在终端中，我将运行以下命令：
 
-```js
-node playground/ mongodb-connect.js
-```
+[PRE13]
 
 当我执行命令时，我们会收到成功消息：`已连接到 MongoDB 服务器`。然后，我们会得到一个插入的文档数组：
 
@@ -236,37 +162,15 @@ node playground/ mongodb-connect.js
 
 希望您能够成功将一个新文档插入到 Users 集合中。为了完成这个任务，您需要调用`db.collection`，这样我们就可以访问我们想要插入的集合，这种情况下是`Users`：
 
-```js
-//Insert new doc into Users(name, age, location)
-db.collection('Users')
-```
+[PRE14]
 
 接下来，我们需要调用一个方法来操作`Users`集合。我们想要插入一个新文档，所以我们将使用`insertOne`，就像我们在上一小节中所做的那样。我们将把两个参数传递给`insertOne`。第一个是要插入的文档。我们将给它一个`name`属性；我将把它设置为`Andrew`。然后，我们可以设置`age`等于`25`。最后，我们将`location`设置为我的当前位置，`Philadelphia`：
 
-```js
-//Insert new doc into Users(name, age, location)
-db.collection('Users').insertOne({
-  name: 'Andrew',
-  age: 25,
-  location: 'Philadelphia'
-}
-```
+[PRE15]
 
 我们要传入的下一个参数是我们的回调函数，它将在错误对象和结果一起被调用。在回调函数内部，我们将首先处理错误。如果有错误，我们将继续将其记录到屏幕上。我将返回`console.log`，然后我们可以放置消息：`Unable to insert user`。然后，我将添加错误参数作为`console.log`的第二个参数。接下来，我们可以添加我们的成功案例代码。如果一切顺利，我将使用`console.log`将`result.ops`打印到屏幕上。这将显示我们插入的所有记录：
 
-```js
-//Insert new doc into Users(name, age, location)
-db.collection('Users').insertOne({
-  name: 'Andrew',
-  age: 25,
-  location: 'Philadelphia'
-}, (err, result) => {
-  if(err) {
-    return console.log('Unable to insert user', err);
-  }
-  console.log(result.ops);
-});
-```
+[PRE16]
 
 现在我们可以继续使用*向上*箭头键和*回车*键在终端内重新运行文件：
 
@@ -288,9 +192,7 @@ db.collection('Users').insertOne({
 
 为了开始我们对`_id`属性的讨论，让我们继续重新运行`mongodb-connect`文件。这将向 Users 集合中插入一个新的文档，就像我们在`db.collection`行中定义的那样。我将通过在节点中运行文件来做到这一点。它在`playground`文件夹中，文件本身叫做`mongodb-connect.js`：
 
-```js
-node playground/mongodb-connect.js
-```
+[PRE17]
 
 我将运行命令，然后我们将打印出插入的文档：
 
@@ -308,14 +210,7 @@ node playground/mongodb-connect.js
 
 ObjectId 是`_id`的默认值。如果没有提供任何内容，你确实可以对该属性做任何你喜欢的事情。例如，在`mongodb-connect`文件中，我可以指定一个`_id`属性。我将给它一个值，所以让我们用`123`；在末尾加上逗号；这是完全合法的：
 
-```js
-db.collection('Users').insertOne({
-  _id: 123,
-  name: 'Andrew',
-  age: 25,
-  location: 'Philadelphia'
-}
-```
+[PRE18]
 
 我们可以保存文件，并使用*上*箭头键和*回车*键重新运行脚本：
 
@@ -329,25 +224,11 @@ db.collection('Users').insertOne({
 
 接下来，我想看一下我们在代码中可以做的一些事情。正如我之前提到的，时间戳被嵌入在这里，我们实际上可以将其提取出来。在 Atom 中，我们要做的是移除`_id`属性。时间戳只有在使用`ObjectId`时才可用。然后，在我们的回调函数中，我们可以继续将时间戳打印到屏幕上。
 
-```js
-db.collection('Users').insertOne({
-  name: 'Andrew',
-  age: 25,
-  location: 'Philadelphia'
-}, (err, result) => {
-  if(err) {
-    return console.log('Unable to insert user', err);
-  }
-
-  console.log(result.ops);
-});
-```
+[PRE19]
 
 如果你记得，`result.ops`是一个包含所有插入的文档的数组。我们只插入一个，所以我将访问数组中的第一个项目，然后我们将访问`_id`属性。这将正如你所想的那样：
 
-```js
-console.log(result.ops[0]._id);
-```
+[PRE20]
 
 如果我们保存文件并从终端重新运行脚本，我们只会得到`ObjectId`打印到屏幕上：
 
@@ -359,9 +240,7 @@ console.log(result.ops[0]._id);
 
 我们要调用的是`.getTimestamp`。`getTimestamp`是一个函数，但它不需要任何参数。它只是返回 ObjectId 创建的时间戳：
 
-```js
-console.log(result.ops[0]._id.getTimestamp()); 
-```
+[PRE21]
 
 现在，如果我们继续重新运行我们的程序，我们会得到一个时间戳：
 
@@ -377,26 +256,15 @@ console.log(result.ops[0]._id.getTimestamp());
 
 对象解构允许你从对象中提取属性以创建变量。这意味着如果我们有一个名为`user`的对象，并且它等于一个具有`name`属性设置为`andrew`和一个年龄属性设置为`25`的对象，如下面的代码所示：
 
-```js
-const MongoClient = require('mongodb').MongoClient;
-
-var user = {name: 'andrew', age: 25};
-```
+[PRE22]
 
 我们可以很容易地将其中一个提取到一个变量中。比如说，我们想要获取名字并创建一个`name`变量。要在 ES6 中使用对象解构，我们将创建一个变量，然后将其包裹在花括号中。我们将提供我们想要提取的名字；这也将是变量名。然后，我们将把它设置为我们想要解构的对象。在这种情况下，那就是`user`对象：
 
-```js
-var user = {name: 'andrew', age: 25};
-var {name} = user;
-```
+[PRE23]
 
 我们已经成功解构了`user`对象，取出了`name`属性，创建了一个新的`name`变量，并将其设置为任何值。这意味着我可以使用`console.log`语句将`name`打印到屏幕上：
 
-```js
-var user = {name: 'andrew', age: 25};
-var {name} = user;
-console.log(name);
-```
+[PRE24]
 
 我将重新运行脚本，我们得到`andrew`，这正是你所期望的，因为这是`name`属性的值：
 
@@ -406,16 +274,11 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 在添加任何新内容之前，让我们继续并将 MongoClient 语句切换到解构；然后，我们将担心抓取那个新东西，让我们能够创建 ObjectIds。我将复制并粘贴该行，并注释掉旧的，这样我们就可以参考它。
 
-```js
-// const MongoClient = require('mongodb').MongoClient;
-const MongoClient = require('mongodb').MongoClient;
-```
+[PRE25]
 
 我们要做的是在`require`之后删除我们的`.MongoClient`调用。没有必要去掉那个属性，因为我们将使用解构代替。这意味着在这里我们可以使用解构，这需要我们添加花括号，并且我们可以从 MongoDB 库中取出任何属性。
 
-```js
-const {MongoClient} = require('mongodb');
-```
+[PRE26]
 
 在这种情况下，我们唯一拥有的属性是`MongoClient`。这创建了一个名为`MongoClient`的变量，将其设置为`require('mongodb')`的`MongoClient`属性，这正是我们在之前的`require`语句中所做的。
 
@@ -423,23 +286,15 @@ const {MongoClient} = require('mongodb');
 
 现在我们有了一些解构，我们可以很容易地从 MongoDB 中取出更多的东西。我们可以添加一个逗号并指定我们想要取出的其他东西。在这种情况下，我们将取出大写的`ObjectID`。
 
-```js
-const {MongoClient, ObjectID} = require('mongodb');
-```
+[PRE27]
 
 这个`ObjectID`构造函数让我们可以随时创建新的 ObjectIds。我们可以随心所欲地使用它们。即使我们不使用 MongoDB 作为我们的数据库，创建和使用 ObjectIds 来唯一标识事物也是有价值的。接下来，我们可以通过首先创建一个变量来创建一个新的 ObjectId。我会称它为`obj`，并将其设置为`new ObjectID`，将其作为一个函数调用：
 
-```js
-const {MongoClient, ObjectID} = require('mongodb');
-
-var obj = new ObjectID(); 
-```
+[PRE28]
 
 使用`new`关键字，我们可以创建`ObjectID`的一个新实例。接下来，我们可以使用`console.log(obj)`将其记录到屏幕上。这是一个普通的 ObjectId：
 
-```js
-console.log(obj); 
-```
+[PRE29]
 
 如果我们从终端重新运行文件，我们会得到你期望的结果：
 
@@ -451,10 +306,7 @@ console.log(obj);
 
 使用这种技术，我们可以在任何地方都使用 ObjectIds。我们甚至可以生成我们自己的 ObjectIds，将它们设置为我们文档的`_id`属性，尽管我发现让 MongoDB 为我们处理这些繁重的工作要容易得多。我将继续删除以下两行，因为我们实际上不会在脚本中使用这段代码：
 
-```js
-var obj = new ObjectID();
-console.log(obj);
-```
+[PRE30]
 
 我们已经了解了一些关于 ObjectIds 的知识，它们是什么，以及它们为什么有用。在接下来的章节中，我们将看看我们可以如何与 MongoDB 一起工作的其他方式。我们将学习如何读取、删除和更新我们的文档。
 
@@ -470,12 +322,7 @@ console.log(obj);
 
 为了使这个查询更有趣一些，我们将继续添加第二个。在 Robomongo 窗口中，我可以点击插入文档。Robomongo 可以删除、插入、更新和读取所有的文档，这使它成为一个很棒的调试工具。我们可以随时添加一个新的文档，其中`text`属性等于`Walk the dog`，我们还可以附加一个`completed`值。我将`completed`设置为`false`：
 
-```js
-{
-  text : "Walk the dog",
-  completed : false
-}
-```
+[PRE31]
 
 现在，默认情况下，我们不会提供`_id`属性。这将让 MongoDB 自动生成那个 ObjectId，而在这里我们有我们的两个 Todos：
 
@@ -487,69 +334,29 @@ console.log(obj);
 
 在 Atom 中，我们要做的是访问集合，就像我们在`mongodb-connect`文件中使用`db.collection`一样，将集合名称作为字符串传递。这个集合将是`Todos`集合。现在，我们将继续使用集合上可用的一个叫做`find`的方法。默认情况下，我们可以不带参数地调用`find`：
 
-```js
-db.collection('Todos').find();
-```
+[PRE32]
 
 这意味着我们没有提供查询，所以我们没有说我们想要获取所有已完成或未完成的`Todos`。我们只是说我们想获取所有`Todos`：无论其值如何，一切。现在，调用 find 只是第一步。`find`返回一个 MongoDB 游标，而这个游标并不是实际的文档本身。可能有几千个，那将非常低效。它实际上是指向这些文档的指针，并且游标有大量的方法。我们可以使用这些方法来获取我们的文档。
 
 我们将要使用的最常见的游标方法之一是`.toArray.`它确切地做了你认为它会做的事情。我们不再有游标，而是有一个文档的数组。这意味着我们有一个对象的数组。它们有 ID 属性，文本属性和完成属性。这个`toArray`方法恰好得到了我们想要的东西，也就是文档。`toArray`返回一个 promise。这意味着我们可以添加一个`then`调用，我们可以添加我们的回调，当一切顺利时，我们可以做一些像将这些文档打印到屏幕上的事情。
 
-```js
-db.collection('Todos').find().toArray().then((docs) => {
-
-});
-```
+[PRE33]
 
 我们将得到文档作为第一个和唯一的参数，我们还可以添加一个错误处理程序。我们将传递一个错误参数，我们可以简单地打印一些像`console.log(无法获取 todos)`的东西到屏幕上；作为第二个参数，我们将传递`err`对象：
 
-```js
-db.collection('Todos').find().toArray().then((docs) => {
-
-}, (err) => { 
-  console.log('Unable to fetch todos', err); 
-}); 
-```
+[PRE34]
 
 现在，对于成功的情况，我们要做的是将文档打印到屏幕上。我将继续使用`console.log`来打印一条小消息，`Todos`，然后我将再次调用`console.log`。这次，我们将使用`JSON.stringify`技术。我将传递文档，`undefined`作为我们的过滤函数和`2`作为我们的间距。
 
-```js
-  db.collection('Todos').find().toArray().then((docs) => {
-    console.log('Todos');
-    console.log(JSON.stringify(docs, undefined, 2));
-  }, (err) => {
-    console.log('Unable to fetch todos', err);
-  });
-```
+[PRE35]
 
 我们现在有一个能够获取文档，将其转换为数组并将其打印到屏幕上的脚本。现在，暂时地，我将注释掉`db.close`方法。目前，那会干扰我们之前的代码。我们的最终代码将如下所示：
 
-```js
-//const MongoClient = require('mongodb').MongoClient;
-const {MongoClient, ObjectID} = require('mongodb');
-
-MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
-  if(err){ 
-    console.log('Unable to connect to MongoDB server');
-  } 
-  console.log('Connected to MongoDB server');
-  const db = client.db('TodoApp');
-
-  db.collection('Todos').find().toArray().then((docs) => {
-    console.log('Todos');
-    console.log(JSON.stringify(docs, undefined, 2));
-  }, (err) => {
-    console.log('Unable to fetch todos', err);
-  });
-  //client.close();
-});
-```
+[PRE36]
 
 保存文件并从终端运行它。在终端中，我将继续运行我们的脚本。显然，由于我们用 Robomongo 连接到了数据库，它正在某个地方运行；它正在另一个标签页中运行。在另一个标签页中，我可以运行脚本。我们将通过`node`运行它；它在`playground`文件夹中，文件本身叫做`mongodb-find.js`：
 
-```js
-node playground/mongodb-find.js
-```
+[PRE37]
 
 当我执行这个文件时，我们将得到我们的结果：
 
@@ -573,9 +380,7 @@ node playground/mongodb-find.js
 
 为了完成这个目标，在 Atom 中，我们将更改调用 find 的方式。我们不再传递`0`个参数，而是传递`1`个参数。这就是我们所谓的查询。我们可以开始指定我们想要查询`Todos`集合的方式。例如，也许我们只想查询`completed`值等于`false`的`Todos`。我们只需设置键值对来按值查询，如下所示：
 
-```js
-db.collection('Todos').find({completed: false}).toArray().then((docs) => {
-```
+[PRE38]
 
 如果我在终端中关闭脚本后重新运行我们的脚本，我们只会得到我们的一个待办事项：
 
@@ -589,27 +394,17 @@ db.collection('Todos').find({completed: false}).toArray().then((docs) => {
 
 现在，为了说明这一点，我将从终端获取`completed`值为`false`的待办事项的 ID。我将使用*command* + *C*进行复制。如果您使用的是 Windows 或 Linux，您可能需要在突出显示 ID 后右键单击，并单击复制文本。现在我已经将文本放入剪贴板，我可以转到查询本身。现在，如果我们尝试像这样添加 ID：
 
-```js
-db.collection('Todos').find({_id: ''}).toArray().then((docs) => {
-```
+[PRE39]
 
 它不会按预期工作，因为我们在 ID 属性中拥有的不是一个字符串。它是一个 ObjectId，这意味着我们需要使用之前导入的`ObjectID`构造函数来为查询创建一个 ObjectId。
 
 为了说明这将如何发生，我将继续缩进我们的对象。这将使它更容易阅读和编辑。
 
-```js
-db.collection('Todos').find({
-  _id: '5a867e78c3a2d60bef433b06'
-}).toArray().then((docs) => {
-```
+[PRE40]
 
 现在，我要删除字符串并调用`new ObjectID`。`new ObjectID`构造函数确实需要一个参数：ID，在这种情况下，我们将其存储为字符串。这将按预期工作。
 
-```js
-db.collection('Todos').find({
-  _id: new ObjectID('5a867e78c3a2d60bef433b06');
-})
-```
+[PRE41]
 
 我们在这里所做的是查询`Todos`集合，寻找任何具有与我们拥有的 ID 相等的`_id`属性的记录。现在，我可以保存这个文件，通过重新运行脚本来刷新一下，我们将得到完全相同的待办事项：
 
@@ -629,35 +424,15 @@ db.collection('Todos').find({
 
 现在，我们将继续在 Atom 中实现`count`。我要做的是将当前查询复制到剪贴板，然后将其注释掉。我将用一个调用`count`替换我们对`toArray`的调用。让我们继续删除我们传递给 find 的查询。我们要做的是计算`Todos`集合中的所有 Todos。我们将不再调用`toArray`，而是调用 count。
 
-```js
-db.collection('Todos').find({}).count().then((count) => {
-```
+[PRE42]
 
 正如您在 count 的示例中看到的那样，他们这样调用 count：调用 count，传递一个回调函数，该函数在出现错误或实际计数时调用。您还可以将 promise 作为访问数据的一种方式，这正是我们使用`toArray`的方式。在我们的情况下，我们将使用 promise 而不是传递回调函数。我们已经设置好了 promise。我们需要做的就是将`docs`更改为`count`，然后我们将删除打印 docs 到屏幕的`console.log`调用者。在我们打印 Todos 之后，我们将打印`Todos count`，并传入值。
 
-```js
-db.collection('Todos').find({}).count().then((count) => {
-   console.log('Todos count:');
-}, (err) => {
-   console.log('Unable to fetch todos', err);
-});
-```
+[PRE43]
 
-这不是一个模板字符串，但我将继续并用一个替换它，用```js. Now, I can pass in the `count`.
+这不是一个模板字符串，但我将继续并用一个替换它，用`` ` ``替换引号。现在，我可以传入`count`。
 
-```替换引号
-
-db.collection('Todos').find({}).count().then((count) => {
-
-console.log(`Todos count: ${count}`);
-
-}, (err) => {
-
-console.log('Unable to fetch todos', err);
-
-});
-
-```js
+[PRE44]
 
 Now that we have this in place, we have a way to count up all of the Todos in the `Todos` collection. Inside the Terminal, I'm going to go ahead and shut down our previous script and rerun it:
 
@@ -679,23 +454,11 @@ We're going to query our users, looking for all of the users with the name equal
 
 The first thing we need to do is fetch from the collection. This is going to be the `Users` collection as opposed to the `Todos` collection we've used in this chapter. In the `db.collection`, we're looking for the `Users` collection and now we're going to go ahead and call `find`, passing in our query. We want a query, fetching all documents where the `name` is equal to the string `Andrew`.
 
-```
-
-db.collection('Users').find({name: 'Andrew'})
-
-```js
+[PRE45]
 
 This is going to return the cursor. In order to actually get the documents, we have to call `toArray`. We now have a promise; we can attach a `then` call onto `toArray` to do something with the `docs`. The documents are going to come back as the first argument in our success handler, and right inside of the function itself we can print the docs to the screen. I'm going to go ahead and use `console.log(JSON.stringify())`, passing in our three classic arguments: the object itself, `docs`, `undefined`, and `2` for formatting:
 
-```
-
-db.collection('Users').find({name: 'Andrew'}).toArray().then((docs) => {
-
-console.log(JSON.stringify(docs, undefined, 2));
-
-});
-
-```js
+[PRE46]
 
 With this in place, we have now done. We have a query, and it should work. We can test it by running it from the Terminal. Inside the Terminal, I'm going to go ahead and shut down the previous connection and rerun the script:
 
@@ -715,11 +478,7 @@ This section is going to be really simple; nothing MongoDB- related here. To get
 
 Here we have our `playground` folder, which we want to add under version control, and we have `package.json`. We also have `node_modules`. We do not want to track this directory. This contains all of our npm libraries. To ignore `node_modules`, in Atom we're going to make the `.gitignore` file in the root of our project. If you remember, this lets you specify files and folders that you want to leave out of your version control. I'm going to create a new file called `.gitignore`. In order to ignore the `node_modules` directory, all we have to do is type it exactly as it's shown here:
 
-```
-
-node_modules/
-
-```js
+[PRE47]
 
 I'm going to save the file and rerun `git status` from the Terminal. We get the `.gitignore` folder showing up, and the `node_modules` folder is nowhere in sight:
 
@@ -727,13 +486,7 @@ I'm going to save the file and rerun `git status` from the Terminal. We get the 
 
 The next thing we're going to do is make our first commit, using two commands. First up, I'm going to use `git add .` to add everything to the next commit. Then, I can make the commit using `git commit` with the `-m` flag. A good message for this commit would be `Init commit`:
 
-```
-
-git add .
-
-git commit -m 'Init commit'
-
-```js
+[PRE48]
 
 Now before we go, I do want to make a GitHub repository and get this code up there. This is going to require me to open up the browser and go to [github.com](http://www.github.com). Once you're logged in we can make a new repo. I'm going to make a new repo and give it a name:
 
@@ -745,13 +498,7 @@ I'm going to go with `node-course-2-todo-api`. You can name yours something else
 
 In this case, we're pushing an existing repository from the command line. We already went through the steps of initializing the repository, adding our files and making our first commit. That means I can take the following two lines, copy them, head over to the Terminal, and paste them in:
 
-```
-
-git remote add origin https://github.com/garygreig/node-course-2-todo-api.git
-
-git push -u origin master
-
-```js
+[PRE49]
 
 You might need to do these one at a time, depending on your operating system. On the Mac, when I try to paste in multiple commands it's going to run all but the last, and then I just have to hit enter to run the last one. Take a moment to knock that out for your operating system. You might need to run it as one command, or you might be able to paste it all in and hit *enter*. Either way, what we have here is our code pushed up to GitHub. I can prove that it's pushed up by refreshing the repository page:
 
@@ -767,17 +514,7 @@ In this section, you're going to learn how to delete documents from your MongoDB
 
 Now, I do have two. I'm going to go ahead and create a third by right-clicking and then going to Insert Document.... We'll make a new document with a `text` property equal to something like `Eat lunch`, and we'll set `completed` equal to `false`:
 
-```
-
-{
-
-text: 'Eat lunch',
-
-completed: false
-
-}
-
-```js
+[PRE50]
 
 Now before we save this, I am going to copy it to the clipboard. We're going to create a few duplicate Todos so we can see how we can delete items based off of specific criteria. In this case, we're going to be deleting multiple Todos with the same text value. I'm going to copy that to the clipboard, click Save, and then I'll create two more with the exact same structure. Now we have three Todos that are identical except for the ID, and we have two that have unique text properties:
 
@@ -801,37 +538,17 @@ Now, we're going to start off with `deleteMany`, and we're going to target those
 
 In Atom, we can go ahead and kick things off by doing `db.collection`. This is going to let us target our Todos collection. Now, we can go ahead and use the collection method `deleteMany`, passing in the arguments. In this case, the only argument we need is our object, and this object is just like the object we passed to find. With this, we can target our Todos. In this case, we're going to delete every Todo where the `text` equals `Eat lunch`.
 
-```
-
-//deleteMany
-
-db.collection('Todos').deleteMany({text: 'Eat lunch'});
-
-```js
+[PRE51]
 
 We didn't use any punctuation in RoboMongo, so we're also going to avoid punctuation over in Atom; it needs to be exactly the same.
 
 Now that we have this in place, we could go ahead and tack on a `then` call to do something when it either succeeds or fails. For now, we'll just add a success case. We are going to get a result argument passed back to the callback, and we can print that to the `console.log(result)` screen, and we'll take a look at exactly what is in this result object a bit later.
 
-```
-
-//deleteMany
-
-db.collection('Todos').deleteMany({text: 'Eat lunch'}).then((result) => {
-
-console.log(result);
-
-});
-
-```js
+[PRE52]
 
 With this in place, we now have a script that deletes all Todos where the text value is `Eat lunch`. Let's go ahead and run it, and see exactly what happens. In the Terminal, I'm going to run this file. It's in the `playground` folder, and we just called it `mongodb-delete.js`:
 
-```
-
-node playground/mongodb-delete.js
-
-```js
+[PRE53]
 
 Now when I run it, we get a lot of output:
 
@@ -857,17 +574,7 @@ Back inside of Atom, we can go ahead and get started by calling `db.collection` 
 
 This time though, instead of deleting multiple documents we're just going to delete the one, and we are still going to get that same exact result. To prove it, I'll just print to the screen like we did previously with `console.log(result)`:
 
-```
-
-//deleteOne
-
-db.collection('Todos').deleteOne({text: 'Eat lunch'}).then((result) => {
-
-console.log(result);
-
-});
-
-```js
+[PRE54]
 
 With this in place, we can now rerun our script and see what happens. In the Terminal, I'm going to shut down our current connection and rerun it:
 
@@ -889,17 +596,7 @@ In order to explore `findOneAndDelete`, we're going to once again target the Tod
 
 Now there are two Todos that fit this query, but once again we're using a `findOne` method, which means it's only going to target the first one it sees, the one with a `text` property of `Something to do`. Back in Atom, we can get this done by targeting Todos where `completed` equals `false`. Now, instead of getting back a result object with an `ok` property and an `n` property, the `findOneAndDelete` method actually gets that document back. This means we can tack on a `then` call, we can get our result, and we can print it to the screen once again with `console.log(result)`:
 
-```
-
-//findOneAndDelete
-
-db.collection('Todos').findOneAndDelete({completed: false}).then((result) => {
-
-console.log(result);
-
-});
-
-```js
+[PRE55]
 
 Now that we have this in place, let's test things out over in the Terminal. In the Terminal, I'm going to shut down the script and start it up again:
 
@@ -927,11 +624,7 @@ First up, I'm going to write my scripts, one for deleting users where the name i
 
 First up, we're going to go ahead and try to remove the duplicate users, and I'm going to do this by using `db.collection`. We're going to target the `Users` collection, and in this particular case, we're going to be using the `deleteMany` method. Here, we're going to try to delete all of the users where the `name` property equals `Andrew`.
 
-```
-
-db.collection('Users').deleteMany({name: 'Andrew'});
-
-```js
+[PRE56]
 
 Now I could tack on a then call to check for success or errors, or I could just leave it like this, which is what I'm going to do. If you use a callback or the promise then method, that is perfectly fine. As long as the deletion happens, you're good to go.
 
@@ -939,37 +632,13 @@ Now I could tack on a then call to check for success or errors, or I could just 
 
 Next up, I'm going to write the other statement. We're going to target the `Users` collection once again. Now, we're going to go ahead and use the `findOneAndDelete` method. In this particular case, I am going to be deleting the Todo where the `_id` equals the ObjectId I have copied to the clipboard, which means I need to create a `new ObjectID`, and I also need to go ahead and pass in the value from the clipboard inside of quotes.
 
-```
-
-db.collection('Users').deleteMany({name: 'Andrew'});
-
-db.collection('Users').findOneAndDelete({
-
-_id: new ObjectID("5a86978929ed740ca87e5c31")
-
-})
-
-```js
+[PRE57]
 
 Either single or double would work. Make sure the capitalization of `ObjectID` is identical to what you have defined, otherwise this creation will not happen.
 
 Now that we have the ID created and passed in as the `_id` property, we can go ahead and tack on a `then` callback. Since I'm using `findOneAndDelete`, I am going to print that document to the screen. Right here I'll get my argument, `results`, and I'm going to print it to the screen using our pretty- printing method,`console.log(JSON.stringify())`, passing in those three arguments, the `results`, `undefined`, and the spacing, which I'm going to use as `2`.
 
-```
-
-db.collection('Users').deleteMany({name: 'Andrew'});
-
-db.collection('Users').findOneAndDelete({
-
-_id: new ObjectID("5a86978929ed740ca87e5c31")
-
-}).then((results) => {
-
-console.log(JSON.stringify(results, undefined, 2));
-
-});
-
-```js
+[PRE58]
 
 With this in place, we are now ready to go.
 
@@ -995,11 +664,7 @@ I get my collection with just one document inside of it. We are now done. We kno
 
 Before we go, let's go ahead and make a commit, pushing it up to GitHub. In the Terminal, I can shut down the script and I can run `git status` to see what files we have untracked. Here, we have our `mongodb-delete` file. I can add it using `git add .` and then I can commit, using `git commit` with the `-m` flag. Here, I can go ahead and provide a commit message, which is going to be `Add delete script`:
 
-```
-
-git commit -m 'Add delete script'
-
-```js
+[PRE59]
 
 I'm going to make that commit and I am going to push it up to GitHub using `git push`, which will default to the origin remote. When you only have one remote, the first one is going to be called origin. This is the default name, just like master is the default branch. With this in place, we are now done. Our code is up on GitHub. The topic of the next section is updating, which is where you're going to learn how to update documents inside of a collection.
 
@@ -1023,39 +688,11 @@ The `returnOriginal` method is defaulted to `true`, which means that it returns 
 
 With this in place, we are done. We can tack on a `then` call to do something with the results. I'll get my result back and I can simply print it to the screen, and we can take a look at exactly what comes back:
 
-```
-
-db.collection('Todos').findOneAndUpdate({
-
-_id: new ObjectID('5a86c378baa6685dd161da6e')
-
-}, {
-
-$set: {
-
-completed:true
-
-}
-
-}, {
-
-returnOriginal: false
-
-}).then((result) => {
-
-console.log(result);
-
-});
-
-```js
+[PRE60]
 
 Now, let's go ahead and run this from the Terminal. I'm going to save my file inside the Terminal. We're going to be running `node`. The file is in the `playground` folder, and we will call it `mongodb-update.js`. I'm going to run the following script:
 
-```
-
-node playground/mongodb-update.js
-
-```js
+[PRE61]
 
 We get back the value prop, just like we did when we used `findOneAndDelete`, and this has our document with the completed value set to true, which is the brand-new value we just set, which is fantastic:
 
@@ -1069,31 +706,7 @@ We have Eat lunch, with a completed value of true. Now that we have this in plac
 
 To kick things off, I'm going to grab the ID of the document in Robomongo, since this is the document I want to update. I'll copy the ID to the clipboard, and now we can focus on writing that statement in Atom. First up, we'll update the name, since we already know how to do that. In Atom, I'm going to go ahead and duplicate the statement:
 
-```
-
-db.collection('Todos').findOneAndUpdate({
-
-_id: new ObjectID('57bc4b15b3b6a3801d8c47a2')
-
-}, {
-
-$set: {
-
-completed:true
-
-}
-
-}, {
-
-returnOriginal: false
-
-}).then((result) => {
-
-console.log(result);
-
-});
-
-```js
+[PRE62]
 
 I'll copy it and paste it. Back inside of Atom, we can start swapping things out. First up, we're going to swap out the old ID for the new one, and we're going to change what we passed to set. Instead of updating `completed`, we want to update `name`. I'm going to set the `name` equal to something other than `Jen`. I'm going to go ahead and use my name, `Andrew`. Now, we are going to keep `returnOriginal` set to `false`. We want to get the new document back, not the original. Now, the other thing that we need to do is increment the age. This is going to be done via the increment operator, which you should have explored using the documentation over inside of Chrome. If you click on `$inc`, it's going to bring you to the `$inc` part of the documentation, and if you scroll down, you should be able to see an example. Right here, we have an example of what it looks like to increment:
 
@@ -1101,37 +714,7 @@ I'll copy it and paste it. Back inside of Atom, we can start swapping things out
 
 We set `$inc` just like we set `set`. Then, inside of the object, we specify the things we want to increment, and the degree to which we want to increment them. It could be `-2`, or in our case, it would be positive, `1`. In Atom, we can implement this, as shown in the following code:
 
-```
-
-db.collection('Users').findOneAndUpdate({
-
-_id: new ObjectID('57abbcf4fd13a094e481cf2c')
-
-}, {
-
-$set: {
-
-name: 'Andrew'
-
-},
-
-$inc: {
-
-age: 1
-
-}
-
-}, {
-
-returnOriginal: false
-
-}).then((result) => {
-
-console.log(result);
-
-});
-
-```js
+[PRE63]
 
 I'll set `$inc` equal to an object, and in there, we'll increment the `age` by `1`. With this in place, we are now done. Before I run this file, I am going to comment out to the other call to `findOneAndUpdate`, just leaving the new one. I also need to swap out the collection. We're no longer updating the Todos collection; we're updating the `Users` collection. Now, we are good to go. We're setting the `name` equal to `Andrew` and we're incrementing the `age` by `1`, which means that we would expect the age in Robomongo to be 26 instead of 25\. Let's go ahead and run this by restarting the script over in the Terminal:
 
@@ -1147,21 +730,11 @@ We have our updated document right here. Well, let's wrap this section up by com
 
 Here, we just have one untracked file, our `mongodb-update` script. I'm going to use `git add .` to add that to the next commit, and then I'll use `git commit` to actually make the commit. I am going to provide the `-m` argument for `message` so we can specify a message, which is going to be `Add update script`:
 
-```
-
-git add .
-
-git commit -m 'Add update script'
-
-```js
+[PRE64]
 
 And now we can run the commit command and push it up to GitHub, so our code is backed up on our GitHub repository:
 
-```
-
-git push
-
-```
+[PRE65]
 
 更新完成后，我们现在已经掌握了所有基本的 CRUD（创建、读取、更新和删除）操作。接下来，我们将讨论一个叫做 Mongoose 的东西，我们将在 Todo API 中使用它。
 
