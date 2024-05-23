@@ -42,9 +42,7 @@
 
 我们在终端中的第一步是创建一个目录来存储所有这些文件。我们将使用`cd Desktop`命令从我们的主目录导航到桌面：
 
-```js
-cd Desktop
-```
+[PRE0]
 
 然后，我们将创建一个文件夹来存储这个项目的所有课程文件。
 
@@ -52,15 +50,11 @@ cd Desktop
 
 现在，我们将使用`mkdir`命令来创建那个文件夹，这是**make directory**的缩写。让我们将文件夹命名为`notes-node`，如下所示：
 
-```js
-mkdir notes-node
-```
+[PRE1]
 
 我们将在 Node 中制作一个笔记应用，所以`notes-node`似乎很合适。然后我们将`cd`进入`notes-node`，然后我们可以开始玩一些内置模块：
 
-```js
-cd notes-node
-```
+[PRE2]
 
 这些模块是内置的，所以不需要在终端中安装任何东西。我们可以直接在我们的 Node 文件中引入它们。
 
@@ -82,9 +76,7 @@ cd notes-node
 
 现在，为了开始，我将首先使用`console.log`打印`Starting app`，如下面的代码所示：
 
-```js
-console.log('Starting app');
-```
+[PRE3]
 
 我们这样做的唯一原因是为了跟踪我们的文件如何执行，我们只会在第一个项目中这样做。在以后，一旦你熟悉了文件的加载和运行方式，我们就可以删除这些`console.log`语句，因为它们将不再必要。
 
@@ -120,9 +112,7 @@ console.log('Starting app');
 
 然后我们会给它一个名字，`fs`，并将其设置为`require()`，如下面的代码所示：
 
-```js
-const fs = require()
-```
+[PRE4]
 
 在这里，`require()`是一个可以在任何 Node.js 文件中使用的函数。你不需要做任何特殊的事情来调用它，只需要像前面的代码中所示的那样调用它。在参数列表中，我们只需要传入一个字符串。
 
@@ -130,36 +120,19 @@ const fs = require()
 
 在我们的例子中，我们将传入模块名`fs`，并在末尾加上一个分号，如下面的代码所示：
 
-```js
-const fs = require('fs');
-```
+[PRE5]
 
 这将告诉 Node，你想要获取`fs`模块的所有内容，并将它们存储在`fs`变量中。此时，我们可以访问`fs`模块上的所有可用函数，包括`fs.appendFile`，我们在文档中探索过。
 
 回到 Atom，我们可以通过调用 `fs.appendFile` 来调用 `appendFile`，传入我们将使用的两个参数；第一个将是文件名，所以我们添加 `greetings.txt`，第二个将是你想要追加到文件中的文本。在我们的例子中，我们将追加 `Hello world!`，如下面的代码所示：
 
-```js
-fs.appendFile('greetings.txt', 'Hello world!');
-```
+[PRE6]
 
 让我们保存文件，如上面的命令所示，并从终端运行它，看看会发生什么。
 
 **在 Node v7 上运行程序时的警告** 如果你在 Node v7 或更高版本上运行，当你在终端内运行程序时会收到一个小警告。现在，在 v7 上，它仍然可以工作，只是一个警告，但你可以使用以下代码来摆脱它：
 
-```js
-// Orignal line 
-fs.appendFile('greetings.txt', 'Hello world!');
-
-// Option one
-fs.appendFile('greetings.txt', 'Hello world!', function (err){
-  if (err) { 
-    console.log('Unable to write to file');
-  }
-});
-
-// Option two
-fs.appendFileSync('greetings.txt', 'Hello world!');
-```
+[PRE7]
 
 在上面的代码中，我们有我们程序中的原始行。
 
@@ -179,13 +152,7 @@ fs.appendFileSync('greetings.txt', 'Hello world!');
 
 如前面的代码所示，我们得到了我们的一个 `console.log` 语句，`Starting app.`。所以我们知道应用程序已经正确启动了。此外，如果我们转到 Atom，我们实际上会看到一个全新的 `greetings.txt` 文件，如下面的代码所示。这是由 `fs.appendFile` 创建的文本文件：
 
-```js
-console.log('Starting app.');
-
-const fs = require('fs');
-
-fs.appendFile('greetings.txt', 'Hello world!');
-```
+[PRE8]
 
 在这里，`fs.appendFile` 尝试将 `greetings.txt` 追加到一个文件中；如果文件不存在，它就会简单地创建它：
 
@@ -215,42 +182,17 @@ os.userInfo([options])方法被调用并返回有关当前登录用户的各种�
 
 要开始，我们必须要求 OS。这意味着我们将回到 Atom 内部。现在，在我创建`fs`常量的下面，我将创建一个名为`os`的新常量，将其设置为`require()`; 这作为一个函数调用，并传递一个参数，模块名称`os`，如下所示：
 
-```js
-console.log('Starting app.');
-
-const fs = require('fs');
-const os = require('os');
-
-fs.appendFile('greetings.txt', 'Hello world!');
-```
+[PRE9]
 
 从这里开始，我们可以开始调用 OS 模块上可用的方法，例如 os.userInfo([optional])。
 
 让我们创建一个名为`user`的新变量来存储结果。变量 user 将被设置为`os.userInfo`，我们可以调用`userInfo`而不带任何参数：
 
-```js
-console.log('Starting app.');
-
-const fs = require('fs');
-const os = require('os');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', 'Hello world!');
-```
+[PRE10]
 
 现在，在我们对`fs.appendFile`行执行任何操作之前，我将对其进行注释，并使用`console.log`打印用户变量的内容：
 
-```js
-console.log('Starting app.');
-
-const fs = require('fs');
-const os = require('os');
-
-var user = os.userInfo();
-console.log(user);
-// fs.appendFile('greetings.txt', 'Hello world!');
-```
+[PRE11]
 
 这将让我们准确地探究我们得到了什么。在终端中，我们可以使用上箭头键和回车键重新运行我们的程序，并且在下面的代码中，你可以看到我们有一个带有一些属性的对象：
 
@@ -260,16 +202,7 @@ console.log(user);
 
 这意味着回到 Atom 内部，我们可以在`appendFile`中使用`user.username`。我将删除`console.log`语句并取消注释我们对`fs.appendFile`的调用：
 
-```js
-console.log('Starting app.');
-
-const fs = require('fs');
-const os = require('os');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', 'Hello world!');
-```
+[PRE12]
 
 现在，在`fs.appendFile`中的`world`处，我们将其与`user.username`交换。我们可以以两种方式做到这一点。
 
@@ -277,16 +210,7 @@ fs.appendFile('greetings.txt', 'Hello world!');
 
 第一种方法是删除`world!`并连接`user.username`。然后我们可以使用`+`（加号）运算符连接另一个字符串，如下面的代码所示：
 
-```js
-console.log('Starting app.');
-
-const fs = require('fs');
-const os = require('os');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', 'Hello' + user.username + '!');
-```
+[PRE13]
 
 现在，如果我们运行这个，一切都会按预期工作。在终端中，我们可以重新运行我们的应用程序。它会打印`Starting app`：
 
@@ -300,39 +224,15 @@ fs.appendFile('greetings.txt', 'Hello' + user.username + '!');
 
 # 使用模板字符串
 
-第二种方法是使用 ES6 功能模板字符串来交换`fs.appendFile`中的`world`与`user.username`。模板字符串以```js (tick) operator, which is available to the left of the *1* key on your keyboard. Then you type things as you normally would.
+第二种方法是使用 ES6 功能模板字符串来交换`fs.appendFile`中的`world`与`user.username`。模板字符串以`` ` ``（对勾）运算符开头和结尾，位于键盘上*1*键的左侧。然后你像平常一样打字。
 
 This means that we'll first type `hello`, then we'll add a space with the `!` (exclamation) mark, and just before `!`, we will put the name:
 
-```开头和结尾
-
-console.log('Starting app.');
-
-const fs = require('fs');
-
-const os = require('os');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', `Hello !`);
-
-```js
+[PRE14]
 
 To insert a JavaScript variable inside your template string, you use the `$` (dollar) sign followed by opening and closing curly braces. Then we will just reference a variable such as `user.username`:
 
-```
-
-console.log('Starting app.');
-
-const fs = require('fs');
-
-const os = require('os');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', `Hello ${user.username}!`);
-
-```js
+[PRE15]
 
 Notice that the Atom editor actually picks up on the syntax of curly braces.
 
@@ -358,11 +258,7 @@ In the context of our notes app, the new file will store various functions for w
 
 For the moment, all we'll do inside `notes` is to use `console.log` to print a little log showing the file has been executed using the following code:
 
-```
-
-console.log('Starting notes.js');
-
-```js
+[PRE16]
 
 Now, we have `console.log` on the top of `notes` and one on the top of `app.js`. I'll change `console.log` in the `app.js` from `Starting app.` to `Starting app.js`. With this in place, we can now require the notes file. It doesn't export any functionality, but that's fine.
 
@@ -372,41 +268,13 @@ We'll look at how to export stuff later in the section. For now though, we'll lo
 
 Let's make `const`; I'll call this one notes and set it equal to the return result from `require()`:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const notes = require('');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', `Hello ${user.username}!`);
-
-```js
+[PRE17]
 
 Inside the parentheses, we will pass in one argument that will be a string, but it will be a little different. In the previous section, we typed in the module name, but what we have in this case is not a module, but a file, `notes.js`. What we need to do is to tell Node where that file lives using a relative path.
 
 Now, relative paths start with `./` (a dot forward slash), which points to the current directory that the file is in. In this case, this points us to the `app.js` directory, which is the root of our project `notes-node`. From here, we don't have to go into any other folders to access `notes.js`, it's in the root of our project, so we can type its name, as shown in the following code:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const notes = require('./notes.js');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', `Hello ${user.username}!`);
-
-```js
+[PRE18]
 
 With this in place, we can now save `app.js` and see what happens when we run our application. I'll run the app using the `node app.js` command:
 
@@ -416,21 +284,7 @@ As shown in the preceding code output, we get our two logs. First, we get `Start
 
 Comment out this command line from the `app.js` file, as shown here:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-// const notes = require('./notes.js');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', `Hello ${user.username}!`);
-
-```js
+[PRE19]
 
 Save the file, and rerun it from Terminal; you can see the `notes.js` file never executes because we never explicitly touch it.
 
@@ -444,13 +298,7 @@ By the way, I'm using command / (forward slash) to comment and uncomment lines q
 
 For now though, the focus will be to export something from `notes.js` which we can use in `app.js`. Inside `notes.js` (actually, inside all of our Node files), we have access to a variable called `module`. I'll use `console.log` to print `module` to the screen so that we can explore it over in Terminal, as shown here:
 
-```
-
-console.log('Starting notes.js');
-
-console.log(module);
-
-```js
+[PRE20]
 
 Let's rerun the file to explore it. As shown in the following screenshot, we get a pretty big object, that is, different properties related to the `notes.js` file:
 
@@ -464,33 +312,13 @@ The `exports` object on the `module` property and everything on this object gets
 
 Let's take a quick look at how that works. What we'll do is to define an `age` property using `module.exports`, the object we just explored over in Terminal. Also, we know that it's an object because we can see it in the preceding screenshot (`exports: {}`); this means that I can add a property, `age`, and set it equal to my age, which is `25`, as shown here:
 
-```
-
-console.log('Starting notes.js');
-
-module.exports.age = 25;
-
-```js
+[PRE21]
 
 Then I can save this file and move into `app.js` to take advantage of this new `age` property. The `const` variable notes will be storing all of my exports, in the present case, just age.
 
 In `fs.appendFile`, after the `greeting.txt` file, I'll add `You are` followed by the age. Inside template strings, we will use `$` with curly braces, `notes.age`, and a period at the end, as shown here:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const notes = require('./notes.js');
-
-var user = os.userInfo();
-
-fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE22]
 
 Now our greeting should say `Hello Gary! You are 25`. It's getting the `25` value from our separate file (that is, `note.js`), which is fantastic.
 
@@ -508,115 +336,33 @@ Using `require()`, we were able to require a file that we created, and this file
 
 Now, obviously, the preceding example is pretty contrived. We'll not be exporting static numbers; the real goal of exports is to be able to export functions that get used inside `app.js`. Let's take a quick moment to export two functions. In the `notes.js` file, I'll set `module.exports.addnote` equal to a function; the `function` keyword followed by opening and closing parentheses, which is followed by the curly braces:
 
-```
-
-控制台记录('启动 notes.js');
-
-module.exports.addNote = function () {
-
-}
-
-```js
+[PRE23]
 
 Now, throughout the course, I'll be using arrow functions where I can, as shown in the preceding code. To convert a regular ES5 function into an arrow function, all you do is remove the `function` keyword and replace it with an `=>` sign right between the parentheses and the opening curly braces, as shown here:
 
-```
-
-控制台记录('启动 notes.js');
-
-module.exports.addNote = () => {
-
-}
-
-```js
+[PRE24]
 
 Now, there are some more subtleties to arrow functions that we'll be talking about throughout the book, but if you have an anonymous function, you can swap it with an arrow function without any problems. The big difference is that the arrow function is not going to bind the `() => {}` keyword or the arguments array, which we'll be exploring throughout the book. So if you do get some errors, it's good to know that the arrow function could be the cause.
 
 For now though, we'll keep things really simple, using `console.log` to print `addNote`. This will let us know that the `addNote` function was called. We'll return a string, `'New note'`, as shown here:
 
-```
-
-控制台记录('启动 notes.js');
-
-module.exports.addNote = () => {
-
-控制台记录('addNote');
-
-返回 '新笔记';
-
-};
-
-```js
+[PRE25]
 
 Now, the `addNote` function is being defined in `notes.js`, but we can take advantage of it over in `app.js`.
 
 Let's take a quick second to comment out both the `appendFile` and user line in `app.js`:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const notes = require('./notes.js');
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE26]
 
 I'll add a variable, call the result, (`res` for short), and set it equal to the return result from `notes.addNote`:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const notes = require('./notes.js');
-
-var res = notes.addNote();
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE27]
 
 Now, the `addNote` function is a dummy function for the moment. It doesn't take any arguments and it doesn't actually do anything, so we can call it without any arguments.
 
 Then we'll print the result variable, as shown in the following code, and we would expect the result variable to be equal to the `New note` string:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const notes = require('./notes.js');
-
-var res = notes.addNote();
-
-控制台记录(res);
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE28]
 
 If I save both of my files (`app.js` and `notes.js`) and rerun things from Terminal, you can see that `New note` prints to the screen at the very end and just before `addNote` prints:
 
@@ -642,87 +388,21 @@ So, take a moment, create that `add` function inside `notes.js`, call it inside 
 
 The first step in the process will be to define the new function. In `notes.js`, I'll set `module.exports.add` equal to that function, as shown here:
 
-```
-
-控制台记录('启动 notes.js');
-
-module.exports.addNote = () => {
-
-控制台记录('addNote');
-
-返回 '新笔记';
-
-};
-
-module.exports.add =
-
-```js
+[PRE29]
 
 Let's set it equal to an arrow function. If you used a regular function, that is perfectly fine, I just prefer using the arrow function when I can. Also, inside parentheses, we will be getting two arguments, we'll be getting `a` and `b`, as shown here:
 
-```
-
-控制台记录('启动 notes.js');
-
-module.exports.addNote = () => {
-
-控制台记录('addNote');
-
-返回 '新笔记';
-
-};
-
-module.exports.add = (a, b) => {
-
-};
-
-```js
+[PRE30]
 
 All we need to do is return the result, which is really simple. So we'll enter `return a + b`:
 
-```
-
-控制台记录('启动 notes.js');
-
-module.exports.addNote = () => {
-
-控制台记录('addNote');
-
-返回 '新笔记';
-
-};
-
-module.exports.add = (a, b) => {
-
-返回 a + b;
-
-};
-
-```js
+[PRE31]
 
 Now, this was the first part of your challenge, defining a utility function in `notes.js`; the second part was to actually use it over in `app.js`.
 
 In `app.js`, we can use our function by printing the `console.log` result with a colon `:` (this is just for formatting). As the second argument, we'll print the actual results, `notes.add`. Then, we'll add up two numbers; we'll add `9` and `-2`, as shown in this code:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const notes = require('./notes.js');
-
-控制台记录('结果:', notes.add(9, -2));
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE32]
 
 The result in this case should be `7`. If we run the program you can see that we get just that, `7` prints to the screen:
 
@@ -782,31 +462,7 @@ To the final question, as shown down below in the preceding image, you can hit e
 
 Now that we have created the file, we can actually view it inside our project. As shown in the following code, we have the `package.json` file:
 
-```
-
-{
-
-"名称": "notes-node",
-
-"版本": "1.0.0",
-
-"描述": "",
-
-"主要": "app.js",
-
-"脚本": {
-
-"测试": "echo \"错误：未指定测试\" && 退出 1"
-
-},
-
-"作者": "",
-
-"许可": "ISC"
-
-}
-
-```js
+[PRE33]
 
 And this is all it is, it's a simple description of your application. Now, as I mentioned, we'll not be publishing our app to npm, so a lot of this information really isn't important to us. What is important, though, is that `package.json` is where we define the third-party modules we want to install in our application.
 
@@ -832,97 +488,23 @@ Coming to Terminal, we'll run the `npm install` command. After installing, we'll
 
 The `npm install lodash` command will install the module, and the `save` flag, `--` (two) hyphens followed by the word `save`, will update the contents of the `package.json` file. Let's run this command:
 
-```
-
-npm 安装 loadsh --save
-
-```js
+[PRE34]
 
 The preceding command will go off to the npm servers and fetch the code and install it inside your project, and any time you install an npm module, it'll live in your project in a `node_modules` folder.
 
 Now, if you open that `node_modules` folder, you'll see the `lodash` folder as shown in the following code. This is the module that we just installed:
 
-```
-
-{
-
-"名称": "notes-node",
-
-"版本": "1.0.0",
-
-"描述": "",
-
-"主要": "app.js",
-
-"脚本": {
-
-"测试": "echo \"错误：未指定测试\" && 退出 1"
-
-},
-
-"作者": "",
-
-"许可": "ISC",
-
-"依赖": {
-
-"lodash": "⁴.17.4"
-
-}
-
-}
-
-```js
+[PRE35]
 
 As you can see over in `package.json` in the preceding figure, we've also had some updates automatically take place. There's a new `dependencies` attribute that has an object with key value pairs, where the key is the module we want to use in our project and the value is the version number, in this case, the most recent version, version `4.17.4`. With this in place, we can now require our module inside the project.
 
 Over inside `app.js`, we can take advantage of everything that comes in `lodash` by going through the same process of requiring it. We'll make a `const`, we'll name that `const _`, (which is a common name for the `lodash` utility library), and we'll set it equal to `require()`. Inside the require parentheses, we'll pass in the module name exactly as it appears in the `package.json` file. This is the same module name you used when you ran `npm install`. Then, we'll type `lodash`, as shown here:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-控制台记录('结果:', notes.add(9, -2));
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE36]
 
 Now, the order of operations is pretty important here. Node will first look for a core module with the name `lodash`. It'll not find one because there is no core module, so the next place it will look is the `node_modules` folder. As shown in the following code, it will find `lodash` and load that module, returning any of the exports it provides:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-控制台记录('结果:', notes.add(9, -2));
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE37]
 
 # Using the utilities of lodash
 
@@ -948,31 +530,7 @@ The `_.isString` is a utility that comes with `lodash`, and it returns `true` if
 
 To use the `_.isString` utility, we'll add `console.log` in `app.js` to show the result to the screen and we'll use `_.isString`, passing in a couple of values. Let's pass in `true` first, then we can duplicate this line and we'll pass in a string such as `Gary`, as shown here:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-控制台记录(_.isString(true));
-
-控制台记录(_.isString('Gary'));
-
-// console.log('Result:', notes.add(9, -2));
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE38]
 
 We can run our project over in the Terminal using the same command we've used previously, `node app.js`, to run our file:
 
@@ -994,69 +552,13 @@ Back inside Atom, we can add this utility into our project, we'll comment out ou
 
 Now, as we know, this takes an array. And since we're trying to use the unique function, we'll pass in an array with some duplicates. Use your name twice as a string; I'll use my name once, followed by the number `1`, followed by my name again. Then I can use `1`, `2`, `3`, and `4` as shown here:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-// console.log(_.isString(true));
-
-// console.log(_.isString('Gary'));
-
-var filteredArray = _.uniq(['Gary', 1, 'Gary', 1, 2, 3, 4]);
-
-控制台记录();
-
-// console.log('Result:', notes.add(9, -2));
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE39]
 
 Now, if things go as planned, we should get an array with all the duplicates removed, which means we'll have one instance of `Gary`, one instance of `1`, and then `2`, `3`, and `4`, which don't have duplicates.
 
 The last thing to do is to print that using `console.log` so we can view it inside the Terminal. I'll pass in this `filteredArray` variable to our `console.log` statement as shown in the following code:
 
-```
-
-控制台记录('启动 app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-// console.log(_.isString(true));
-
-// console.log(_.isString('Gary'));
-
-var filteredArray = _.uniq(['Gary', 1, 'Gary', 1, 2, 3, 4]);
-
-控制台记录(filteredArray);
-
-// console.log('Result:', notes.add(9, -2));
-
-// var user = os.userInfo();
-
-//
-
-// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
-
-```js
+[PRE40]
 
 From here, we can run our project inside Node. I'll use the last command, then I can press the e*nter* key, and you can see we get our array with all duplicates removed, as shown in the following code output:
 
@@ -1079,37 +581,7 @@ The `node_modules` folder contains generated code. This is not code you've writt
 
 In our case, we've already defined the modules and the versions inside `package.json` as shown in the following code because we used that handy `save` flag:
 
-```
-
-{
-
-"name": "notes-node",
-
-"version": "1.0.0",
-
-"description": "",
-
-"main": "app.js",
-
-"scripts": {
-
-"test": "echo \"Error: no test specified\" && exit 1"
-
-},
-
-"author": "",
-
-"license": "ISC",
-
-"dependencies": {
-
-"lodash": "⁴.17.4"
-
-}
-
-}
-
-```js
+[PRE41]
 
 This actually means we can delete the `node_modules` folder completely. Now, we can copy the folder and give it to a friend, we can put it on GitHub, or whatever we want to do. When we want to get that `node_modules` folder back, all we have to do inside the Terminal is run the `npm install` command without any module names or any flags.
 
@@ -1131,47 +603,13 @@ The nodemon will be responsible for watching our app for changes and restarting 
 
 You will also notice that it's a really popular module, with over 30,000 downloads a day. Now, this module is a little different from the one we used in the last section, that is, `lodash`. The `lodash` got installed and added into our project's `package.json` file as shown in the following code block:
 
-```
-
-{
-
-"name": "notes-node",
-
-"version": "1.0.0",
-
-"description": "",
-
-"main": "app.js",
-
-"scripts": {
-
-"test": "echo \"Error: no test specified\" && exit 1"
-
-},
-
-"author": "",
-
-"license": "ISC",
-
-"dependencies": {
-
-"lodash": "⁴.17.4"
-
-}
-
-}
-
-```js
+[PRE42]
 
 That means it went into our `node_modules` folder and we were able to require it in our `app.js` file (refer to the previous section for more detail). Nodemon, however, works a little differently. It's a command-line utility that gets executed from the Terminal. It will be a completely new way of starting our application, and to install modules to be run from the command line, we have to tweak the `install` command that we used in the last section.
 
 For now, we can start off much the same way, though. We'll use `npm install` and type the name just like we did in the *Installing the* *lodash* *module in our app* section, but instead of using the `save` flag, we'll use the `g` flag, which is short for global, as shown here:
 
-```
-
-npm install nodemon -g
-
-```js
+[PRE43]
 
 This command installs `nodemon` as a global utility on your machine, which means it'll not get added to your specific project and you'll never require `nodemon`. Instead, you'll be running the `nodemon` command from Terminal, as shown here:
 
@@ -1193,27 +631,7 @@ We'll see a combination of our app's output, along with `nodemon` logs that show
 
 Inside Atom, we'll make a few changes to our app. Let's get started by changing `Gary` to `Mike` in `app.js`, and then we'll change the `filteredArray` variable to `var filteredArray = _.uniq(['Mike'])`, as shown in the following code:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const os = require('os');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-// console.log(_.isString(true));
-
-// console.log(_.isString('Gary'));
-
-var filteredArray = _.uniq(['Mike']);
-
-console.log(filteredArray);
-
-```js
+[PRE44]
 
 Now, I'll be saving the file. In the Terminal window, you can see the app automatically restarted, and within a split second, the new output is shown on the screen:
 
@@ -1227,41 +645,13 @@ For the most part, we will be using `nodemon` throughout the book since it's sup
 
 Before we get started, we should clean up a lot of the code we've already written in this section. I'll remove all of the commented-out code in `app.js`. Then, I'll simply remove `os`, where we have `fs`, `os` and `lodash`, since we'll not be using it throughout the project. I'll also be adding a space between the third-party and Node modules and the files I've written, which are as follows:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-```js
+[PRE45]
 
 I find this to be a good syntax that makes it a lot easier to quickly scan for either third-party or Node modules, or the modules that I've created and required.
 
 Next up, over in `notes.js`, we'll remove the `add` function; this was only added for demonstration purposes, as shown in the following figure. Then we can save both the `notes.js` and `app.js` files, and `nodemon` will automatically restart:
 
-```
-
-console.log('Starting notes.js');
-
-module.exports.addNote = () => {
-
-console.log('addNote');
-
-return 'New note';
-
-};
-
-module.exports.add = (a, b) => {
-
-return a + b;
-
-};
-
-```js
+[PRE46]
 
 Now we can remove the `greetings.txt` file. That was used to demonstrate how the `fs` module works, and since we already know how it works, we can wipe that file. And last but not least, we can always shut down `nodemon` using C*trl* + *C*. Now we're back at the regular Terminal.
 
@@ -1283,27 +673,15 @@ We can pass all sorts of command-line arguments in. We could have a command, and
 
 If we want to add a note, that might look as a command shown in the following code:
 
-```
-
-node app.js add
-
-```js
+[PRE47]
 
 This command will add a note; we can remove a note using the `remove` command, as shown here:
 
-```
-
-node app.js remove
-
-```js
+[PRE48]
 
 And we could list all of our notes using the `list` command:
 
-```
-
-node app.js list
-
-```js
+[PRE49]
 
 Now, when we run this command, the app is still going to work as expected. Just because we passed in a new argument doesn't mean our app is going to crash:
 
@@ -1319,19 +697,7 @@ The `argv` object is short for arguments vector, or in the case of JavaScript, i
 
 Now save `app.js` and it'll look like the following:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-console.log(process.argv);
-
-```js
+[PRE50]
 
 Then we'll rerun this file:
 
@@ -1349,19 +715,11 @@ That means we can access that third item in the array, and that will be the comm
 
 Let's access the command-line argument in the array now. We'll make a variable called `command`, and set it equal to `process.argv`, and we'll grab the item in the third position (which is `list`, as shown in the preceding command output), which is the index of two as shown here:
 
-```
-
-var command = process.argv[2];
-
-```js
+[PRE51]
 
 Then we can log that out to the screen by logging out `command` the string. Then, as the second argument, I'll pass in the actual command that was used:
 
-```
-
-console.log('Command: ' , command);
-
-```js
+[PRE52]
 
 And this is just a simple log to keep track of how the app is getting executed. The cool stuff is going to come when we add if statements that do different things depending on that command.
 
@@ -1369,123 +727,23 @@ And this is just a simple log to keep track of how the app is getting executed. 
 
 Let's create an `if/else` block below the `console.log('Command: ', command);`. We'll add `if (command === 'add')`, as shown here:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-var command = process.argv[2];
-
-console.log('Command: ', command);
-
-if (command === 'add')
-
-```js
+[PRE53]
 
 In this case, we'll go through the process of adding a `new note`. Now, we're not specifying the other arguments here, such as the title or the body (we'll discuss that in later sections). For now, `if` the `command` does equal `add`, we'll use `console.log` to print `Adding new note`, as shown in the following code:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-var command = process.argv[2];
-
-console.log('Command: ', command);
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-}
-
-```js
+[PRE54]
 
 And we can do the exact same thing with a command such as `list`. We'll add `else if (command === 'list')`, as shown here:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-var command = process.argv[2];
-
-console.log('Command: ', command);
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-} else if (command === 'list')
-
-```js
+[PRE55]
 
 If the command does equal the string `list`, we'll run the following block of code using `console.log` to print `Listing all notes`. We can also add an `else` clause if there is no command, which is `console.log ('Command not recognized')`, as shown here:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-var command = process.argv[2];
-
-console.log('Command: ', command);
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-} else if (command === 'list') {
-
-console.log('Listing all notes');
-
-} else {
-
-console.log('Command not recognized');
-
-}
-
-```js
+[PRE56]
 
 With this in place, we can now rerun our app for a third time, and this time around, you'll see we have the command equal to list, and listing all notes shows up, as shown in the following code:
 
-```
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-} else if (command === 'list') {
-
-console.log('Listing all notes');
-
-} else {
-
-console.log('Command not recognized');
-
-}
-
-```js
+[PRE57]
 
 This means we were able to use our argument to run different code. Notice that we didn't run `Adding new note` and we didn't run `Command not recognized`. We could, however, switch the `node app.js` command from `list` to `add`, and in that case, we'll get `Adding new note` printing, as shown in the following screenshot:
 
@@ -1512,173 +770,25 @@ For the solution, the first thing I'll do is to add an `else if` for `read`. I'l
 
 In the `else if` statement, I'll check whether the `command` variable equals the string `read`, as shown here:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-var command = process.argv[2];
-
-console.log('Command: ', command);
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-} else if (command === 'list') {
-
-console.log('Listing all notes');
-
-} else if () {
-
-} else {
-
-console.log('Command not recognized');
-
-}
-
-```js
+[PRE58]
 
 In the future, we'll be calling methods that update our local database with the notes.
 
 For now, we'll use `console.log` to print `Reading note`:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-var command = process.argv[2];
-
-console.log('Command: ', command);
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-} else if (command === 'list') {
-
-console.log('Listing all notes');
-
-} else if (command === 'read') {
-
-} else {
-
-console.log('Command not recognized');
-
-}
-
-```js
+[PRE59]
 
 The next thing you need to do is add an `else if` clause that checks whether the `command` equals `remove`. In the `else if`, I'll open and close my condition and hit e*nter* just as I did in the previous `else if` clause; this time, I'll add `if` the `command` equals `remove`, we want to remove the note. And in that case, all we'll do is to use `console.log` to print `Reading note`, as shown in the following code:
 
-```
-
-console.log('Starting app.js');
-
-const fs = require('fs');
-
-const _ = require('lodash');
-
-const notes = require('./notes.js');
-
-var command = process.argv[2];
-
-console.log('Command: ', command);
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-} else if (command === 'list') {
-
-console.log('Listing all notes');
-
-} else if (command === 'read') {
-
-console.log('Reading note');
-
-} else {
-
-console.log('Command not recognized');
-
-}
-
-```js
+[PRE60]
 
 And with this in place, we are done. If we refer to the code block, we've added two new commands we can run over in the Terminal, and we can test those:
 
-```
-
-if (command === 'add') {
-
-console.log('Adding new note');
-
-} else if (command === 'list') {
-
-控制台日志（'列出所有笔记'）;
-
-} 否则 if（命令 === '读取'）{
-
-控制台日志（'阅读笔记'）;
-
-} 否则 {
-
-控制台日志（'命令未被识别'）;
-
-}
-
-```js
+[PRE61]
 
 First up, I'll run `node app.js` with the `read` command, and `Reading note` shows up:
 
-```
-
-控制台日志（'启动 app.js'）;
-
-const fs = require（'fs'）;
-
-const _ = require（'lodash'）;
-
-const notes = require（'./notes.js'）;
-
-var command = process.argv [2];
-
-控制台日志（'命令：'，命令）;
-
-如果（命令 === '添加'）{
-
-控制台日志（'添加新笔记'）;
-
-} 否则 if（命令 === '列表'）{
-
-控制台日志（'列出所有笔记'）;
-
-} 否则 if（命令 === '读取'）;
-
-控制台日志（'阅读笔记'）;
-
-} 否则 if（命令 == '删除'）{
-
-控制台日志（'删除笔记'）;
-
-} 否则 {
-
-控制台日志（'命令未被识别'）;
-
-}
-
-```js
+[PRE62]
 
 Then I'll rerun the command; this time, I'll be using `remove`. And when I do that, `Removing note` prints to the screen, as shown in this screenshot:
 
@@ -1692,19 +802,11 @@ Now, what we did in the previous subsection is step 1\. We now have support for 
 
 Now, getting it is going to be pretty similar to what we did earlier, and to show you what it looks like, we'll print the entire `argv` object once again, using the following command:
 
-```
-
-控制台日志（process.argv）;
-
-```js
+[PRE63]
 
 Over in the Terminal, we can now run a more complex command. Let's say we want to remove a note using the `node app.js remove` command, and we'll do that by its title. We might use the `title` argument, which looks like the following code:
 
-```
-
-节点 app.js 删除--title
-
-```js
+[PRE64]
 
 In this `title` argument, we have `--` (two) hyphens followed by the argument name, which is `title`, followed by the `=` (equals) sign. Then we can type our note title. Maybe the note title is `secrets`. This will pass the title argument into our application.
 
@@ -1713,19 +815,11 @@ Now, there are a couple of different ways you could format the `title` argument,
 *   You could have the title `secrets` like the one in the preceding command
 *   You could have title equals secrets inside quotes, which will let us use spaces in the title:
 
-```
-
-节点 app.js 删除--title =秘密
-
-```js
+[PRE65]
 
 *   You can remove the `=` (equals) sign altogether and simply put a space:
 
-```
-
-节点 app.js 删除--title =“secrets 2”
-
-```js
+[PRE66]
 
 No matter how you choose to format your argument, these are all valid ways to pass in the title.
 
@@ -1733,15 +827,11 @@ As you see in the preceding screenshot, I am using double quotes when wrapping m
 
 For the moment, I'll keep the `=` (equals) sign and the quotes and rerun the command:
 
-```
-
-节点 app.js 删除--title =“秘密 2”
-
-```
+[PRE67]
 
 当我运行命令时，您可以在以下代码输出中看到我们有两个参数：
 
-！[]（img/1cb82daa-4c24-4774-873c-9a3f6872e51d.png）
+![](img/1cb82daa-4c24-4774-873c-9a3f6872e51d.png)
 
 这些是我们不需要的参数，然后我们有我们的`删除`命令，这是第三个，现在我们有一个新的第四个字符串，标题等于`secrets 2`。我们的参数已成功传递到应用程序中。问题是它不太容易使用。在第四个字符串中，我们必须解析出键`title`和值`secrets 2`。
 
@@ -1749,7 +839,7 @@ For the moment, I'll keep the `=` (equals) sign and the quotes and rerun the com
 
 随着我们使用不同的样式传递参数，事情变得更加复杂。如果我们使用空格而不是`=`（等号）重新运行上一个命令，如下面的代码所示，这是完全有效的，我们的参数数组现在看起来完全不同：
 
-！[]（img/d2a28fa2-df33-4c71-a401-b391ddc66626.png）
+![](img/d2a28fa2-df33-4c71-a401-b391ddc66626.png)
 
 在上面的代码输出中，您可以看到标题作为第四项，值作为第五项，这意味着我们必须添加其他条件来解析。这很快就会变得痛苦，这就是为什么我们不会这样做。
 
