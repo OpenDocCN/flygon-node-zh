@@ -34,7 +34,9 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 在`playground`文件夹中，让我们继续创建一个新文件，我们将称这个文件为`mongodb-connect.js`。在这个文件中，我们将通过加载库并连接到数据库来开始。现在，为了做到这一点，我们必须安装库。从终端，我们可以运行`npm install`来完成这项工作。新的库名称是`mongodb`；全部小写，没有连字符。然后，我们将继续指定版本，以确保我们都使用相同的功能，`@3.0.2`。这是写作时的最新版本。在版本号之后，我将使用`--save`标志。这将把它保存为常规依赖项，它已经是：
 
-[PRE0]
+```js
+npm install mongodb@3.0.2 --save
+```
 
 我们需要这个来运行 Todo API 应用程序。
 
@@ -42,7 +44,9 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 现在安装了 MongoDB，我们可以将其移动到我们的`mongodb-connect`文件并开始连接到数据库。我们需要做的第一件事是从我们刚刚安装的库中提取一些东西，那就是`mongodb`库。我们要找的是一个叫做`MongoClient`的构造函数。`MongoClient`构造函数允许您连接到 Mongo 服务器并发出命令来操作数据库。让我们继续创建一个名为`MongoClient`的常量。我们将把它设置为`require`，并且我们将要求我们刚刚安装的库`mongodb`。从那个库中，我们将取出`MongoClient`：
 
-[PRE1]
+```js
+const MongoClient = require('mongodb').MongoClient; 
+```
 
 现在`MongoClient`已经就位，我们可以调用`MongoClient.connect`来连接到数据库。这是一个方法，它接受两个参数：
 
@@ -54,35 +58,63 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 对于我们的第一个参数，我们将从`mongodb://`开始。当我们连接到 MongoDB 数据库时，我们要使用像这样的 mongodb 协议：
 
-[PRE2]
+```js
+MongoClient.connect('mongodb://')
+```
 
 接下来，它将在本地主机上，因为我们在本地机器上运行它，并且我们已经探索了端口：`27017`。在端口之后，我们需要使用`/`来指定我们要连接的数据库。现在，在上一章中，我们使用了测试数据库。这是 MongoDB 给你的默认数据库，但我们可以继续创建一个新的。在`/`之后，我将称数据库为`TodoApp`，就像这样：
 
-[PRE3]
+```js
+MongoClient.connect('mongodb://localhost:27017/TodoApp'); 
+```
 
 # 将回调函数添加为第二个参数
 
 接下来，我们可以继续提供回调函数。我将使用 ES6 箭头（`=>`）函数，并且我们将通过两个参数。第一个将是一个错误参数。这可能存在，也可能不存在；就像我们过去看到的那样，如果实际发生了错误，它就会存在；否则就不会存在。第二个参数将是`client`对象。这是我们可以用来发出读写数据命令的对象：
 
-[PRE4]
+```js
+MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => { 
+
+});
+```
 
 # mongodb-connect 中的错误处理
 
 现在，在写入任何数据之前，我将继续处理可能出现的任何错误。我将使用一个`if`语句来做到这一点。如果有错误，我们将在控制台上打印一条消息，让查看日志的人知道我们无法连接到数据库服务器，`console.log`，然后在引号内放上类似`Unable to connect to MongoDB server`的内容。在`if`语句之后，我们可以继续记录一个成功的消息，类似于`console.log`。然后，在引号内，我们将使用`Connected to MongoDB server`：
 
-[PRE5]
+```js
+MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
+  if(err){
+    console.log('Unable to connect to MongoDB server');
+  }
+  console.log('Connected to MongoDB server');
+});
+```
 
 现在，当你处理这样的错误时，即使错误块运行，成功代码也会运行。我们要做的是在`console.log('Unable to connect to MongoDB server');`行之前添加一个`return`语句。
 
 这个`return`语句并没有做什么花哨的事情。我们所做的只是使用它来阻止函数的其余部分执行。一旦从函数返回，程序就会停止，这意味着如果发生错误，消息将被记录，函数将停止，我们将永远看不到这条`Connected to MongoDB server`消息：
 
-[PRE6]
+```js
+if(err) { 
+    return console.log('Unable to connect to MongoDB server'); 
+  } 
+```
 
 使用`return`关键字的替代方法是添加一个`else`子句，并将我们的成功代码放在`else`子句中，但这是不必要的。我们可以只使用我更喜欢的`return`语法。
 
 现在，在运行这个文件之前，我还想做一件事。在我们的回调函数的最底部，我们将在 db 上调用一个方法。它叫做`client.close`：
 
-[PRE7]
+```js
+MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
+  if(err) { 
+    return console.log('Unable to connect to MongoDB server'); 
+  } 
+  console.log('Connected to MongoDB server');
+  const db = client.db('TodoApp');
+  client.close(); 
+}); 
+```
 
 这关闭了与 MongoDB 服务器的连接。现在我们已经有了这个设置，我们实际上可以保存`mongodb-connect`文件并在终端内运行它。它现在还没有做太多事情，但它确实会工作。
 
@@ -90,7 +122,9 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 在终端中，我们可以使用`node playground`作为目录运行文件，文件本身是`mongodb-connect.js`：
 
-[PRE8]
+```js
+node playground/mongodb-connect.js
+```
 
 当我们运行这个文件时，我们会得到`Connected to MongoDB server`打印到屏幕上：
 
@@ -116,7 +150,9 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 我们可以继续通过调用`db.collection`向`Todos`集合添加一些数据。`db.collection`方法以要插入的集合的字符串名称作为其唯一参数。现在，就像实际数据库本身一样，您不需要首先创建此集合。您只需给它一个名称，比如`Todos`，然后可以开始插入。无需运行任何命令来创建它：
 
-[PRE9]
+```js
+db.collection('Todos')
+```
 
 接下来，我们将使用集合中可用的一个方法`insertOne`。`insertOne`方法允许您将新文档插入到集合中。它需要两个参数：
 
@@ -126,19 +162,57 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 您将获得一个错误参数，可能存在，也可能不存在，您还将获得结果参数，如果一切顺利，将会提供：
 
-[PRE10]
+```js
+const MongoClient = require('mongodb').MongoClient;
+
+MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
+  if(err){
+    console.log('Unable to connect to MongoDB server');
+  }
+  console.log('Connected to MongoDB server');
+  const db = client.db('TodoApp');
+  db.collection('Todos').insertOne({
+    text: 'Something to do',
+    completed: false
+  }, (err, result) => {
+
+  });
+  client.close();
+});
+```
 
 在错误回调函数本身内部，我们可以添加一些代码来处理错误，然后我们将添加一些代码来在成功添加时将对象打印到屏幕上。首先，让我们添加一个错误处理程序。就像我们之前做的那样，我们将检查错误参数是否存在。如果存在，那么我们将简单地使用`return`关键字打印一条消息，以阻止函数继续执行。接下来，我们可以使用`console.log`打印`无法插入 todo`。我将传递给`console.log`的第二个参数将是实际的`err`对象本身，这样如果有人查看日志，他们可以看到出了什么问题：
 
-[PRE11]
+```js
+db.collection('Todos').insertOne({ 
+  text: 'Something to do', 
+  completed: false 
+}, (err, result) => { 
+  if(err){ 
+    return console.log('Unable to insert todo', err); 
+  }
+```
 
 在我们的`if`语句旁边，我们可以添加我们的成功代码。在这种情况下，我们要做的只是将一些内容漂亮地打印到`console.log`屏幕上，然后我将调用`JSON.stringify`，我们将继续传入`result.ops`。`ops`属性将存储所有插入的文档。在这种情况下，我们使用了`insertOne`，所以它只会是我们的一个文档。然后，我可以添加另外两个参数，对于筛选函数是`undefined`，对于缩进是`2`：
 
-[PRE12]
+```js
+db.collection('Todos').insertOne({ 
+  text: 'Something to do', 
+  completed: false 
+}, (err, result) => { 
+  if(err){ 
+    return console.log('Unable to insert todo', err); 
+  }
+
+  console.log(JSON.stringify(result.ops, undefined, 2)); 
+}); 
+```
 
 有了这个，我们现在可以继续执行我们的文件，看看会发生什么。在终端中，我将运行以下命令：
 
-[PRE13]
+```js
+node playground/ mongodb-connect.js
+```
 
 当我执行命令时，我们会收到成功消息：`已连接到 MongoDB 服务器`。然后，我们会得到一个插入的文档数组：
 
@@ -162,15 +236,37 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 希望您能够成功将一个新文档插入到 Users 集合中。为了完成这个任务，您需要调用`db.collection`，这样我们就可以访问我们想要插入的集合，这种情况下是`Users`：
 
-[PRE14]
+```js
+//Insert new doc into Users(name, age, location)
+db.collection('Users')
+```
 
 接下来，我们需要调用一个方法来操作`Users`集合。我们想要插入一个新文档，所以我们将使用`insertOne`，就像我们在上一小节中所做的那样。我们将把两个参数传递给`insertOne`。第一个是要插入的文档。我们将给它一个`name`属性；我将把它设置为`Andrew`。然后，我们可以设置`age`等于`25`。最后，我们将`location`设置为我的当前位置，`Philadelphia`：
 
-[PRE15]
+```js
+//Insert new doc into Users(name, age, location)
+db.collection('Users').insertOne({
+  name: 'Andrew',
+  age: 25,
+  location: 'Philadelphia'
+}
+```
 
 我们要传入的下一个参数是我们的回调函数，它将在错误对象和结果一起被调用。在回调函数内部，我们将首先处理错误。如果有错误，我们将继续将其记录到屏幕上。我将返回`console.log`，然后我们可以放置消息：`Unable to insert user`。然后，我将添加错误参数作为`console.log`的第二个参数。接下来，我们可以添加我们的成功案例代码。如果一切顺利，我将使用`console.log`将`result.ops`打印到屏幕上。这将显示我们插入的所有记录：
 
-[PRE16]
+```js
+//Insert new doc into Users(name, age, location)
+db.collection('Users').insertOne({
+  name: 'Andrew',
+  age: 25,
+  location: 'Philadelphia'
+}, (err, result) => {
+  if(err) {
+    return console.log('Unable to insert user', err);
+  }
+  console.log(result.ops);
+});
+```
 
 现在我们可以继续使用*向上*箭头键和*回车*键在终端内重新运行文件：
 
@@ -192,7 +288,9 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 为了开始我们对`_id`属性的讨论，让我们继续重新运行`mongodb-connect`文件。这将向 Users 集合中插入一个新的文档，就像我们在`db.collection`行中定义的那样。我将通过在节点中运行文件来做到这一点。它在`playground`文件夹中，文件本身叫做`mongodb-connect.js`：
 
-[PRE17]
+```js
+node playground/mongodb-connect.js
+```
 
 我将运行命令，然后我们将打印出插入的文档：
 
@@ -210,7 +308,14 @@ GitHub 仓库，应该是第一个链接，是我们想要的——node-mongodb-
 
 ObjectId 是`_id`的默认值。如果没有提供任何内容，你确实可以对该属性做任何你喜欢的事情。例如，在`mongodb-connect`文件中，我可以指定一个`_id`属性。我将给它一个值，所以让我们用`123`；在末尾加上逗号；这是完全合法的：
 
-[PRE18]
+```js
+db.collection('Users').insertOne({
+  _id: 123,
+  name: 'Andrew',
+  age: 25,
+  location: 'Philadelphia'
+}
+```
 
 我们可以保存文件，并使用*上*箭头键和*回车*键重新运行脚本：
 
@@ -224,11 +329,25 @@ ObjectId 是`_id`的默认值。如果没有提供任何内容，你确实可以
 
 接下来，我想看一下我们在代码中可以做的一些事情。正如我之前提到的，时间戳被嵌入在这里，我们实际上可以将其提取出来。在 Atom 中，我们要做的是移除`_id`属性。时间戳只有在使用`ObjectId`时才可用。然后，在我们的回调函数中，我们可以继续将时间戳打印到屏幕上。
 
-[PRE19]
+```js
+db.collection('Users').insertOne({
+  name: 'Andrew',
+  age: 25,
+  location: 'Philadelphia'
+}, (err, result) => {
+  if(err) {
+    return console.log('Unable to insert user', err);
+  }
+
+  console.log(result.ops);
+});
+```
 
 如果你记得，`result.ops`是一个包含所有插入的文档的数组。我们只插入一个，所以我将访问数组中的第一个项目，然后我们将访问`_id`属性。这将正如你所想的那样：
 
-[PRE20]
+```js
+console.log(result.ops[0]._id);
+```
 
 如果我们保存文件并从终端重新运行脚本，我们只会得到`ObjectId`打印到屏幕上：
 
@@ -240,7 +359,9 @@ ObjectId 是`_id`的默认值。如果没有提供任何内容，你确实可以
 
 我们要调用的是`.getTimestamp`。`getTimestamp`是一个函数，但它不需要任何参数。它只是返回 ObjectId 创建的时间戳：
 
-[PRE21]
+```js
+console.log(result.ops[0]._id.getTimestamp()); 
+```
 
 现在，如果我们继续重新运行我们的程序，我们会得到一个时间戳：
 
@@ -256,15 +377,26 @@ ObjectId 是`_id`的默认值。如果没有提供任何内容，你确实可以
 
 对象解构允许你从对象中提取属性以创建变量。这意味着如果我们有一个名为`user`的对象，并且它等于一个具有`name`属性设置为`andrew`和一个年龄属性设置为`25`的对象，如下面的代码所示：
 
-[PRE22]
+```js
+const MongoClient = require('mongodb').MongoClient;
+
+var user = {name: 'andrew', age: 25};
+```
 
 我们可以很容易地将其中一个提取到一个变量中。比如说，我们想要获取名字并创建一个`name`变量。要在 ES6 中使用对象解构，我们将创建一个变量，然后将其包裹在花括号中。我们将提供我们想要提取的名字；这也将是变量名。然后，我们将把它设置为我们想要解构的对象。在这种情况下，那就是`user`对象：
 
-[PRE23]
+```js
+var user = {name: 'andrew', age: 25};
+var {name} = user;
+```
 
 我们已经成功解构了`user`对象，取出了`name`属性，创建了一个新的`name`变量，并将其设置为任何值。这意味着我可以使用`console.log`语句将`name`打印到屏幕上：
 
-[PRE24]
+```js
+var user = {name: 'andrew', age: 25};
+var {name} = user;
+console.log(name);
+```
 
 我将重新运行脚本，我们得到`andrew`，这正是你所期望的，因为这是`name`属性的值：
 
@@ -274,11 +406,16 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 在添加任何新内容之前，让我们继续并将 MongoClient 语句切换到解构；然后，我们将担心抓取那个新东西，让我们能够创建 ObjectIds。我将复制并粘贴该行，并注释掉旧的，这样我们就可以参考它。
 
-[PRE25]
+```js
+// const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
+```
 
 我们要做的是在`require`之后删除我们的`.MongoClient`调用。没有必要去掉那个属性，因为我们将使用解构代替。这意味着在这里我们可以使用解构，这需要我们添加花括号，并且我们可以从 MongoDB 库中取出任何属性。
 
-[PRE26]
+```js
+const {MongoClient} = require('mongodb');
+```
 
 在这种情况下，我们唯一拥有的属性是`MongoClient`。这创建了一个名为`MongoClient`的变量，将其设置为`require('mongodb')`的`MongoClient`属性，这正是我们在之前的`require`语句中所做的。
 
@@ -286,15 +423,23 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 现在我们有了一些解构，我们可以很容易地从 MongoDB 中取出更多的东西。我们可以添加一个逗号并指定我们想要取出的其他东西。在这种情况下，我们将取出大写的`ObjectID`。
 
-[PRE27]
+```js
+const {MongoClient, ObjectID} = require('mongodb');
+```
 
 这个`ObjectID`构造函数让我们可以随时创建新的 ObjectIds。我们可以随心所欲地使用它们。即使我们不使用 MongoDB 作为我们的数据库，创建和使用 ObjectIds 来唯一标识事物也是有价值的。接下来，我们可以通过首先创建一个变量来创建一个新的 ObjectId。我会称它为`obj`，并将其设置为`new ObjectID`，将其作为一个函数调用：
 
-[PRE28]
+```js
+const {MongoClient, ObjectID} = require('mongodb');
+
+var obj = new ObjectID(); 
+```
 
 使用`new`关键字，我们可以创建`ObjectID`的一个新实例。接下来，我们可以使用`console.log(obj)`将其记录到屏幕上。这是一个普通的 ObjectId：
 
-[PRE29]
+```js
+console.log(obj); 
+```
 
 如果我们从终端重新运行文件，我们会得到你期望的结果：
 
@@ -306,7 +451,10 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 使用这种技术，我们可以在任何地方都使用 ObjectIds。我们甚至可以生成我们自己的 ObjectIds，将它们设置为我们文档的`_id`属性，尽管我发现让 MongoDB 为我们处理这些繁重的工作要容易得多。我将继续删除以下两行，因为我们实际上不会在脚本中使用这段代码：
 
-[PRE30]
+```js
+var obj = new ObjectID();
+console.log(obj);
+```
 
 我们已经了解了一些关于 ObjectIds 的知识，它们是什么，以及它们为什么有用。在接下来的章节中，我们将看看我们可以如何与 MongoDB 一起工作的其他方式。我们将学习如何读取、删除和更新我们的文档。
 
@@ -322,7 +470,12 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 为了使这个查询更有趣一些，我们将继续添加第二个。在 Robomongo 窗口中，我可以点击插入文档。Robomongo 可以删除、插入、更新和读取所有的文档，这使它成为一个很棒的调试工具。我们可以随时添加一个新的文档，其中`text`属性等于`Walk the dog`，我们还可以附加一个`completed`值。我将`completed`设置为`false`：
 
-[PRE31]
+```js
+{
+  text : "Walk the dog",
+  completed : false
+}
+```
 
 现在，默认情况下，我们不会提供`_id`属性。这将让 MongoDB 自动生成那个 ObjectId，而在这里我们有我们的两个 Todos：
 
@@ -334,29 +487,69 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 在 Atom 中，我们要做的是访问集合，就像我们在`mongodb-connect`文件中使用`db.collection`一样，将集合名称作为字符串传递。这个集合将是`Todos`集合。现在，我们将继续使用集合上可用的一个叫做`find`的方法。默认情况下，我们可以不带参数地调用`find`：
 
-[PRE32]
+```js
+db.collection('Todos').find();
+```
 
 这意味着我们没有提供查询，所以我们没有说我们想要获取所有已完成或未完成的`Todos`。我们只是说我们想获取所有`Todos`：无论其值如何，一切。现在，调用 find 只是第一步。`find`返回一个 MongoDB 游标，而这个游标并不是实际的文档本身。可能有几千个，那将非常低效。它实际上是指向这些文档的指针，并且游标有大量的方法。我们可以使用这些方法来获取我们的文档。
 
 我们将要使用的最常见的游标方法之一是`.toArray.`它确切地做了你认为它会做的事情。我们不再有游标，而是有一个文档的数组。这意味着我们有一个对象的数组。它们有 ID 属性，文本属性和完成属性。这个`toArray`方法恰好得到了我们想要的东西，也就是文档。`toArray`返回一个 promise。这意味着我们可以添加一个`then`调用，我们可以添加我们的回调，当一切顺利时，我们可以做一些像将这些文档打印到屏幕上的事情。
 
-[PRE33]
+```js
+db.collection('Todos').find().toArray().then((docs) => {
+
+});
+```
 
 我们将得到文档作为第一个和唯一的参数，我们还可以添加一个错误处理程序。我们将传递一个错误参数，我们可以简单地打印一些像`console.log(无法获取 todos)`的东西到屏幕上；作为第二个参数，我们将传递`err`对象：
 
-[PRE34]
+```js
+db.collection('Todos').find().toArray().then((docs) => {
+
+}, (err) => { 
+  console.log('Unable to fetch todos', err); 
+}); 
+```
 
 现在，对于成功的情况，我们要做的是将文档打印到屏幕上。我将继续使用`console.log`来打印一条小消息，`Todos`，然后我将再次调用`console.log`。这次，我们将使用`JSON.stringify`技术。我将传递文档，`undefined`作为我们的过滤函数和`2`作为我们的间距。
 
-[PRE35]
+```js
+  db.collection('Todos').find().toArray().then((docs) => {
+    console.log('Todos');
+    console.log(JSON.stringify(docs, undefined, 2));
+  }, (err) => {
+    console.log('Unable to fetch todos', err);
+  });
+```
 
 我们现在有一个能够获取文档，将其转换为数组并将其打印到屏幕上的脚本。现在，暂时地，我将注释掉`db.close`方法。目前，那会干扰我们之前的代码。我们的最终代码将如下所示：
 
-[PRE36]
+```js
+//const MongoClient = require('mongodb').MongoClient;
+const {MongoClient, ObjectID} = require('mongodb');
+
+MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
+  if(err){ 
+    console.log('Unable to connect to MongoDB server');
+  } 
+  console.log('Connected to MongoDB server');
+  const db = client.db('TodoApp');
+
+  db.collection('Todos').find().toArray().then((docs) => {
+    console.log('Todos');
+    console.log(JSON.stringify(docs, undefined, 2));
+  }, (err) => {
+    console.log('Unable to fetch todos', err);
+  });
+  //client.close();
+});
+```
 
 保存文件并从终端运行它。在终端中，我将继续运行我们的脚本。显然，由于我们用 Robomongo 连接到了数据库，它正在某个地方运行；它正在另一个标签页中运行。在另一个标签页中，我可以运行脚本。我们将通过`node`运行它；它在`playground`文件夹中，文件本身叫做`mongodb-find.js`：
 
-[PRE37]
+```js
+node playground/mongodb-find.js
+```
 
 当我执行这个文件时，我们将得到我们的结果：
 
@@ -380,7 +573,9 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 为了完成这个目标，在 Atom 中，我们将更改调用 find 的方式。我们不再传递`0`个参数，而是传递`1`个参数。这就是我们所谓的查询。我们可以开始指定我们想要查询`Todos`集合的方式。例如，也许我们只想查询`completed`值等于`false`的`Todos`。我们只需设置键值对来按值查询，如下所示：
 
-[PRE38]
+```js
+db.collection('Todos').find({completed: false}).toArray().then((docs) => {
+```
 
 如果我在终端中关闭脚本后重新运行我们的脚本，我们只会得到我们的一个待办事项：
 
@@ -394,17 +589,27 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 现在，为了说明这一点，我将从终端获取`completed`值为`false`的待办事项的 ID。我将使用*command* + *C*进行复制。如果您使用的是 Windows 或 Linux，您可能需要在突出显示 ID 后右键单击，并单击复制文本。现在我已经将文本放入剪贴板，我可以转到查询本身。现在，如果我们尝试像这样添加 ID：
 
-[PRE39]
+```js
+db.collection('Todos').find({_id: ''}).toArray().then((docs) => {
+```
 
 它不会按预期工作，因为我们在 ID 属性中拥有的不是一个字符串。它是一个 ObjectId，这意味着我们需要使用之前导入的`ObjectID`构造函数来为查询创建一个 ObjectId。
 
 为了说明这将如何发生，我将继续缩进我们的对象。这将使它更容易阅读和编辑。
 
-[PRE40]
+```js
+db.collection('Todos').find({
+  _id: '5a867e78c3a2d60bef433b06'
+}).toArray().then((docs) => {
+```
 
 现在，我要删除字符串并调用`new ObjectID`。`new ObjectID`构造函数确实需要一个参数：ID，在这种情况下，我们将其存储为字符串。这将按预期工作。
 
-[PRE41]
+```js
+db.collection('Todos').find({
+  _id: new ObjectID('5a867e78c3a2d60bef433b06');
+})
+```
 
 我们在这里所做的是查询`Todos`集合，寻找任何具有与我们拥有的 ID 相等的`_id`属性的记录。现在，我可以保存这个文件，通过重新运行脚本来刷新一下，我们将得到完全相同的待办事项：
 
@@ -424,317 +629,436 @@ ES6 解构是从对象的属性中创建新变量的一种绝妙方式。我将�
 
 现在，我们将继续在 Atom 中实现`count`。我要做的是将当前查询复制到剪贴板，然后将其注释掉。我将用一个调用`count`替换我们对`toArray`的调用。让我们继续删除我们传递给 find 的查询。我们要做的是计算`Todos`集合中的所有 Todos。我们将不再调用`toArray`，而是调用 count。
 
-[PRE42]
+```js
+db.collection('Todos').find({}).count().then((count) => {
+```
 
 正如您在 count 的示例中看到的那样，他们这样调用 count：调用 count，传递一个回调函数，该函数在出现错误或实际计数时调用。您还可以将 promise 作为访问数据的一种方式，这正是我们使用`toArray`的方式。在我们的情况下，我们将使用 promise 而不是传递回调函数。我们已经设置好了 promise。我们需要做的就是将`docs`更改为`count`，然后我们将删除打印 docs 到屏幕的`console.log`调用者。在我们打印 Todos 之后，我们将打印`Todos count`，并传入值。
 
-[PRE43]
+```js
+db.collection('Todos').find({}).count().then((count) => {
+   console.log('Todos count:');
+}, (err) => {
+   console.log('Unable to fetch todos', err);
+});
+```
 
 这不是一个模板字符串，但我将继续并用一个替换它，用`` ` ``替换引号。现在，我可以传入`count`。
 
-[PRE44]
+```js
+db.collection('Todos').find({}).count().then((count) => {
+   console.log(`Todos count: ${count}`);
+}, (err) => {
+   console.log('Unable to fetch todos', err);
+});
+```
 
-Now that we have this in place, we have a way to count up all of the Todos in the `Todos` collection. Inside the Terminal, I'm going to go ahead and shut down our previous script and rerun it:
+现在我们已经完成了这一步，我们有一个方法来计算`Todos`集合中的所有`Todos`的数量。 在终端中，我将关闭之前的脚本并重新运行它：
 
 ![](img/9fd9155b-32b9-4c22-9771-82a526d89065.png)
 
-We get `Todos count` too, which is correct. The cursor that we have, a call to find, returns everything in the Todos collection. If you count all of that up, you're going to get those two Todo items.
+我们也得到了`Todos count`，这是正确的。 我们有一个调用 find 返回`Todos`集合中的所有内容的游标。 如果您将所有这些加起来，您将得到这两个 Todo 项目。
 
-Once again, these are `count` and `toArray`; they're just a subset of all of the awesome methods you have available to you. We will be using other methods, whether it be the MongoDB native driver or, as you'll see later, the library Mongoose, but for now let's go ahead and do a challenge, given what you know.
+再次强调，这些是`count`和`toArray`；它们只是您可以使用的所有出色方法的一个子集。 我们将使用其他方法，无论是 MongoDB 本机驱动程序还是稍后将看到的 Mongoose 库，但现在让我们继续进行挑战，根据您的了解。
 
-# Querying users collection
+# 查询用户集合
 
-To get started, let's head into Robomongo, open up the Users collection, and take a look at all the documents we have inside of there. We currently have five. If you don't have the exact same number or yours are a little different, that's fine. I'm going to highlight them, right-click them, and click Expand Recursively. This is going to show me all of the key-value pairs for each document:
+要开始，让我们进入 Robomongo，打开`Users`集合，并查看我们在其中的所有文档。 目前我们有五个。 如果您的数量不完全相同，或者您的有点不同，也没关系。 我将突出显示它们，右键单击它们，并单击递归展开。 这将显示我每个文档的所有键值对：
 
 ![](img/389ebd7e-0161-4c1b-a31d-bab563cc5621.png)
 
-Currently, aside from the ID, they're all identical. The name's Andrew, the age is 25, and the location is Philadelphia. I'm going to tweak the name property for two of them. I'm going to right-click the first document, and change the name to something like `Jen`. Then, I'll go ahead and do the same thing for the second document. I'm going to edit that document and change the name from `Andrew` to `Mike`. Now I have one document with a name of `Jen`, one with `Mike`, and three with `Andrew`.
+目前，除了 ID 之外，它们都是相同的。 名字都是 Andrew，年龄是 25，位置是费城。 我将调整其中两个的姓名属性。 我将右键单击第一个文档，并将名称更改为类似`Jen`的内容。 然后，我将继续对第二个文档执行相同的操作。 我将编辑该文档并将名称从`Andrew`更改为`Mike`。 现在我有一个名称为`Jen`的文档，一个名称为`Mike`的文档，还有三个名称为`Andrew`的文档。
 
-We're going to query our users, looking for all of the users with the name equal to the name that you provided in the script. In this case, I'm going to try to query for all documents in the `Users` collection where the name is `Andrew`. Then, I'm going to print them into the screen, and I will expect to get three back. The two with the names `Jen` and `Mike` should not show up.
+我们将查询我们的用户，寻找所有名称等于您在脚本中提供的名称的用户。 在这种情况下，我将尝试查询`Users`集合中名称为`Andrew`的所有文档。 然后，我将它们打印到屏幕上，并且我期望会得到三个回来。 名称为`Jen`和`Mike`的两个不应该出现。
 
-The first thing we need to do is fetch from the collection. This is going to be the `Users` collection as opposed to the `Todos` collection we've used in this chapter. In the `db.collection`, we're looking for the `Users` collection and now we're going to go ahead and call `find`, passing in our query. We want a query, fetching all documents where the `name` is equal to the string `Andrew`.
+我们需要做的第一件事是从集合中获取。 这将是`Users`集合，而不是本章中使用的`Todos`集合。 在`db.collection`中，我们正在寻找`Users`集合，现在我们将继续调用`find`，传入我们的查询。 我们希望查询所有文档，其中`name`等于字符串`Andrew`。
 
-[PRE45]
+```js
+db.collection('Users').find({name: 'Andrew'})
+```
 
-This is going to return the cursor. In order to actually get the documents, we have to call `toArray`. We now have a promise; we can attach a `then` call onto `toArray` to do something with the `docs`. The documents are going to come back as the first argument in our success handler, and right inside of the function itself we can print the docs to the screen. I'm going to go ahead and use `console.log(JSON.stringify())`, passing in our three classic arguments: the object itself, `docs`, `undefined`, and `2` for formatting:
+这将返回游标。为了真正地获取这些文档，我们必须调用`toArray`。现在我们有一个 promise；我们可以将`then`调用附加到`toArray`上来对`docs`做一些事情。文档将作为我们成功处理程序的第一个参数返回，并且在函数本身内部，我们可以将文档打印到屏幕上。我将继续使用`console.log(JSON.stringify())`，传入我们的三个经典参数：对象本身，`docs`，`undefined`和`2`来进行格式化：
 
-[PRE46]
+```js
+db.collection('Users').find({name: 'Andrew'}).toArray().then((docs) => {
+  console.log(JSON.stringify(docs, undefined, 2));
+});
+```
 
-With this in place, we have now done. We have a query, and it should work. We can test it by running it from the Terminal. Inside the Terminal, I'm going to go ahead and shut down the previous connection and rerun the script:
+有了这个，我们现在就完成了。我们有一个查询，并且它应该可以工作。我们可以通过从终端运行它来进行测试。在终端中，我将关闭之前的连接，然后重新运行脚本：
 
 ![](img/4fd344a9-de63-45ff-a7b0-fd5353c06e3b.png)
 
-When I do this, I get my three documents back. All of them have a `name` equal to `Andrew`, which is correct because of the query we set up. Notice the documents with a name equal to `Mike` or `Jen` are nowhere to be found.
+当我这样做时，我得到了三份文件。它们都有一个`name`等于`Andrew`，这是正确的，因为我们设置的查询。请注意，具有名称等于`Mike`或`Jen`的文档找不到了。
 
-We now know how to insert and query data from the database. Up next, we're going to take a look at how we can remove and update documents.
+我们现在知道如何向数据库中插入和查询数据。接下来，我们将看看如何删除和更新文档。
 
-# Setting up the repo
+# 设置存储库
 
-Before we go any further, I do want to add version control to this project. In this section, we're going to create a new repo locally, make a new GitHub repository, and push our code to that GitHub repository. If you're already familiar with Git or GitHub, you can go ahead and do that on your own; you don't need to go through this section. If you're new to Git and it doesn't make sense just yet, that's also fine. Simply follow along, and we'll go through the whole process.
+在我们继续之前，我确实想为这个项目添加版本控制。在这一节中，我们将在本地创建一个新的存储库，创建一个新的 GitHub 存储库，并将我们的代码推送到该 GitHub 存储库中。如果你已经熟悉 Git 或 GitHub，你可以自行操作；你不需要通过这一节。如果你对 Git 还不明白，那也没关系。只需跟着进行，我们将一起完成整个过程。
 
-This section is going to be really simple; nothing MongoDB- related here. To get started, I am going to go ahead and initialize a new Git repository from the Terminal by using `git init`. This is going to initialize a new repository, and I can always run `git status` like this to take a look at the files that are untracked:
+这一部分将非常简单；这里涉及的内容与 MongoDB 无关。要开始，我将从终端使用`git init`初始化一个新的 Git 存储库。这将初始化一个新的仓库，我随时可以像这样运行`git status`来查看未跟踪的文件：
 
 ![](img/8c2070ea-2d27-43e3-b609-f3a4948be5bc.png)
 
-Here we have our `playground` folder, which we want to add under version control, and we have `package.json`. We also have `node_modules`. We do not want to track this directory. This contains all of our npm libraries. To ignore `node_modules`, in Atom we're going to make the `.gitignore` file in the root of our project. If you remember, this lets you specify files and folders that you want to leave out of your version control. I'm going to create a new file called `.gitignore`. In order to ignore the `node_modules` directory, all we have to do is type it exactly as it's shown here:
+这里有我们的`playground`文件夹，我们希望将其添加到版本控制下，并且有`package.json`。我们还有`node_modules`。我们不想跟踪这个目录。这里包含了我们所有的 npm 库。要忽略`node_modules`，在 Atom 中我们将在项目的根目录下创建`.gitignore`文件。如果你记得的话，这可以让你指定你想要在版本控制之外的文件和文件夹。我将创建一个名为`.gitignore`的新文件。为了忽略`node_modules`目录，我们只需要像这里显示的那样输入它：
 
-[PRE47]
+```js
+node_modules/
+```
 
-I'm going to save the file and rerun `git status` from the Terminal. We get the `.gitignore` folder showing up, and the `node_modules` folder is nowhere in sight:
+我将保存文件并从终端重新运行`git status`。我们看到`.gitignore`文件出现了，而`node_modules`文件夹却不见了：
 
 ![](img/ce67bd02-10cd-4cf0-b6ba-6754e2b5a4aa.png)
 
-The next thing we're going to do is make our first commit, using two commands. First up, I'm going to use `git add .` to add everything to the next commit. Then, I can make the commit using `git commit` with the `-m` flag. A good message for this commit would be `Init commit`:
+接下来，我们要做的是使用两个命令进行第一次提交。首先，我要使用 `git add .` 将所有内容添加到下一个提交中。然后，我可以使用带有 `-m` 标志的 `git commit` 进行提交。这次提交的一个好消息是 `初始提交`：
 
-[PRE48]
+```js
+git add .
+git commit -m 'Init commit'
+```
 
-Now before we go, I do want to make a GitHub repository and get this code up there. This is going to require me to open up the browser and go to [github.com](http://www.github.com). Once you're logged in we can make a new repo. I'm going to make a new repo and give it a name:
+在我们离开之前，我想要创建一个 GitHub 仓库并将这段代码上传到上面。这将需要我打开浏览器并转到 [github.com](http://www.github.com)。一旦您登录，我们就可以创建一个新的仓库。我要创建一个新的仓库并给它一个名称：
 
 ![](img/e42875c4-0a3d-41cb-8ee9-f150f3c02dcf.png)
 
-I'm going to go with `node-course-2-todo-api`. You can name yours something else if you wish. I'm going to go with this one to keep the course files organized. Now I can go ahead and create this repository, and as you may recall, GitHub actually gives us a few helpful commands:
+我将使用 `node-course-2-todo-api`。如果您愿意，您可以选择其他名称。我要选择这个来保持课程文件的组织。现在我可以继续创建这个仓库，并且正如您可能还记得的，GitHub 实际上给了我们一些有用的命令：
 
 ![](img/77b896c2-0987-4c37-a6d7-7fe02ea00204.png)
 
-In this case, we're pushing an existing repository from the command line. We already went through the steps of initializing the repository, adding our files and making our first commit. That means I can take the following two lines, copy them, head over to the Terminal, and paste them in:
+在这种情况下，我们正在从命令行推送一个现有仓库。我们已经经历了初始化仓库、添加文件和进行第一次提交的步骤。这意味着我可以复制以下两行，然后前往终端并将它们粘贴进去：
 
-[PRE49]
+```js
+git remote add origin https://github.com/garygreig/node-course-2-todo-api.git
+git push -u origin master
+```
 
-You might need to do these one at a time, depending on your operating system. On the Mac, when I try to paste in multiple commands it's going to run all but the last, and then I just have to hit enter to run the last one. Take a moment to knock that out for your operating system. You might need to run it as one command, or you might be able to paste it all in and hit *enter*. Either way, what we have here is our code pushed up to GitHub. I can prove that it's pushed up by refreshing the repository page:
+取决于您的操作系统，您可能需要逐个执行这些命令。在 Mac 上，当我尝试粘贴多个命令时，它会运行所有命令，除了最后一个，然后我只需按回车键运行最后一个命令。花点时间为您的操作系统执行这些操作。您可能需要将它们作为一个命令运行，或者您可以粘贴所有内容并按*回车*键。无论哪种方式，我们的代码都被推送到了 GitHub。我可以通过刷新仓库页面来证明它已经推送上去了：
 
 ![](img/1bd89ea4-3f8b-4cb0-9ff0-194e62d0d9e0.png)
 
-Right there we have all of our source code, the `.gitignore` file, `package.json`, and we have our `playground` directory with our MongoDB scripts.
+这里我们有所有的源代码、`.gitignore` 文件、`package.json`，还有我们的`playground`目录和我们的 MongoDB 脚本。
 
-That's it for this section. We'll explore how to delete data from a MongoDB collection in the next section.
+到此为止了。下一节我们将探讨如何从 MongoDB 集合中删除数据。
 
-# Deleting documents
+# 删除文档
 
-In this section, you're going to learn how to delete documents from your MongoDB collections. Before we get into that, in order to explore the methods that let us delete multiple documents or just one, we want to create a few more Todos. Currently, the `Todos` collection only has two items, and we're going to need a few more in order to play around with all these methods involving deletion.
+在本节中，您将学习如何从 MongoDB 集合中删除文档。在深入探讨可以删除多个文档或只删除一个文档的方法之前，我们需要创建几个更多的 Todos。当前，`Todos` 集合仅有两个条目，我们需要更多的条目来演示这些涉及删除的方法。
 
-Now, I do have two. I'm going to go ahead and create a third by right-clicking and then going to Insert Document.... We'll make a new document with a `text` property equal to something like `Eat lunch`, and we'll set `completed` equal to `false`:
+现在，我有两个。我将继续创建第三个，可以通过右键单击然后转到插入文档...来完成。我们将使用 `text` 属性等于诸如 `吃午饭` 的新文档，并将 `completed` 设置为 `false`：
 
-[PRE50]
+```js
+{
+   text: 'Eat lunch',
+   completed: false
+}
+```
 
-Now before we save this, I am going to copy it to the clipboard. We're going to create a few duplicate Todos so we can see how we can delete items based off of specific criteria. In this case, we're going to be deleting multiple Todos with the same text value. I'm going to copy that to the clipboard, click Save, and then I'll create two more with the exact same structure. Now we have three Todos that are identical except for the ID, and we have two that have unique text properties:
+现在在保存之前，我会将它复制到剪贴板上。我们将创建一些重复的 Todos，这样我们就可以看到如何基于特定条件删除项目。在这种情况下，我们将删除具有相同文本值的多个 Todos。我将把它复制到剪贴板上，点击保存，然后我将创建两个具有完全相同结构的副本。现在我们有三个除了 ID 不同之外都相同的 Todos，以及两个具有唯一文本属性的 Todos：
 
 ![](img/8fc55286-909e-408d-8951-e315c454287f.png)
 
-Let's go ahead and move into Atom and start writing some code.
+让我们继续进入 Atom 并开始编写一些代码。
 
-# Exploring methods to delete data
+# 探索删除数据的方法
 
-I'm going to duplicate the `mongodb-find` file, creating a brand-new file called `mongodb-delete.js`. In here, we'll explore the methods for deleting data. I'm also going to remove all of the queries that we set up in the previous section. I am going to keep the `db.close` method commented out, as once again we don't want to close the connection just yet; it's going to interfere with these statements we're about to write.
+我要复制`mongodb-find`文件，创建一个名为`mongodb-delete.js`的全新文件。在这里，我们将探索删除数据的方法。我还将删除我们在上一部分设置的所有查询。我将保留`db.close`方法的注释，因为我们不想立即关闭连接；这将干扰我们即将编写的这些语句。
 
-Now, there are three methods that we'll be using in order to remove data.
+现在，我们将使用三种方法来删除数据。
 
-*   The first one is going to be `deleteMany`. The `deleteMany` method will let us target many documents and remove them.
-*   We'll also be using `deleteOne`, which targets one document and removes it.
-*   And finally, we'll be using `findOneAndDelete`. The `findOneAndDelete` method lets you remove an individual item and it also returns those values. Imagine I want to delete a Todo. I delete the Todo, but I also get the Todo object back so I can tell the user exactly which one got deleted. This is a really useful method.
++   第一个将使用的是`deleteMany`。`deleteMany`方法让我们可以针对多个文档并将它们删除。
 
-# The deleteMany method
++   我们还将使用`deleteOne`，它可以定位一个文档并删除它。
 
-Now, we're going to start off with `deleteMany`, and we're going to target those duplicates we just created. The goal in this section, is to delete every single Todo inside of the Todos collection that has a `text` property equal to `Eat lunch`. Currently, there are three out of five that fit that criteria.
++   最后，我们将使用`findOneAndDelete`。`findOneAndDelete`方法让您删除单个项目，并返回这些值。想象一下，我想删除一个 Todo。我删除了 Todo，但我也得到了 Todo 对象，所以我可以告诉用户确切地删除了哪一个。这是一个非常有用的方法。
 
-In Atom, we can go ahead and kick things off by doing `db.collection`. This is going to let us target our Todos collection. Now, we can go ahead and use the collection method `deleteMany`, passing in the arguments. In this case, the only argument we need is our object, and this object is just like the object we passed to find. With this, we can target our Todos. In this case, we're going to delete every Todo where the `text` equals `Eat lunch`.
+# `deleteMany`方法
 
-[PRE51]
+现在，我们将从`deleteMany`开始，并将针对我们刚刚创建的重复项。这一部分的目标是删除 Todos 集合中每一个`text`属性等于`吃午餐`的 Todo。目前，有五个中的三个符合这个条件。
 
-We didn't use any punctuation in RoboMongo, so we're also going to avoid punctuation over in Atom; it needs to be exactly the same.
+在 Atom 中，我们可以通过执行`db.collection`来开始`db.collection`。这将让我们定位到我们的 Todos 集合。现在，我们可以继续使用`deleteMany`集合方法，传入参数。在这种情况下，我们只需要一个参数，就是我们的对象，这个对象就像我们传递给 find 的对象一样。有了这个，我们可以定位到我们的 Todos。在这种情况下，我们将删除所有`text`等于`吃午餐`的 Todo。
 
-Now that we have this in place, we could go ahead and tack on a `then` call to do something when it either succeeds or fails. For now, we'll just add a success case. We are going to get a result argument passed back to the callback, and we can print that to the `console.log(result)` screen, and we'll take a look at exactly what is in this result object a bit later.
+```js
+//deleteMany 
+db.collection('Todos').deleteMany({text: 'Eat lunch'});
+```
 
-[PRE52]
+在 RoboMongo 中我们没有使用任何标点符号，因此在 Atom 中我们也将避免使用标点符号；它需要完全相同。
 
-With this in place, we now have a script that deletes all Todos where the text value is `Eat lunch`. Let's go ahead and run it, and see exactly what happens. In the Terminal, I'm going to run this file. It's in the `playground` folder, and we just called it `mongodb-delete.js`:
+现在我们可以添加`then`调用，当成功或失败时执行一些操作。现在，我们将只添加一个成功案例。我们将得到一个返回到回调的结果参数，并且我们可以将其打印到`console.log(result)`屏幕上，稍后我们将看一下这个结果对象的具体内容。
 
-[PRE53]
+```js
+//deleteMany 
+db.collection('Todos').deleteMany({text: 'Eat lunch'}).then((result) => {
+  console.log(result); 
+});
+```
 
-Now when I run it, we get a lot of output:
+有了这个，我们现在有一个可以删除所有`吃午饭`文本值的脚本。让我们继续运行它，看看发生了什么。在终端中，我将运行这个文件。它在`playground`文件夹中，我们刚刚称它为`mongodb-delete.js`：
+
+```js
+node playground/mongodb-delete.js
+```
+
+现在当我运行它时，我们会得到很多输出：
 
 ![](img/7744c074-3a75-4b6b-8dc0-2d5f890da471.png)
 
-A really important piece of output, the only important piece actually, is up at the very top. If you scroll to the top, what you're going to see is this `result` object. We get `ok` set to `1`, which means things did go as expected, and we get `n` set to `3`. `n` is the number of records that were deleted. In this case, we had three Todos that match that criteria, so three Todos were deleted. This is how you can target and delete many Todos.
+一个真正重要的输出部分，事实上是唯一重要的部分，就在顶部。如果你滚动到顶部，你会看到这个`result`对象。我们将`ok`设置为`1`，表示事情如预期般发生了，我们将`n`设置为`3`。`n`是已删除的记录数。在这种情况下，有三个符合条件的 Todos 被删除了。这就是你如何可以定位和删除许多 Todos。
 
-# The deleteOne Method
+# `deleteOne`方法
 
-Now, aside from `deleteMany`, we have `deleteOne`, and `deleteOne` works exactly the same as `deleteMany`, only it deletes the first item it sees that matches the criteria and then it stops.
+现在，除了`deleteMany`，我们还有`deleteOne`，`deleteOne`的工作方式与`deleteMany`完全相同，只是它删除它看到与条件匹配的第一项，然后停止。
 
-To illustrate exactly how this works, we're going to create two items inside of our collection. If I give things a refresh, you will see that we now only have two documents:
+为了确切地说明这是如何工作的，我们将创建两个项目并存放到我们的集合中。如果我刷新一下，你会看到我们现在只有两个文档：
 
 ![](img/9a571ad9-8625-46c8-813d-118afc431db6.png)
 
-These are the ones we started with. I'm going to insert documents again using the same data that's already in my clipboard. This time we'll just make two document, two that are identical.
+这些是我们开始的内容。我将再次使用剪贴板中的相同数据插入文档。这次我们只创建两个重复的文档。
 
-# The deleteOne method
+# `deleteOne`方法
 
-The goal here is to use `deleteOne` to delete the document where the text equals `Eat lunch`, but since we're using `deleteOne` and not `deleteMany`, one of these should stay around and one of them should go away.
+这里的目标是使用`deleteOne`删除文本等于`吃午饭`的文档，但因为我们使用的是`deleteOne`而不是`deleteMany`，其中一个应该保留，另一个应该被删除。
 
-Back inside of Atom, we can go ahead and get started by calling `db.collection` with the collection name we want to target. In this case it's `Todos` again, and we're going to use `deleteOne`. The `deleteOne` method takes that same criteria. We're going to target documents where `text` equals `Eat lunch`.
+回到 Atom 中，我们可以通过调用`db.collection`并指定目标集合的名称开始工作。这次又是`Todos`，我们将使用`deleteOne`。`deleteOne`方法需要相同的条件。我们会对`text`等于`吃午饭`的文档进行操作。
 
-This time though, instead of deleting multiple documents we're just going to delete the one, and we are still going to get that same exact result. To prove it, I'll just print to the screen like we did previously with `console.log(result)`:
+这一次，我们只是要删除一个文档，而且我们依然会得到完全相同的结果。为了证明这一点，我会像之前用`console.log(result)`一样打印到屏幕上：
 
-[PRE54]
+```js
+//deleteOne 
+db.collection('Todos').deleteOne({text: 'Eat lunch'}).then((result) => {
+  console.log(result); 
+});
+```
 
-With this in place, we can now rerun our script and see what happens. In the Terminal, I'm going to shut down our current connection and rerun it:
+有了这个，我们现在重新运行我们的脚本，看看发生了什么。在终端中，我将关闭当前的连接并重新运行它：
 
 ![](img/30033a3b-581d-4d26-9540-f20270b17f0a.png)
 
-We get a similar-looking object, a bunch of junk we don't really care about, but once again if we scroll to the top we have a `result` object, where `ok` is `1` and the number of deleted documents is also `1`. Even though multiple documents did pass this criteria it only deleted the first one, and we can prove that by going over to Robomongo, right-clicking up above, and viewing the documents again. This time around, we have three Todos.
+我们得到一个看起来类似的对象，一堆我们并不关心的无用东西，但是再次滚动到顶部，我们有一个`result`对象，其中`ok`为`1`，被删除的文档数量也是`1`。尽管有多个文档满足了这个条件，但它只删除了第一个，并且我们可以通过转到 Robomongo，右键单击上方，再次查看文档来证明这一点。这次，我们有三个 Todos。
 
-We do still have one of the Todos with the `Eat lunch` text:
+我们仍然有一个带有`吃午饭`文本的 Todos:
 
 ![](img/d13d8b43-2602-4ce3-9343-ca45bc01c592.png)
 
-And now that we know how to use these two methods, I want to take a look at my favorite method. This is `findOneAndDelete`.
+现在我们知道了如何使用这两种方法，我想来看看我最喜欢的方法。这就是`findOneAndDelete`。
 
-# The findOneAndDelete method
+# findOneAndDelete 方法
 
-Most of the time, when I'm deleting a document, I only have the ID. This means that I don't exactly know what the text is or the completed status, and that can be really useful depending on your user interface. For example, if I delete a Todo, maybe I want to show that next, saying *You deleted the Todo that says Eat lunch*, with a little undo button in case they didn't mean to take that action. Getting the data back as well as deleting it can be really useful.
+大多数时候，当我要删除文档时，我只有 ID。这意味着我不知道文本是什么或完成状态是什么，这取决于你的用户界面，这可能非常有用。例如，如果我删除了一个待办事项，也许我想显示，接着说*您删除了说吃午饭的待办事项*，并配备一个小的撤销按钮，以防他们不小心执行了该操作。获取数据以及删除它可以是非常有用的。
 
-In order to explore `findOneAndDelete`, we're going to once again target the Todo where the `text` equals `Eat lunch`. I'm going to go ahead and comment out `deleteOne`, and next we can get started by accessing the appropriate collection. The method is called `findOneAndDelete`. The `findOneAndDelete` method takes a very similar set of arguments. The only thing we need to pass in is the query. This is going to be identical to the ones we have in the previous screenshot. This time though, let's go ahead and target Todos that had a `completed` value set to `false`.
+为了探索`findOneAndDelete`，我们将再次针对`text`等于`吃午饭`的待办事项进行操作。我将注释掉`deleteOne`，接下来我们可以通过访问适当的集合来开始。方法名为`findOneAndDelete`。`findOneAndDelete`方法接受一组非常相似的参数。我们唯一需要传递的是查询。这将与我们在上一屏幕截图中使用的相同。不过，这一次，让我们直接针对`completed`值设置为`false`的待办事项。
 
-Now there are two Todos that fit this query, but once again we're using a `findOne` method, which means it's only going to target the first one it sees, the one with a `text` property of `Something to do`. Back in Atom, we can get this done by targeting Todos where `completed` equals `false`. Now, instead of getting back a result object with an `ok` property and an `n` property, the `findOneAndDelete` method actually gets that document back. This means we can tack on a `then` call, we can get our result, and we can print it to the screen once again with `console.log(result)`:
+现在有两个符合此查询的待办事项，但再次使用的是`findOne`方法，这意味着它只会定位到它看到的第一个，即带有`text`属性为`有事情要做`的。回到 Atom 中，我们可以通过目标`completed`等于`false`的待办事项完成这个操作。现在，我们不再得到一个带有`ok`属性和`n`属性的结果对象，而是`findOneAndDelete`方法实际上获取了该文档。这意味着我们可以连接一个`then`调用，获取我们的结果，并再次使用`console.log(result)`打印到屏幕上：
 
-[PRE55]
+```js
+//findOneAndDelete
+db.collection('Todos').findOneAndDelete({completed: false}).then((result) => {
+  console.log(result);
+});
+```
 
-Now that we have this in place, let's test things out over in the Terminal. In the Terminal, I'm going to shut down the script and start it up again:
+现在我们有了这个方法，让我们在终端中测试一下。在终端中，我将关闭脚本，然后再次启动它：
 
 ![](img/c21e6884-fda6-41aa-aa79-316cdfcf9085.png)
 
-We get a few different things in our result object. We do get an `ok` set to `1`, letting us know things went as planned. We have a `lastErrorObject`; we'll talk about that in just a second; and we have our `value` object. This is the actual document we deleted. This is why the `findOneAndDelete` method is super handy. It gets that document back as well as deleting it.
+我们可以在结果对象中得到几种不同的东西。我们得到一个设置为`1`的`ok`，让我们知道事情进行得如计划。我们有一个`lastErrorObject`；我们马上就会讨论它；还有我们的`value`对象。这就是我们删除的实际文档。这就是为什么`findOneAndDelete`方法非常方便。它不仅得到了该文档，还删除了它。
 
-Now in this particular case, the `lastErrorObject`, once again just has our `n` property, and we can see the number of Todos that were deleted. There is other information that could potentially be in `lastErrorObject`, but that's only going to happen when we use other methods, so we'll look at that when the time comes. For now, when you delete a Todo, we just get the number back.
+现在在这种特殊情况下，`lastErrorObject`中再次只有我们的`n`属性，并且我们可以查看删除的待办事项数。`lastErrorObject`可能还包含其他信息，但只有在使用其他方法时才会发生，所以到时候我们再看。现在，当你删除待办事项时，我们只会得到一个数字。
 
-With this in place, we now have three different ways we can target our MongoDB documents and remove them.
+有了这个方法，我们现在有三种不同的方法可以针对我们的 MongoDB 文档进行定位并删除它们。
 
-# Using the deleteMany and findOneAndDelete methods
+# 使用 deleteMany 和 findOneAndDelete 方法
 
-We're going to go ahead and go over a quick challenge to test your skills. Inside of Robomongo, we can look at the data we have in the `Users` collection. I'm going to open it up, highlight all the data, and expand it recursively so we can view it:
+我们将进行一项快速挑战，以测试你的能力。在 Robomongo 中，我们可以查看`Users`集合中的数据。我将打开它，突出显示所有数据，并递归展开，以便我们可以查看：
 
 ![](img/93f0f8e8-ab68-4b27-a89e-83c04cd39268.png)
 
-We have the name Jen; we have Mike; we have Andrew, Andrew and Andrew. This is perfect data. Yours might look a little different, but the goal is to use two methods. First up, look for any duplicates, anything that has a name set to the name of another document. In this case, I have three documents where the name is Andrew. What I want to do is use `deleteMany` to target all of these documents and remove them. I also want to use `findOneAndDelete` to delete another document; it doesn't matter which one. And I want you to delete it by ID.
+我们有 Jen 的名字；我们有 Mike；我们有 Andrew，Andrew 和 Andrew。这是完美的数据。你的数据可能看起来有些不同，但目标是使用两种方法。首先，查找任何重复项，任何具有与另一个文档名称相同的名称的文档。在这种情况下，我有三个名称为 Andrew 的文档。我想要使用`deleteMany`来定位并删除所有这些文档。我还想使用`findOneAndDelete`来删除另一个文档；无论哪一个都可以。而且我希望你通过 ID 来删除它。
 
-In the end, both statements should show their effect over inside of Robomongo. When I'm done, I'm hoping to see these three documents deleted. They all have the name Andrew, and I'm hoping to see the document where the name Mike is deleted, because I'm going to target this one by ID in my `findOneAndDelete` method call.
+最终，这两个语句都应该在 Robomongo 内显示它们的效果。当完成时，我希望看到这三个文档被删除。它们全部都叫 Andrew，我希望看到名为 Mike 的文档被删除，因为我打算用`findOneAndDelete`方法调用来定位它。
 
-First up, I'm going to write my scripts, one for deleting users where the name is `Andrew` and one for deleting the document with the ID. In order to grab the ID, I am going to go ahead and edit it and simply grab the text inside of quotes, and then I can cancel the update and move into Atom.
+首先，我要编写我的脚本，一个用于删除名称为`Andrew`的用户，一个用于删除 ID 的文档。为了获取 ID，我将继续编辑，并简单地抓取引号内的文本，然后取消更新并移动到 Atom。
 
-# Removing duplicate documents
+# 删除重复文档
 
-First up, we're going to go ahead and try to remove the duplicate users, and I'm going to do this by using `db.collection`. We're going to target the `Users` collection, and in this particular case, we're going to be using the `deleteMany` method. Here, we're going to try to delete all of the users where the `name` property equals `Andrew`.
+首先，我们将尝试去除重复用户，我将使用`db.collection`来实现这一点。我们将针对`Users`集合进行操作，在这种特殊情况下，我们将使用`deleteMany`方法。在这里，我们将尝试删除所有`name`属性等于`Andrew`的用户。
 
-[PRE56]
+```js
+db.collection('Users').deleteMany({name: 'Andrew'});
+```
 
-Now I could tack on a then call to check for success or errors, or I could just leave it like this, which is what I'm going to do. If you use a callback or the promise then method, that is perfectly fine. As long as the deletion happens, you're good to go.
+现在我可以追加一个 then 调用来检查成功或错误，或者我可以像这样离开它，这就是我要做的。如果你使用回调或 promise 的 then 方法，那是完全可以的。只要删除发生了，你就可以继续。
 
-# Targeting the documents using ID
+# 使用 ID 定位文档
 
-Next up, I'm going to write the other statement. We're going to target the `Users` collection once again. Now, we're going to go ahead and use the `findOneAndDelete` method. In this particular case, I am going to be deleting the Todo where the `_id` equals the ObjectId I have copied to the clipboard, which means I need to create a `new ObjectID`, and I also need to go ahead and pass in the value from the clipboard inside of quotes.
+接下来，我将写另一个语句。我们再次针对`Users`集合进行操作。现在，我们将使用`findOneAndDelete`方法。在这种特殊情况下，我将删除`_id`等于我已复制到剪贴板的 ObjectId 的 Todo，这意味着我需要创建一个`new ObjectID`，并且我还需要在引号内传入剪贴板中的值。
 
-[PRE57]
+```js
+db.collection('Users').deleteMany({name: 'Andrew'});
 
-Either single or double would work. Make sure the capitalization of `ObjectID` is identical to what you have defined, otherwise this creation will not happen.
+db.collection('Users').findOneAndDelete({
+  _id: new ObjectID("5a86978929ed740ca87e5c31")
+})
+```
 
-Now that we have the ID created and passed in as the `_id` property, we can go ahead and tack on a `then` callback. Since I'm using `findOneAndDelete`, I am going to print that document to the screen. Right here I'll get my argument, `results`, and I'm going to print it to the screen using our pretty- printing method,`console.log(JSON.stringify())`, passing in those three arguments, the `results`, `undefined`, and the spacing, which I'm going to use as `2`.
+单引号或双引号都可以。确保`ObjectID`的大写与你定义的内容完全相同，否则此创建将不会发生。
 
-[PRE58]
+现在我们创建了`ID`并将其作为`_id`属性传递，我们可以继续添加`then`回调。因为我正在使用`findOneAndDelete`，我打算将那个文档打印到屏幕上。在这里，我将获得我的参数`results`，然后我将使用我们的漂亮打印方法将其打印到屏幕上，`console.log(JSON.stringify())`，传入这三个参数，`results`，`undefined`和间距，我将使用`2`。
 
-With this in place, we are now ready to go.
+```js
+db.collection('Users').deleteMany({name: 'Andrew'});
 
-# Running the findOneAndDelete and deleteMany statements
+db.collection('Users').findOneAndDelete({
+  _id: new ObjectID("5a86978929ed740ca87e5c31")
+}).then((results) => {
+  console.log(JSON.stringify(results, undefined, 2));
+});
+```
 
-Let's go ahead and comment out `findOneAndDelete` first. We'll run the `deleteMany` statement. Over in the Terminal, I can shut down the current connection, start it up again, and if we go over to Robomongo, we should see that those three documents were deleted. I'm going to right-click on `Users` and view the documents:
+有了这个，我们现在可以继续了。
+
+# 运行 findOneAndDelete 和 deleteMany 语句
+
+让我们首先注释掉`findOneAndDelete`。我们将运行`deleteMany`语句。在终端中，我可以关闭当前连接，然后再次启动它，如果我们进入 Robomongo，我们应该看到那三个文档已被删除。我将右键单击`Users`并查看文档：
 
 ![](img/f0a3f3dc-cabf-4503-bc29-7152fe580144.png)
 
-We just get the two documents back. Anything where the name was `Andrew` is now removed, which means our statement worked as expected, and this is fantastic.
+我们刚刚得到了两个文档。任何名为`Andrew`的都已被删除，这意味着我们的语句按预期运行了，这太棒了。
 
-Next up, we can run our `findOneAndDelete` statement. In this case, we're expecting that that one document, the one where the `name` equals `Mike`, gets removed. I'm going to go ahead and make sure I save the file. Once I do, I can move into the Terminal and rerun the script. This time around, we get the document back where the `name` is `Mike`. We did target the correct one, and it does appear that one item was deleted:
+接下来，我们可以运行我们的`findOneAndDelete`语句。在这种情况下，我们期望那个`name`等于`Mike`的文档被删除。我将确保保存文件。一旦保存，我就可以进入终端并重新运行脚本。这一次，我们获得了`name`为`Mike`的文档。我们确实针对了正确的文档，并且似乎已经删除了一个项目：
 
 ![](img/b3fb5a61-5cdd-45ea-85fc-52ebca362ae0.png)
 
-I can always go ahead and verify this by refreshing the collection inside of Robomongo:
+我可以随时通过刷新 Robomongo 中的集合来验证这一点：
 
 ![](img/84ba63a2-1cd9-48ff-90df-833865eb2282.png)
 
-I get my collection with just one document inside of it. We are now done. We know how to delete documents from our MongoDB collections; we can delete multiple documents; we can target just one, or we can target one and get its value back.
+我得到了只有一个文档的集合。我们现在结束了。我们知道如何从我们的 MongoDB 集合中删除文档；我们可以删除多个文档；我们可以只针对一个，或者我们可以针对一个并获取其值。
 
-# Making commit for the deleting documents methods
+# 为删除文档方法进行提交
 
-Before we go, let's go ahead and make a commit, pushing it up to GitHub. In the Terminal, I can shut down the script and I can run `git status` to see what files we have untracked. Here, we have our `mongodb-delete` file. I can add it using `git add .` and then I can commit, using `git commit` with the `-m` flag. Here, I can go ahead and provide a commit message, which is going to be `Add delete script`:
+在我们离开之前，让我们进行提交并将其推送到 GitHub。在终端中，我可以关闭脚本并运行`git status`以查看我们有未跟踪的文件。这里，我们有我们的`mongodb-delete`文件。我可以使用`git add .`添加它，然后我可以提交，使用带有`-m`标志的`git commit`。在这里，我可以提供提交消息，即`Add delete script`：
 
-[PRE59]
+```js
+git commit -m 'Add delete script'
+```
 
-I'm going to make that commit and I am going to push it up to GitHub using `git push`, which will default to the origin remote. When you only have one remote, the first one is going to be called origin. This is the default name, just like master is the default branch. With this in place, we are now done. Our code is up on GitHub. The topic of the next section is updating, which is where you're going to learn how to update documents inside of a collection.
+我将进行提交并使用`git push`将其推送到 GitHub，默认情况下将使用 origin 远程仓库。当你只有一个远程仓库时，第一个将被称为 origin。这是默认名称，就像 master 是默认分支一样。有了这个，我们现在就结束了。我们的代码已经上传到 GitHub。下一节的主题是更新，你将学习如何更新集合中的文档。
 
-# Updating data
+# 更新数据
 
-You know how to insert, delete, and fetch documents out of MongoDB. In this section, you're going to learn how to update documents in your MongoDB collections. To kick things off, as usual, we're going to duplicate the last script we wrote, and we'll update it for this section.
+你知道如何向 MongoDB 中插入、删除和获取文档。在本节中，你将学习如何更新 MongoDB 集合中的文档。和往常一样，开始之前，我们将复制我们上次写的最后一个脚本，并将其更新用于本节。
 
-I'm going to duplicate the `mongodb-delete` file, renaming it to `mongodb-update.js`, and this is where we'll write our update statements. I'm also going to delete all of the statements we wrote, which is the deleted data. Now that we have this in place, we can explore the one method we'll be looking at in this section. This one is called `findOneAndUpdate`. It's kind of similar to `findOneAndDelete`. It lets us update an item and get the new document back. So if I update a Todo, set it as `completed` equal to `true`, I will get that document back in the response. Now in order to get started, we're going to be updating one of the items that we have inside of our Todos collection. If I view the documents, we currently have two. The goal here is going to be to update the second item, the one where `text` equals `Eat lunch`. We're going to try to set the `completed` value to `true`, which would be a pretty common action.
+我将复制`mongodb-delete`文件，重命名为`mongodb-update.js`，这就是我们将编写更新语句的地方。我还将删除我们写的所有语句，也就是被删除的数据。现在我们已经准备好了，接下来我们将探索本节将要学习的一个方法。这个方法叫做`findOneAndUpdate`。它有点类似于`findOneAndDelete`。它允许我们更新一项内容并获得新文档。所以，如果我更新一个待办事项，将其`completed`设置为`true`，我将在响应中得到那个文档。现在，为了开始，我们将更新我们 Todos 集合中的一项内容。如果查看文档，我们目前有两个。这里的目标将是更新第二项内容，即`text`等于`Eat lunch`的内容。我们将尝试将`completed`值设置为`true`，这将是一个很常见的操作。
 
-If I check off a Todo item, we want to toggle that completed Boolean value. Back inside of Atom, we're going to kick things off by accessing the appropriate collection. That'll be `db.collection`. The collection name is `Todos`, and the method we'll be using is `findOneAndUpdate`. Now, `findOneAndUpdate` is going to take the most arguments we've used so far, so let's go ahead and look up the documentation for it for future reference.
+如果我勾选一个待办事项，我们希望切换完成的布尔值。回到 Atom 中，我们将通过访问适当的集合来启动事情。那将是`db.collection`。集合名称是`Todos`，我们将使用的方法是`findOneAndUpdate`。现在，`findOneAndUpdate`将使用到目前为止我们使用过的最多参数，所以让我们去查找它的文档以备将来参考。
 
-Over inside of Chrome, we currently have the Cursor tab open. This is where we have the `count` method defined. If we scroll next the Cursor tab, we have our other tabs. The one we're looking for is `Collection`. Now, inside of the Collection section, we have our typedefs and our methods. We're looking at methods here, so if I scroll down, we should be able to find `findOneAndUpdate` and click it. Now, `findOneAndUpdate` takes quite a few arguments. The first one is the `filter`. The `update` argument lets us target the document we want to update. Maybe we have the text, or most likely we have the ID of the document. Next up is the actual updates we want to make. We don't want to update the ID, we just want to filter by ID. In this case, the updates are going to be updating the completed Boolean. Then we have some options, which we are going to define. We'll use just one of them. We also have our `callback`. We're going to leave off the callback as we've been doing so so far, in favor of promises. As you can see on the documentation page, it returns a promise if no callback is passed in, and that's exactly what we expect. Let's go ahead and start filling out the appropriate arguments for `findOneAndUpdate`, kicking things off with the `filter`. What I'm going to do is filter by ID. In Robomongo, I can grab the ID of this document. I'm going to edit it and copy the ID to the clipboard. Now, in Atom, we can start querying the first object, `filter`. We're only looking for documents where the `_id` equals `new ObjectID` with the value that we copied to the clipboard. This is all we need for the `filter` argument. Next up is going to be the actual updates we want to apply, and this is not exactly straightforward. What we have to do here is learn about the MongoDB update operators.
+在 Chrome 中，我们目前打开了“Cursor”选项卡。这是我们定义`count`方法的地方。如果我们滚动到“Cursor”选项卡旁边，我们还有其他选项卡。我们正在寻找的是`Collection`。现在，在`Collection`部分，我们有我们的 typedefs 和方法。我们在这里看的是方法，所以如果我往下滚动，应该能找到`findOneAndUpdate`并单击它。现在，`findOneAndUpdate`需要传入一些参数。第一个是`filter`。`update`参数让我们可以指定要更新的文档。也许我们有文本，或者更有可能的是我们有文档的 ID。接下来是我们想要进行的实际更新。我们不想更新 ID，只想通过 ID 进行筛选。在这种情况下，更新的目标是更新“completed”布尔值。然后我们有一些选项，我们将对其进行定义。我们将仅使用其中之一。我们还有我们的`callback`。我们将继续遵循迄今为止的方式，忽略掉回调，而是使用 promises。正如您在文档页面上所看到的，如果没有传入回调，它会返回一个 promise，这正是我们所期望的。让我们开始填写适当的`findOneAndUpdate`参数，从`filter`开始。我要做的是通过 ID 进行筛选。在 Robomongo 中，我可以获取此文档的 ID。我将编辑它并将 ID 复制到剪贴板中。现在，在 Atom 中，我们可以开始查询第一个对象`filter`。我们只需要查找`_id`等于我们复制到剪贴板中的值的文档。这就是我们需要的`filter`参数。接下来要做的是要应用的实际更新，并且这并不是很直接。我们在这里要做的是了解 MongoDB 的更新操作符。
 
-We can view a complete list of these operators and exactly what they are by googling `mongodb update operators`. When I do this, we're looking for the [mongodb.com](http://www.mongodb.com) documentation:
+通过谷歌搜索`mongodb update operators`，我们可以查看完整的这些操作符列表以及它们的确切含义。当我这样做时，我们在寻找[mongodb.com](http://www.mongodb.com)文档：
 
 ![](img/6f97eb20-78fa-402b-a775-9cfc27409e28.png)
 
-Now this documentation is specific to MongoDB, which means it's going to work with all of the drivers. In this case, it is going to work with our Node.js driver. If we scroll down further, we can look at all of the update operators we have access to. The most important, and the one we're going to get started with, is the `$set` operator. This lets us set a field's value inside of our update, which is exactly what we want to do. There's other operators, like increment. This one, `$inc`, lets you increment a field's value, like the age field in our `Users` collection. Although these are super useful, we're going to get started with `$set`. In order to use one of these operators, what we need to do is type it out, `$set`, and then set it equal to an object. In this object, these are the things that we're actually going to be setting. For example, we want to set `completed` equal to `true`. If we tried to put `completed` equal to `true` at the root of the object like this, it would not work as expected. We have to use these update operators, which means we need this. Now that we have our updates in place using the set update operator, we can go ahead and provide our third and final argument. If you head over to the documentation for `findOneAndUpdate`, we can take a look at the `options` real quick. The one we care about is `returnOriginal`.
+现在这个文档是专门针对 MongoDB 的，这意味着它适用于所有驱动程序。在这种情况下，它将与我们的 Node.js 驱动程序配合使用。如果我们继续向下滚动，我们可以查看我们可以访问的所有更新操作符。最重要的，也是我们要开始使用的是`$set`操作符。这让我们在更新中设置字段的值，这正是我们想要做的。还有其他操作符，比如增量。这个`$inc`让你增加字段的值，就像我们的`Users`集合中的`age`字段一样。虽然这些操作符非常有用，但我们要开始使用`$set`。要使用这些操作符之一，我们需要将其输入，并将其设置为一个对象。在这个对象中，这些就是我们实际要设置的东西。例如，我们想将`completed`设置为`true`。如果我们尝试像这样在对象的根目录下将`completed`设置为`true`，那么它不会按预期工作。我们必须使用这些更新操作符，这意味着我们需要这个。现在我们已经使用了设置更新操作符来更新我们的更新，我们可以继续提供我们的第三个和最后一个参数。如果你前往`findOneAndUpdate`的文档，我们可以快速查看一下`options`。我们关心的是`returnOriginal`。
 
-The `returnOriginal` method is defaulted to `true`, which means that it returns the original document, not the updated one, and we don't want that. When we update a document, we want to get back that updated document. What we're going to do is set `returnOriginal` to `false`, and that's going to happen in our third and final argument. This one is also going to be an object, `returnOriginal`, which is going to be setting equal to `false`.
+`returnOriginal`方法默认为`true`，这意味着它返回原始文档，而不是更新后的文档，我们不希望如此。当我们更新文档时，我们希望得到更新后的文档。我们要做的就是将`returnOriginal`设置为`false`，这将在我们的第三个和最后一个参数中发生。这也将是一个对象，`returnOriginal`将被设置为`false`。
 
-With this in place, we are done. We can tack on a `then` call to do something with the results. I'll get my result back and I can simply print it to the screen, and we can take a look at exactly what comes back:
+有了这个，我们就完成了。我们可以添加一个`then`调用来对结果进行操作。我将得到我的结果，并可以简单地将其打印到屏幕上，我们可以看一下具体返回了什么：
 
-[PRE60]
+```js
+db.collection('Todos').findOneAndUpdate({ 
+  _id: new ObjectID('5a86c378baa6685dd161da6e') 
+}, { 
+  $set: { 
+    completed:true 
+  } 
+}, { 
+  returnOriginal: false 
+}).then((result) => { 
+  console.log(result); 
+}); 
+```
 
-Now, let's go ahead and run this from the Terminal. I'm going to save my file inside the Terminal. We're going to be running `node`. The file is in the `playground` folder, and we will call it `mongodb-update.js`. I'm going to run the following script:
+现在，让我们从终端运行这个。我将在终端中保存我的文件。我们将运行`node`。文件在`playground`文件夹中，我们将称它为`mongodb-update.js`。我将运行以下脚本：
 
-[PRE61]
+```js
+node playground/mongodb-update.js
+```
 
-We get back the value prop, just like we did when we used `findOneAndDelete`, and this has our document with the completed value set to true, which is the brand-new value we just set, which is fantastic:
+我们得到了值属性，就像我们使用`findOneAndDelete`时一样，这里有我们的文档，其中`completed`值设置为`true`，这就是我们刚刚设置的全新值，这太棒了。
 
 ![](img/6ea4eeaf-5eb6-4035-be14-aa56c0efb3c1.png)
 
-If we head over to Robomongo, we can confirm that the value was indeed updated. We can see this in the old document, where the value is false. I'm going to open up a new view for Todos:
+如果我们前往 Robomongo，我们可以确认值确实已经更新。我们可以在旧文档中看到这一点，在那里值为 false。我将为 Todos 打开一个新的视图：
 
 ![](img/936011e3-b25f-4701-ac2d-f15393c3216f.png)
 
-We have Eat lunch, with a completed value of true. Now that we have this in place, we know how to insert, delete, update, and read documents from our MongoDB collections. To wrap this section up, I want to give you a quick challenge. Over inside of the `Users` collection, you should have a document. It should have a name. It's probably not `Jen`; it's probably something that you set. What I want you to do is update this name to your name. Now if it's already your name, that's fine; you can change it to something else. I also want you to use `$inc`, the increment operator that we talked about, to increment this by 1\. Now I'm not going to tell you exactly how increment works. What I want you to do is head over to the docs, click on the `operator`, and then scroll down to see the examples. There's examples for each operator. It's going to become really useful for you to learn how to read documentation. Now, documentation for libraries is not always going to be the same; everyone does it a little differently; but once you learn how to read the docs for one library, it gets a lot easier to read the docs for others, and I can only teach so much in this course. The real goal of this course is to get you writing your own code, doing your own research, and looking up your own documentation, so your goal once again is to update this document, setting the name to something other than what it's currently set to, and incrementing the age by 1.
+我们有一个包含值为 true 的吃午餐任务。既然我们已经完成了这一步，我们知道如何在 MongoDB 集合中插入、删除、更新和读取文档了。为了结束这一节，我想给你提供一个快速挑战。在 `Users` 集合中，你应该有一个文档。它应该有一个姓名。它可能不是 `Jen`；它可能是你设置的其他东西。我想让你把这个名字更新为你的名字。如果它已经是你的名字，那就没问题；你可以将它改为其他的东西。我还希望你使用 `$inc`，我们谈论过的增加运算符，将这个值增加 1。现在我不会告诉你增加运算符究竟是如何工作的。我希望你前往文档，点击 `运算符`，然后向下滚动查看示例。每个运算符都有示例。学会如何阅读文档对你变得非常有用。现在，各种库的文档并不总是一样的；每个人都有点不一样的做法；但是一旦你学会了如何阅读一个库的文档，那么阅读其他库的文档就会变得容易得多，而我在这门课程中只能教授一部分知识。这门课程的真正目的是让你编写自己的代码，进行自己的研究，并查阅自己的文档，所以你的目标再次是更新这个文档，将姓名设置为当前设置的其他名称，并将年龄增加 1。
 
-To kick things off, I'm going to grab the ID of the document in Robomongo, since this is the document I want to update. I'll copy the ID to the clipboard, and now we can focus on writing that statement in Atom. First up, we'll update the name, since we already know how to do that. In Atom, I'm going to go ahead and duplicate the statement:
+要开始工作，我打算在 Robomongo 中获取文档的 ID，因为这是我想要更新的文档。我会将 ID 复制到剪贴板上，现在我们可以专注于在 Atom 中编写该语句了。首先，我们将更新姓名，因为我们已经知道如何做了。在 Atom 中，我将继续复制该语句：
 
-[PRE62]
+```js
+db.collection('Todos').findOneAndUpdate({
+  _id: new ObjectID('57bc4b15b3b6a3801d8c47a2')
+}, {
+  $set: {
+    completed:true
+  }
+}, {
+  returnOriginal: false
+}).then((result) => {
+  console.log(result);
+});
+```
 
-I'll copy it and paste it. Back inside of Atom, we can start swapping things out. First up, we're going to swap out the old ID for the new one, and we're going to change what we passed to set. Instead of updating `completed`, we want to update `name`. I'm going to set the `name` equal to something other than `Jen`. I'm going to go ahead and use my name, `Andrew`. Now, we are going to keep `returnOriginal` set to `false`. We want to get the new document back, not the original. Now, the other thing that we need to do is increment the age. This is going to be done via the increment operator, which you should have explored using the documentation over inside of Chrome. If you click on `$inc`, it's going to bring you to the `$inc` part of the documentation, and if you scroll down, you should be able to see an example. Right here, we have an example of what it looks like to increment:
+我会复制并粘贴它。回到 Atom 中，我们可以开始替换内容。首先，我们将使用新的 ID 替换旧的 ID，并更改我们传递给设置的内容。我们不想更新 `completed`，而是想要更新 `name`。我会将 `name` 设置为除了 `Jen` 之外的其他名称。我将使用我的名字 `Andrew`。现在，我们将保持 `returnOriginal` 设置为 `false`。我们想要拿回新文档，而不是原始文档。现在，我们需要做的另一件事是增加年龄。这将通过增加运算符来完成，你应该已经通过 Chrome 中的文档进行了探索。如果你点击 `$inc`，它会带你到文档的 `$inc` 部分，如果向下滚动，你应该能够看到一个示例。在这里，我们有一个增加的示例：
 
 ![](img/ea8c2677-365e-4533-80bb-e53952b498a4.png)
 
-We set `$inc` just like we set `set`. Then, inside of the object, we specify the things we want to increment, and the degree to which we want to increment them. It could be `-2`, or in our case, it would be positive, `1`. In Atom, we can implement this, as shown in the following code:
+我们像设置 `set` 一样设置 `$inc`。然后，在对象内部，我们指定要递增的内容，以及要递增的程度。可以是`-2`，或者在我们的情况下，它将是正数，`1`。在 Atom 中，我们可以实现这一点，如下所示的代码：
 
-[PRE63]
+```js
+db.collection('Users').findOneAndUpdate({ 
+  _id: new ObjectID('57abbcf4fd13a094e481cf2c') 
+}, { 
+  $set: { 
+    name: 'Andrew' 
+  }, 
+  $inc: { 
+    age: 1 
+  } 
+}, { 
+  returnOriginal: false 
+}).then((result) => { 
+  console.log(result); 
+}); 
+```
 
-I'll set `$inc` equal to an object, and in there, we'll increment the `age` by `1`. With this in place, we are now done. Before I run this file, I am going to comment out to the other call to `findOneAndUpdate`, just leaving the new one. I also need to swap out the collection. We're no longer updating the Todos collection; we're updating the `Users` collection. Now, we are good to go. We're setting the `name` equal to `Andrew` and we're incrementing the `age` by `1`, which means that we would expect the age in Robomongo to be 26 instead of 25\. Let's go ahead and run this by restarting the script over in the Terminal:
+我将 `$inc` 等于一个对象，并在其中，我们将 `age` 递增 `1`。有了这一点，我们现在完成了。在运行这个文件之前，我将把其他对 `findOneAndUpdate` 的调用注释掉，只留下新的。我还需要交换集合。我们不再更新 Todos 集合；我们正在更新`Users` 集合。现在，我们可以开始了。我们将 `name` 设置为 `Andrew`，并将 `age` 递增 `1`，这意味着我们期望 Robomongo 中的年龄为 26 而不是 25。让我们重启终端中的脚本来运行它：
 
 ![](img/92d5c78a-7d25-4e19-aad4-155256400d0a.png)
 
-We can see our new document, where the name is indeed `Andrew` and the age is indeed `26`, and this is fantastic. Now that you know how to use the increment operator, you can also go off and learn all of the other operators you have available to you inside of your update calls. I can double-check that everything worked as expected in Robomongo. I'm going to go ahead and refresh the `Users` collection:
+我们可以看到我们的新文档，其中名称确实为 `Andrew`，年龄确实为`26`，这太棒了。既然你知道如何使用递增运算符，你也可以去学习你在更新调用中可用的所有其他运算符。我可以在 Robomongo 中再次检查一切是否按预期工作。我将刷新`Users`集合：
 
 ![](img/4bce35a0-d75f-4431-8e26-93dbc12f7e02.png)
 
-We have our updated document right here. Well, let's wrap this section up by committing our changes. In the Terminal, I'm going to run `git status` so we can view all of the changes to the repository:
+我们在这里有我们的更新文档。好了，让我们通过提交更改来结束本节。在终端中，我将运行 `git status` 以查看存储库的所有更改：
 
 ![](img/a0f74cdc-051d-4c3b-9a02-3539a35a2383.png)
 
-Here, we just have one untracked file, our `mongodb-update` script. I'm going to use `git add .` to add that to the next commit, and then I'll use `git commit` to actually make the commit. I am going to provide the `-m` argument for `message` so we can specify a message, which is going to be `Add update script`:
+在这里，我们只有一个未跟踪的文件，我们的`mongodb-update`脚本。我将使用 `git add .` 将其添加到下一次提交中，然后使用 `git commit` 实际进行提交。我将为 `message` 提供 `-m` 参数，以便我们可以指定消息，这将是 `Add update script`：
 
-[PRE64]
+```js
+git add .
+git commit -m 'Add update script'
+```
 
-And now we can run the commit command and push it up to GitHub, so our code is backed up on our GitHub repository:
+现在我们可以运行提交命令并将其推送到 GitHub，这样我们的代码就备份到了 GitHub 存储库中：
 
-[PRE65]
+```js
+git push
+```
 
 更新完成后，我们现在已经掌握了所有基本的 CRUD（创建、读取、更新和删除）操作。接下来，我们将讨论一个叫做 Mongoose 的东西，我们将在 Todo API 中使用它。
 
