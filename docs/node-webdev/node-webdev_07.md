@@ -52,7 +52,7 @@ Promise 和 async 函数都用于延迟和异步计算，并且可以使深度�
 
 这些和其他工具的开发是为了更容易编写异步代码并解决**末日金字塔**问题。这是根据代码在几层嵌套后采取的形状而命名的。任何以回调函数编写的多阶段过程都可能迅速升级为嵌套多层的代码。考虑以下例子：
 
-```js
+```
 
 We don't need to worry about the specific functions, but we should instead recognize that one callback tends to lead to another. Before you know it, you've landed in the middle of a deeply nested structure like this. Rewriting this as an async function will make it much clearer. To get there, we need to examine how Promises are used to manage asynchronous results, as well as get a deeper understanding of async functions.
 
@@ -66,17 +66,17 @@ More precisely, Promise objects can be in one of three states:
 
 We generate a Promise in the following way:
 
-```js
+```
 
 这样的函数创建了`Promise`对象，给它一个回调函数，在其中是您的异步操作。`resolve`和`reject`函数被传递到该函数中，并在 Promise 解析为成功或失败状态时调用。`new Promise`的典型用法是这样的结构：
 
-```js
+```
 
 This is the pattern that we use when *promisifying* an asynchronous function that uses callbacks. The asynchronous code executes, and in the callback, we invoke either `resolve` or `reject`, as appropriate. We can usually use the `util.promisify` Node.js function to do this for us, but it's very useful to know how to construct this as needed.
 
 Your caller then uses the function, as follows:
 
-```js
+```
 
 `Promise`对象足够灵活，传递给`.then`处理程序的函数可以返回一些东西，比如另一个 Promise，并且可以将`.then`调用链接在一起。在`.then`处理程序中返回的值（如果有的话）将成为一个新的`Promise`对象，通过这种方式，您可以构建一个`.then`和`.catch`调用链来管理一系列异步操作。
 
@@ -86,17 +86,17 @@ Your caller then uses the function, as follows:
 
 重要的是要正确处理所有错误并将其报告给 Express。对于同步代码，Express 将正确捕获抛出的异常并将其发送到错误处理程序。看下面的例子：
 
-```js
+```
 
 Express catches that exception and does the right thing, meaning it invokes the error handler, but it does not see a thrown exception in asynchronous code. Consider the following error example:
 
-```js
+```
 
 这是一个错误指示器落在回调函数中不方便的地方的例子。异常在一个完全不同的堆栈帧中抛出，而不是由 Express 调用的堆栈帧。即使我们安排返回一个 Promise，就像异步函数的情况一样，Express 也不处理 Promise。在这个例子中，错误被丢失；调用者永远不会收到响应，也没有人知道为什么。
 
 重要的是要可靠地捕获任何错误，并用结果或错误回应调用者。为了更好地理解这一点，让我们重新编写一下“末日金字塔”示例：
 
-```js
+```
 
 This is rewritten using a Promise chain, rather than nested callbacks. What had been a deeply nested pyramid of callback functions is now arguably a little cleaner thanks to Promises.
 
@@ -119,7 +119,7 @@ There are two problems that need to be addressed that are related to asynchro
 
 To explain, let's reiterate the example that Ryan Dahl gives as the primary Node.js idiom:
 
-```js
+```
 
 这里的目标是避免使用长时间操作阻塞事件循环。使用回调函数推迟处理结果或错误是一个很好的解决方案，也是 Node.js 的基本习惯用法。回调函数的实现导致了这个金字塔形的问题。Promise 帮助扁平化代码，使其不再呈现金字塔形状。它们还捕获错误，确保将其传递到有用的位置。在这两种情况下，错误和结果都被埋在一个匿名函数中，并没有传递到下一行代码。
 
@@ -131,13 +131,13 @@ To explain, let's reiterate the example that Ryan Dahl gives as the primary Node
 
 我们已经使用了异步函数，并了解了它们如何让我们编写看起来整洁的异步代码。例如，`db.query`作为异步函数的示例如下：
 
-```js
+```
 
 This is much cleaner, with results and errors landing where we want them to.
 
 However, to discuss integration with Express, let's return to the pyramid of doom example from earlier, rewriting it as an async function:
 
-```js
+```
 
 除了`try/catch`，这个例子与之前的形式相比非常干净，无论是作为回调金字塔还是 Promise 链。所有样板代码都被抹去，程序员的意图清晰地展现出来。没有东西丢失在回调函数中。相反，一切都方便地落在下一行代码中。
 
@@ -177,17 +177,17 @@ CRUD 模型包括持久数据存储的四个基本操作。`Notes`应用程序�
 
 由于我们正在启动一个新的应用程序，我们可以使用 Express 生成器给我们一个起点。虽然不一定要使用这个工具，因为我们完全可以自己编写代码。然而，优点在于它给了我们一个完全成熟的起点：
 
-```js
+```
 
 As in the previous chapter, we will use `cross-env` to ensure that the scripts run cross-platform. Start by changing `package.json` to have the following `scripts` section:
 
-```js
+```
 
 提供的脚本使用`bin/www`，但很快，我们将重新构造生成的代码，将所有内容放入一个名为`app.mjs`的单个 ES6 脚本中。
 
 然后，安装`cross-env`，如下所示：
 
-```js
+```
 
 With `cross-env`, the scripts are executable on either Unix-like systems or Windows.
 
@@ -197,7 +197,7 @@ If you wish, you can run `npm start` and view the blank application in your brow
 
 Let's start with the `routes` directory. Since we won't have a `Users` concept right now, delete `users.js`. We need to convert the JavaScript files into ES6 format, and we can recall that the simplest way for a module to be recognized as an ES6 module is to use the `.mjs` extension. Therefore, rename `index.js` to `index.mjs`, rewriting it as follows:
 
-```js
+```
 
 我们稍后会完成这个，但我们所做的是重新构造我们得到的代码。我们可以导入 Express 包，然后导出`router`对象。添加路由函数当然是以相同的方式进行的，无论是 CommonJS 还是 ES6 模块。我们将路由回调设置为异步函数，因为它将使用异步代码。
 
@@ -211,11 +211,11 @@ Let's start with the `routes` directory. Since we won't have a `Users` concept r
 
 在`app.mjs`中，从这里开始：
 
-```js
+```
 
 The generated `app.js` code had a series of `require` statements. We have rewritten them to use corresponding `import` statements. We also added code to calculate the `__filename` and `__dirname` variables, but presented a little differently. To support this, add a new module, `approotdir.mjs`, containing the following:
 
-```js
+```
 
 在第三章的`dirname-fixed.mjs`示例中，我们从`path`和`url`核心模块中导入了特定的函数。我们使用了那段代码，然后将`__dirname`的值导出为`approotdir`。Notes 应用程序的其他部分只需要应用程序的根目录的路径名，以便计算所需的路径名。
 
@@ -223,7 +223,7 @@ The generated `app.js` code had a series of `require` statements. We have rewri
 
 现在，让我们初始化`express`应用程序对象：
 
-```js
+```
 
 This should look familiar to the `app.js` code we used in the previous chapter. Instead of inline functions, however, they're pushed into `appsupport.mjs`.
 
@@ -231,7 +231,7 @@ The `app` and `port` objects are exported in case some other code in the applica
 
 This section of code creates and configures the Express application instance. To make it a complete running server, we need the following code:
 
-```js
+```
 
 这段代码将 Express 应用程序包装在 HTTP 服务器中，并让它监听 HTTP 请求。`server`对象也被导出，以便其他代码可以访问它。
 
@@ -239,19 +239,19 @@ This section of code creates and configures the Express application instance. To
 
 创建`appsupport.mjs`来保存内联函数，从以下开始：
 
-```js
+```
 
 This function handles safely converting a port number string that we might be given into a numerical value that can be used in the application. The `isNaN` test is used to handle cases where instead of a TCP port number, we want to use a **named pipe**. Look carefully at the other functions and you'll see that they all accommodate either a numerical port number or a string described as a pipe:
 
-```js
+```
 
 前面的代码处理了来自 HTTP 服务器对象的错误。其中一些错误将简单地导致服务器退出：
 
-```js
+```
 
 The preceding code prints a user-friendly message saying where the server is listening for HTTP connections. Because this function needs to reference the server object, we have imported it:
 
-```js
+```
 
 这些以前是实现 Express 应用程序的错误处理的内联函数。
 
@@ -267,7 +267,7 @@ The preceding code prints a user-friendly message saying where the server is li
 
 首先，让我们定义一对类来描述数据模型。在`models/Notes.mjs`中创建一个名为`models/Notes.mjs`的文件，并在其中包含以下代码：
 
-```js
+```
 
 This defines two classes—`Note` and `AbstractNotesStore`—whose purpose is as follows:
 
@@ -296,19 +296,19 @@ The technique used in the `Note` class gates access to the fields through getter
 
 The technique we use is to name the fields using instances of the `Symbol` class. `Symbol`, another ES-2015 feature, is an opaque object with some interesting attributes that make it attractive for use as keys for private fields in objects. Consider the following code:
 
-```js
+```
 
 创建`Symbol`实例是通过`Symbol('symbol-name')`完成的。生成的`Symbol`实例是一个唯一标识符，即使再次调用`Symbol('symbol-name')`，唯一性也得到保留。每个`Symbol`实例都是唯一的，即使是由相同的字符串形成的。在这个例子中，`b`和`b1`变量都是通过调用`Symbol('b')`形成的，但它们并不相等。
 
 让我们看看如何使用`Symbol`实例来附加字段到一个对象上：
 
-```js
+```
 
 We've created a little object, then used those `Symbol` instances as field keys to store data in the object. Notice that when we dump the object's contents, the two fields both register as `Symbol(b)`, but they are two separate fields.
 
 With the `Note` class, we have used the `Symbol` instances to provide a small measure of data hiding. The actual values of the `Symbol` instances are hidden inside `Notes.mjs`. This means the only code that can directly access the fields is the code running inside `Notes.mjs`:
 
-```js
+```
 
 定义了`Note`类之后，我们可以创建一个`Note`实例，然后转储它并查看结果字段。这些字段的键确实是`Symbol`实例。这些`Symbol`实例被隐藏在模块内部。这些字段本身对模块外部的代码是可见的。正如我们在这里看到的，企图用`note[Symbol('key')] = 'new key'`来破坏实例并不会覆盖字段，而是会添加第二个字段。
 
@@ -320,13 +320,13 @@ With the `Note` class, we have used the `Symbol` instances to provide a small m
 
 在`models`目录中创建一个名为`notes-memory.mjs`的文件，其中包含以下代码：
 
-```js
+```
 
 This should be fairly self-explanatory. The notes are stored in a private array, named `notes`. The operations, in this case, are defined in terms of adding or removing items in that array. The `key` object for each `Note` instance is used as the index to the `notes` array, which in turn holds the `Note` instance. This is simple, fast, and easy to implement. It does not support any long-term data persistence, and any data stored in this model will disappear when the server is killed.
 
 We need to initialize an instance of `NotesStore` so that it can be used in the application. Let's add the following to `app.mjs`, somewhere near the top:
 
-```js
+```
 
 这将创建一个类的实例并将其导出为`NotesStore`。只要我们有一个单一的`NotesStore`实例，这将起作用，但是在第七章中，*数据存储和检索*，我们将改变这一点，以支持动态选择`NotesStore`实例。
 
@@ -338,13 +338,13 @@ We need to initialize an instance of `NotesStore` so that it can be used in the 
 
 `app.mjs`中不需要更改，因为主页是在这个路由模块中控制的。
 
-```js
+```
 
 In `app.mjs`, we configured the Handlebars template engine to use the `partials` directory to hold partial files. Therefore, make sure you create that directory.
 
 To implement the home page, update `routes/index.mjs` to the following:
 
-```js
+```
 
 我们之前展示了这个概要，并且已经定义了`Notes`数据存储模型，我们可以填写这个函数。
 
@@ -352,7 +352,7 @@ To implement the home page, update `routes/index.mjs` to the following:
 
 如何检索所有的笔记？我们可以编写一个简单的`for`循环，如下所示：
 
-```js
+```
 
 This has the advantage of being simple to read since it's a simple `for` loop. The problem is that this loop reads the notes one at a time. It's possible that reading the notes in parallel is more efficient since there's an opportunity to interweave the processing.
 
@@ -366,19 +366,19 @@ The `notelist` array is then passed into the `view` template that we're about t
 
 But first, we need a page layout template. Create a file, `views/layout.hbs`, containing the following:
 
-```js
+```
 
 这是由`express-generator`生成的文件，还添加了一个用于页面标题的`header`部分。
 
 请记住，在斐波那契应用程序中，我们使用了一个*partial*来存储导航的 HTML 片段。部分是 HTML 模板片段，可以在一个或多个模板中重用。在这种情况下，`header`部分将出现在每个页面上，并作为应用程序中的通用导航栏。创建`partials/header.hbs`，包含以下内容：
 
-```js
+```
 
 This simply looks for a variable, `title`, which should have the page title. It also outputs a navigation bar containing a pair of links—one to the home page and another to `/notes/add`, where the user will be able to add a new note.
 
 Now, let's rewrite `views/index.hbs` to this:
 
-```js
+```
 
 这只是简单地遍历笔记数据数组并格式化一个简单的列表。每个项目都链接到`/notes/view` URL，并带有一个`key`参数。我们还没有编写处理该 URL 的代码，但显然会显示笔记。另一个需要注意的是，如果`notelist`为空，将不会生成列表的 HTML。
 
@@ -386,7 +386,7 @@ Now, let's rewrite `views/index.hbs` to this:
 
 我们现在已经写了足够的内容来运行应用程序，让我们查看主页：
 
-```js
+```
 
 If we visit `http://localhost:3000`, we will see the following page:
 
@@ -402,19 +402,19 @@ If we click on the ADD Note link, we get an error because the application doesn'
 
 In `app.mjs`, uncomment the two lines dealing with `notesRouter`:
 
-```js
+```
 
 我们最终会在`app.mjs`中得到这个。我们导入两个路由，然后将它们添加到应用程序配置中。
 
 创建一个名为`routes/notes.mjs`的文件来保存`notesRouter`，并以以下内容开始：
 
-```js
+```
 
 This handles the `/notes/add` URL corresponding to the link in `partials/header.hbs`. It simply renders a template, `noteedit`, using the provided data.
 
 In the `views` directory, add the corresponding template, named `noteedit.hbs`, containing the following:
 
-```js
+```
 
 这个模板支持创建新笔记和更新现有笔记。我们将通过`docreate`标志重用这个模板来支持这两种情况。
 
@@ -422,7 +422,7 @@ In the `views` directory, add the corresponding template, named `noteedit.hbs`, 
 
 创建 HTML 表单时，必须小心使用包含值的元素中的空格。考虑一个情况，`<textarea>`元素被格式化如下：
 
-```js
+```
 
 By normal coding practices, this looks alright, right? It's nicely indented, with the code arranged for easy reading. The problem is that extra whitespace ends up being included in the `body` value when the form is submitted to the server. That extra whitespace is added because of the nicely indented code. To avoid that extra whitespace, we need to use the angle brackets in the HTML elements that are directly adjacent to the Handlebars code to insert the value. Similar care must be taken with the elements with the `value=` attributes, ensuring no extra whitespace is within the `value` string.
 
@@ -430,7 +430,7 @@ This template is a form that will post its data to the `/notes/save` URL. If yo
 
 To support the `/notes/save` URL, add it to `routes/notes.mjs`:
 
-```js
+```
 
 因为这个 URL 也将用于创建和更新笔记，所以我们检查`docreate`标志来调用适当的模型操作。
 
@@ -458,7 +458,7 @@ To support the `/notes/save` URL, add it to `routes/notes.mjs`:
 
 将以下`router`函数添加到`routes/notes.mjs`中：
 
-```js
+```
 
 Because this route is mounted on a router handling, `/notes`, this route handles `/notes/view`.
 
@@ -466,7 +466,7 @@ The handler simply calls `notes.read` to read the note. If successful, the not
 
 Add the `noteview.hbs` template to the `views` directory, referenced by the following code:
 
-```js
+```
 
 这很简单；我们从`note`对象中取出数据，并使用 HTML 显示它。底部有两个链接——一个是到`/notes/destroy`用于删除笔记，另一个是到`/notes/edit`用于编辑它。
 
@@ -484,7 +484,7 @@ Add the `noteview.hbs` template to the `views` directory, referenced by the fo
 
 在`routes/notes.mjs`中添加以下路由函数：
 
-```js
+```
 
 This handles the `/notes/edit` URL.
 
@@ -506,19 +506,19 @@ Now, let's look at how to implement the `/notes/destroy` URL to delete notes.
 
  Add the following router function to `routes/notes.mjs`:
 
-```js
+```
 
 销毁一个笔记是一个重要的步骤，因为如果用户犯了错误，就没有垃圾桶可以从中恢复。因此，我们需要询问用户是否确定要删除笔记。在这种情况下，我们检索笔记，然后呈现以下页面，显示一个问题以确保他们确定要删除笔记。
 
 在`views`目录中添加一个`notedestroy.hbs`模板：
 
-```js
+```
 
 This is a simple form that asks the user to confirm by clicking on the button. The Cancel link just sends them back to the `/notes/view` page. Clicking on the Submit button generates a `POST` request on the `/notes/destroy/confirm` URL.
 
 This URL needs a request handler. Add the following code to `routes/notes.mjs`:
 
-```js
+```
 
 这调用模型中的`notes.destroy`函数。如果成功，浏览器将重定向到主页。如果不成功，会向用户显示错误消息。重新运行应用程序，我们现在可以看到它在运行中的样子：
 
@@ -534,19 +534,19 @@ Express 团队在确保 Express 应用程序一开始看起来不错方面做得
 
 如果您正在使用推荐的方法`npm start`运行`Notes`应用程序，控制台窗口中将打印出一条不错的活动日志。其中之一是以下内容：
 
-```js
+```
 
 This is due to the following line of code, which we put into `layout.hbs`:
 
-```js
+```
 
 这个文件是由 Express 生成器在一开始为我们自动生成的，并且被放在`public`目录中。`public`目录由 Express 静态文件服务器管理，使用`app.mjs`中的以下行：
 
-```js
+```
 
 Therefore, the CSS stylesheet is at `public/stylesheets/style.css`, so let's open it and take a look:
 
-```js
+```
 
 一个显眼的问题是应用程序内容在屏幕顶部和左侧有很多空白。原因是`body`标签有`padding: 50px`样式。更改它很快。
 
@@ -554,7 +554,7 @@ Therefore, the CSS stylesheet is at `public/stylesheets/style.css`, so let's op
 
 让我们做一些调整：
 
-```js
+```
 
 This changes the padding and also adds a gray box around the header area.
 
@@ -582,17 +582,17 @@ The first thing is to make sure the instances are on different ports. In `app.mj
 
 Let's open up `package.json` and add the following lines to the `scripts` section:
 
-```js
+```
 
 `server1`脚本在`PORT 3001`上运行，而`server2`脚本在`PORT 3002`上运行。在一个地方记录所有这些是不是很好？
 
 然后，在一个命令窗口中，运行以下命令：
 
-```js
+```
 
 In another command window, run the following:
 
-```js
+```
 
 这给了我们两个`Notes`应用程序的实例。使用两个浏览器窗口访问`http://localhost:3001`和`http://localhost:3002`。输入一些笔记，你可能会看到类似这样的东西：
 

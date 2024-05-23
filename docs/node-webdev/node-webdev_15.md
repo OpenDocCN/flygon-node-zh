@@ -92,7 +92,7 @@ AWS 提供了支持广泛的工具来操作 AWS 基础架构的 AWS API。AWS CL
 
 单击此按钮，将显示两个安全令牌，即访问密钥 ID 和秘密访问密钥。您将有机会下载包含这些密钥的逗号分隔值（CSV）文件。CSV 文件如下所示：
 
-```js
+```
 
 You will receive a file that looks like this. These are the security tokens that identify your account. Don't worry, as no secrets are being leaked in this case. Those particular credentials have been revoked. The good news is that you can revoke these credentials at any time and download new credentials.
 
@@ -100,7 +100,7 @@ Now that we have the credentials file, we can configure an AWS CLI profile.
 
 The `aws configure` command, as the name implies, takes care of configuring your AWS CLI environment. This asks a series of questions, the first two of which are those keys. The interaction looks like this:
 
-```js
+```
 
 对于前两个提示，粘贴您下载的密钥。区域名称提示选择您的服务将在其中提供服务的默认 Amazon AWS 数据中心。AWS 在世界各地都有设施，每个地点都有一个代码名称，例如`us-west-2`（位于俄勒冈州）。最后一个提示询问您希望 AWS CLI 如何向您呈现信息。
 
@@ -112,7 +112,7 @@ The `aws configure` command, as the name implies, takes care of configuring yo
 
 验证 AWS 配置的一种简单方法是运行以下命令：
 
-```js
+```
 
 The AWS **Simple Storage Service** (**S3**) is a cloud file-storage system, and we are running these commands solely to verify the correct installation of the credentials.  The `ls` command lists any files you have stored in S3\. We don't care about the files that may or may not be in an S3 bucket, but whether this executes without error.
 
@@ -154,7 +154,7 @@ Next, we have to create an administrator group. In IAM, users are assigned to gr
 
 The policy document to use is as follows:
 
-```js
+```
 
 这描述了为管理员组创建的策略。它为该组提供了我们之前在管理员角色中指定的权限。资源标签是我们输入之前创建的管理员组的 ARN 的地方。确保将整个 ARN 放入此字段。
 
@@ -186,13 +186,13 @@ The policy document to use is as follows:
 
 在完成本节之前，返回命令行并运行以下命令：
 
-```js
+```
 
 This will create another AWS CLI profile, this time for the `notes-app` IAM user.
 
 Using the AWS CLI, we can list the users in our account, as follows:
 
-```js
+```
 
 这是验证 AWS CLI 是否正确安装的另一种方法。此命令从 AWS 查询用户信息，如果执行无误，则已正确配置 CLI。
 
@@ -218,7 +218,7 @@ AWS CLI 命令遵循类似的结构，其中有一系列子命令，后面跟着
 
 1.  下载密钥对文件后，需要将其设置为只读，可以使用以下命令：
 
-```js
+```
 
 Substitute here the pathname where your browser downloaded the file.
 
@@ -268,13 +268,13 @@ Alternatively, you will find the Terraform CLI available in many package managem
 
 Once installed, you can view the Terraform help with the following command:
 
-```js
+```
 
 Terraform 文件具有`.tf`扩展名，并使用相当简单、易于理解的声明性语法。Terraform 不关心您使用的文件名或创建文件的顺序。它只是读取所有具有`.tf`扩展名的文件，并寻找要部署的资源。这些文件不包含可执行代码，而是声明。Terraform 读取这些文件，构建依赖关系图，并确定如何在使用的云基础设施上实现这些声明。
 
 一个示例声明如下：
 
-```js
+```
 
 The first word, `resource` or `variable`, is the block type, and in this case, we are declaring a resource and a variable. Within the curly braces are the arguments to the block, and it is helpful to think of these as attributes.
 
@@ -282,7 +282,7 @@ Blocks have labels—in this case, the labels are `aws_vpc` and `main`. We ca
 
 The general structure is as follows:
 
-```js
+```
 
 区块类型包括资源（resource），声明与云基础设施相关的内容，变量（variable），声明命名值，输出（output），声明模块的结果，以及其他一些类型。
 
@@ -294,13 +294,13 @@ Terraform 模块是包含 Terraform 脚本的目录。当在目录中运行`terr
 
 在模块内，我们处理各种值。我们已经讨论了资源、变量和输出。资源本质上是与云托管平台上的某些东西相关的对象值。变量可以被视为模块的输入，因为有多种方法可以为变量提供值。输出值如其名称所示，是模块的输出。当执行模块时，输出可以打印在控制台上，或保存到文件中，然后被其他模块使用。与此相关的代码可以在以下片段中看到：
 
-```js
+```
 
 This is what the `variable` and `output` declarations look like. Every value has a data type. For variables, we can attach a description to aid in their documentation. The declaration uses the word `default` rather than `value` because there are multiple ways (such as Terraform command-line arguments) to specify a value for a variable. Terraform users can override the default value in several ways, such as the `--var` or `--var-file` command-line options.
 
 Another type of value is local. Locals exist only within a module because they are neither input values (variables) nor output values, as illustrated in the following code snippet:
 
-```js
+```
 
 在这种情况下，我们定义了与要在 VPC 中创建的子网的 CIDR 相关的几个本地变量。`cidrsubnet`函数用于计算子网掩码，例如`10.1.1.0/24`。
 
@@ -322,7 +322,7 @@ AWS VPC 就像它的名字一样，是 AWS 内的一个服务，用来容纳您�
 
 在该目录中，创建一个名为`main.tf`的文件，其中包含以下内容：
 
-```js
+```
 
 This says to use the AWS provider plugin. It also configures this script to execute using the named AWS profile. Clearly, the AWS provider plugin requires AWS credential tokens in order to use the AWS API. It knows how to access the credentials file set up by `aws configure`.
 
@@ -334,13 +334,13 @@ In addition, we have specified which AWS region to use. The reference, `var.aws
 
 To support the variables, we create a file named `variables.tf`, starting with this:
 
-```js
+```
 
 `default`属性为变量设置了默认值。正如我们之前看到的，声明也可以指定变量的数据类型和描述。
 
 有了这个，我们现在可以运行我们的第一个 Terraform 命令，如下所示：
 
-```js
+```
 
 This initializes the current directory as a Terraform workspace. You'll see that it creates a directory, `.terraform`, and a file named `terraform.tfstate` containing data collected by Terraform. The `.tfstate` files are what is known as state files. These are in JSON format and store the data Terraform collects from the platform (in this case, AWS) regarding what has been deployed. State files must not be committed to source code repositories because it is possible for sensitive data to end up in those files. Therefore, a `.gitignore` file listing the state files is recommended.
 
@@ -348,7 +348,7 @@ The instructions say we should run `terraform plan`, but before we do that, let
 
 To declare the VPC and its related infrastructure, let's create a file named `vpc.tf`. Start with the following command:
 
-```js
+```
 
 这声明了 VPC。这将是我们正在创建的基础设施的容器。
 
@@ -360,13 +360,13 @@ To declare the VPC and its related infrastructure, let's create a file named `v
 
 在`variables.tf`中，添加以下内容以支持这些资源声明：
 
-```js
+```
 
 These values will be used throughout the project. For example, `var.project_name` will be widely used as the basis for creating name tags for deployed resources.
 
 Add the following to `vpc.tf`:
 
-```js
+```
 
 `resource`块声明了托管平台上的某些内容（在本例中是 AWS），`data`块从托管平台检索数据。在这种情况下，我们正在检索当前选择区域的 AZ 列表。以后在声明某些资源时会用到这个数据。
 
@@ -376,7 +376,7 @@ Add the following to `vpc.tf`:
 
 创建一个名为`gw.tf`的文件，其中包含以下内容：
 
-```js
+```
 
 This declares the internet gateway and the NAT gateway. Remember that internet gateways are used with public subnets, and NAT gateways are used with private subnets.
 
@@ -384,7 +384,7 @@ An **Elastic IP** (**EIP**) resource is how a public internet IP address is assi
 
 For the subnets, create a file named `subnets.tf` containing the following:
 
-```js
+```
 
 这声明了公共和私有子网。请注意，这些子网分配给了特定的 AZ。通过添加名为`public2`、`public3`、`private2`、`private3`等子网，很容易扩展以支持更多子网。如果这样做，最好将这些子网分布在不同的 AZ 中。建议在多个 AZ 中部署，这样如果一个 AZ 崩溃，应用程序仍在仍在运行的 AZ 中运行。
 
@@ -392,13 +392,13 @@ For the subnets, create a file named `subnets.tf` containing the following:
 
 每个子网都有自己的 CIDR（IP 地址范围），为了支持这一点，我们需要在`variables.tf`中列出这些 CIDR 分配，如下所示：
 
-```js
+```
 
 These are the CIDRs corresponding to the resources declared earlier.
 
 For these pieces to work together, we need appropriate routing tables to be configured. Create a file named `routing.tf` containing the following:
 
-```js
+```
 
 要为公共子网配置路由表，我们修改连接到 VPC 的主路由表的路由表。我们在这里做的是向该表添加一条规则，指定公共互联网流量要发送到互联网网关。我们还有一个路由表关联声明，公共子网使用这个路由表。
 
@@ -416,11 +416,11 @@ For these pieces to work together, we need appropriate routing tables to be conf
 
 之前，我们运行了`terraform init`来初始化我们的工作目录中的 Terraform。这样做时，它建议我们运行以下命令：
 
-```js
+```
 
 This command scans the Terraform files in the current directory and first determines that everything has the correct syntax, that all the values are known, and so forth. If any problems are encountered, it stops right away with error messages such as the following:
 
-```js
+```
 
 Terraform 的错误消息通常是不言自明的。在这种情况下，原因是决定只使用一个公共子网和一个私有子网。这段代码是从两个子网的情况遗留下来的。因此，这个错误指的是容易删除的陈旧代码。
 
@@ -428,7 +428,7 @@ Terraform 的错误消息通常是不言自明的。在这种情况下，原因�
 
 一旦您满意了，请运行以下命令：
 
-```js
+```
 
 With `terraform apply`, the report shows the difference between the actual deployed state and the desired state as reflected by the Terraform files. In this case, there is no deployed state, so therefore everything that is in the files will be deployed. In other cases, you might have deployed a system and have made a change, in which case Terraform will work out which changes have to be deployed based on the changes you've made. Once it calculates that, Terraform asks for permission to proceed. Finally, if we have said yes, it will proceed and launch the desired infrastructure.
 
@@ -448,7 +448,7 @@ For example, this is the NAT gateway dashboard showing the one created for this 
 
 Another way to explore is with the AWS CLI tool. Just because we have Terraform doesn't mean we are prevented from using the CLI. Have a look at the following code block:
 
-```js
+```
 
 这列出了创建的 VPC 的参数。
 
@@ -456,7 +456,7 @@ Another way to explore is with the AWS CLI tool. Just because we have Terraform 
 
 要列出子网上的数据，请运行以下命令：
 
-```js
+```
 
 To focus on the subnets for a given VPC, we use the `--filters` option, passing in the filter named `vpc-id` and the VPC ID for which to filter.
 
@@ -508,7 +508,7 @@ Another attribute to select is the instance size. AWS supports a long list of si
 
 Create a file named `ec2-public.tf` containing the following:
 
-```js
+```
 
 在 Terraform AWS 提供程序中，EC2 实例的资源名称是`aws_instance`。由于此实例附加到我们的公共子网，我们将其称为`aws_instance.public`。因为它是一个公共的 EC2 实例，`associate_public_ip_address`属性设置为`true`。
 
@@ -516,7 +516,7 @@ Create a file named `ec2-public.tf` containing the following:
 
 对于 AMI、实例类型和密钥对数据，请将这些条目添加到`variables.tf`，如下所示：
 
-```js
+```
 
 The AMI ID shown here is specifically for Ubuntu 20.04 in `us-west-2`. There will be other AMI IDs in other regions. The `key_pair` name shown here should be the key-pair name you selected when creating your key pair earlier.
 
@@ -526,7 +526,7 @@ The `user_data` feature is very useful since it lets us customize an instance af
 
 Create a directory named `sh` in which we'll create shell scripts, and in that directory create a file named `docker_install.sh`. To this file, add the following:
 
-```js
+```
 
 此脚本源自 Ubuntu 上安装 Docker Engine **Community Edition** (**CE**)的官方说明。第一部分是支持`apt-get`从 HTTPS 存储库下载软件包。然后将 Docker 软件包存储库配置到 Ubuntu 中，之后安装 Docker 和相关工具。最后，确保`docker`组已创建并确保`ubuntu`用户 ID 是该组的成员。Ubuntu AMI 默认使用此用户 ID `ubuntu` 作为 EC2 管理员使用的用户 ID。
 
@@ -534,7 +534,7 @@ Create a directory named `sh` in which we'll create shell scripts, and in that d
 
 回到`ec2-public.tf`，我们还有两件事要做，然后我们可以启动 EC2 实例。看一下以下代码块：
 
-```js
+```
 
 This is the security group declaration for the public EC2 instance. Remember that a security group describes the rules of a firewall that is attached to many kinds of AWS objects. This security group was already referenced in declaring `aws_instance.public`.
 
@@ -548,7 +548,7 @@ These `ingress` rules are obviously very strict and limit the attack surface any
 
 The final task is to add these output declarations to `ec2-public.tf`, as follows:
 
-```js
+```
 
 这将让我们知道公共 IP 地址和公共 DNS 名称。如果我们感兴趣，输出还会告诉我们私有 IP 地址和 DNS 名称。
 
@@ -558,11 +558,11 @@ The final task is to add these output declarations to `ec2-public.tf`, as follo
 
 现在我们已经准备好将其部署到 AWS 并查看我们可以做些什么。我们已经知道该怎么做了，所以让我们运行以下命令：
 
-```js
+```
 
 If the VPC infrastructure were already running, you would get output similar to this. The addition is two new objects, `aws_instance.public` and `aws_security_group.ec2-public-sg`. This looks good, so we proceed to deployment, as follows:
 
-```js
+```
 
 这构建了我们的 EC2 实例，我们有了 IP 地址和域名。因为初始化脚本需要几分钟才能运行，所以最好等待一段时间再进行系统测试。
 
@@ -570,7 +570,7 @@ If the VPC infrastructure were already running, you would get output similar to 
 
 我们可以这样登录到 EC2 实例：
 
-```js
+```
 
 On a Linux or macOS system where we're using SSH, the command is as shown here. The `-i` option lets us specify the **Privacy Enhanced Mail** (**PEM**) file that was provided by AWS for the key pair. If on Windows using PuTTY, you'd instead tell it which **PuTTY Private Key** (**PPK**) file to use, and the connection parameters will otherwise be similar to this.
 
@@ -580,11 +580,11 @@ This lands us at the command-line prompt of the EC2 instance. We see that it is 
 
 Earlier, we said to safely store the key-pair file somewhere on your computer.  In the previous section, we showed how to use the PEM file with SSH to log in to the EC2 instance. Namely, we use the PEM file like so:
 
-```js
+```
 
 每次使用 SSH 时记住添加`-i`标志可能会不方便。为了避免使用此选项，运行此命令：
 
-```js
+```
 
 As the command name implies, this adds the authentication file to SSH. This has to be rerun on every reboot of the computer, but it conveniently lets us access EC2 instances without remembering to specify this option.
 
@@ -592,17 +592,17 @@ As the command name implies, this adds the authentication file to SSH. This has 
 
 We have an EC2 instance and it should already be configured with Docker, and we can easily verify that this is the case as follows:
 
-```js
+```
 
 设置脚本也应该已经将此 EC2 实例初始化为 Docker Swarm 节点，以下命令验证了是否发生了这种情况：
 
-```js
+```
 
 The `docker info` command, as the name implies, prints out a lot of information about the current Docker instance. In this case, the output includes verification that it is in Docker Swarm mode and that this is a Docker Swarm manager instance.
 
 Let's try a couple of swarm commands, as follows:
 
-```js
+```
 
 `docker node`命令用于管理集群中的节点。在这种情况下，只有一个节点 - 这个节点，并且它被显示为不仅是一个管理者，而且是集群的领导者。当你是集群中唯一的节点时，成为领导者似乎很容易。
 
@@ -610,7 +610,7 @@ Let's try a couple of swarm commands, as follows:
 
 要了解这意味着什么，让我们启动一个`nginx`服务，如下所示：
 
-```js
+```
 
 We started one service using the `nginx` image. We said to deploy one replica and to expose port `80`. We chose the `nginx` image because it has a simple default HTML file that we can easily view, as illustrated in the following screenshot:
 
@@ -620,13 +620,13 @@ Simply paste the IP address of the EC2 instance into the browser location bar, a
 
 We also see by using `docker node ls` and `docker service ps` that there is one instance of the service. Since this is a swarm, let's increase the number of `nginx` instances, as follows:
 
-```js
+```
 
 一旦服务部署完成，我们可以使用`docker service update`命令来修改部署。在这种情况下，我们告诉它使用`--replicas`选项增加实例的数量，现在`notes-public`节点上运行了三个`nginx`容器的实例。
 
 我们还可以运行正常的`docker ps`命令来查看实际的容器，如下面的代码块所示：
 
-```js
+```
 
 This verifies that the `nginx` service with three replicas is actually three `nginx` containers.
 
@@ -642,35 +642,35 @@ One method for remotely controlling a Docker instance is to expose the Docker **
 
 The following setup is for Linux and macOS, relying on features of SSH. To do this on Windows would rely on installing OpenSSH. From October 2018, OpenSSH became available for Windows, and the following commands may work in PowerShell (failing that, you can run these commands from a Multipass or **Windows Subsystem for Linux** (**WSL**) 2 instance on Windows):
 
-```js
+```
 
 退出 EC2 实例上的 shell，这样你就可以在笔记本电脑的命令行上了。
 
 运行以下命令：
 
-```js
+```
 
 We discussed this command earlier, noting that it lets us log in to EC2 instances without having to use the `-i` option to specify the PEM file.  This is more than a simple convenience when it comes to remotely accessing Docker hosts. The following steps are dependent on having added the PEM file to SSH, as shown here. 
 
 To verify you've done this correctly, use this command:
 
-```js
+```
 
 通常在 EC2 实例上，我们会使用`-i`选项，就像之前展示的那样。但是在运行`ssh-add`之后，就不再需要`-i`选项了。
 
 这使我们能够创建以下环境变量：
 
-```js
+```
 
 The `DOCKER_HOST` environment variable enables the remote control of Docker hosts. It relies on a passwordless SSH login to the remote host. Once you have that, it's simply a matter of setting the environment variable and you've got remote control of the Docker host, and in this case, because the host is a swarm manager, a remote swarm.
 
 But this gets even better by using the Docker context feature. A *context* is a configuration required to access a remote node or swarm. Have a look at the following code snippet:
 
-```js
+```
 
 我们首先删除环境变量，因为我们将用更好的东西来替代它，如下所示：
 
-```js
+```
 
 We create a context using `docker context create`, specifying the same SSH URL we used in the `DOCKER_HOST` variable. We can then use it either with the `--context` option or by using `docker context use` to switch between contexts.
 
@@ -678,13 +678,13 @@ With this feature, we can easily maintain configurations for multiple remote ser
 
 For example, the Docker instance on our laptop is the *default* context. Therefore, we might find ourselves doing this:
 
-```js
+```
 
 有时候我们必须意识到当前的 Docker 上下文是什么，以及何时使用哪个上下文。在下一节中，当我们学习如何将镜像推送到 AWS ECR 时，这将是有用的。
 
 我们在本节中学到了很多知识，所以在进行下一个任务之前，让我们清理一下我们的 AWS 基础设施。没有必要保持这个 EC2 实例运行，因为我们只是用它进行了一个快速的熟悉之旅。我们可以轻松地删除这个实例，同时保留其余的基础设施配置。最有效的方法是将`ec2-public.tf`重命名为`ec2-public.tf-disable`，然后重新运行`terraform apply`，如下面的代码块所示：
 
-```js
+```
 
 The effect of changing the name of one of the Terraform files is that Terraform will not scan those files for objects to deploy. Therefore, when Terraform maps out the state we want Terraform to deploy, it will notice that the deployed EC2 instance and security group are not listed in the local files, and it will, therefore, destroy those objects. In other words, this lets us undeploy some infrastructure with very little fuss. 
 
@@ -708,7 +708,7 @@ It is extremely important to run commands in this section in the default Docker 
 
 Because it is important to not run Docker build commands on the Swarm infrastructure, execute this command:
 
-```js
+```
 
 这个命令将 Docker 上下文切换到本地系统。
 
@@ -718,19 +718,19 @@ Because it is important to not run Docker build commands on the Swarm infrastruc
 
 第一个任务是连接到 AWS ECR 服务。为此，创建一个名为`login.sh`的文件，其中包含以下内容：
 
-```js
+```
 
 This command, and others, are available in the ECR dashboard. If you navigate to that dashboard and then create a repository there, a button labeled View Push Command is available. This and other useful commands are listed there, but we have substituted a few variable names to make this configurable.
 
 If you are instead using Windows PowerShell, AWS recommends the following:
 
-```js
+```
 
 这依赖于 PowerShell 的 AWS 工具包（参见[`aws.amazon.com/powershell/`](https://aws.amazon.com/powershell/)），它似乎提供了一些有用于 AWS 服务的强大工具。然而，在测试中，这个命令并没有表现得很好。
 
 相反，发现以下命令效果更好，你可以将其放在一个名为`login.ps1`的文件中：
 
-```js
+```
 
 This is the same command as is used for Unix-like systems, but with Windows-style references to environment variables.  
 
@@ -752,15 +752,15 @@ The AWS command-line tools will use those environment variables in place of the 
 
 This means that we need an easy way to set those variables. These Bash commands can be recorded in a shell script like this, which you could store as `env-us-west-2`:
 
-```js
+```
 
 当然，这个脚本遵循 Bash shell 的语法。对于其他命令环境，你必须适当地进行转换。要在 Bash shell 中设置这些变量，请运行以下命令：
 
-```js
+```
 
 For other command environments, again transliterate appropriately. For example, in Windows and in PowerShell, the variables can be set with these commands:
 
-```js
+```
 
 这些值应该是相同的，只是在 Windows 中被识别的语法。
 
@@ -774,7 +774,7 @@ For other command environments, again transliterate appropriately. For example, 
 
 要构建镜像，让我们添加一个名为`build.sh`的文件，其中包含以下内容：
 
-```js
+```
 
 This handles running `docker build` commands for both the Notes and user authentication services. It is expected to be executed in the `ecr` directory and takes care of executing commands in both the `notes` and `users` directories.
 
@@ -782,11 +782,11 @@ Let's now create and delete a pair of registries to hold our images. We have two
 
 Create a file named `create.sh` containing the following:
 
-```js
+```
 
 还要创建一个名为`delete.sh`的伴随文件，其中包含以下内容：
 
-```js
+```
 
 Between these scripts, we can create and delete the ECR repositories for our Docker images. These scripts are directly usable on Windows; simply change the filenames to `create.ps1` and `delete.ps1`.
 
@@ -794,7 +794,7 @@ In `aws ecr delete-repository`, the `--force` option means to delete the reposit
 
 With the scripts we've written so far, they are executed in the following order:
 
-```js
+```
 
 `aws ecr create-repository`命令会输出这些镜像存储库的描述符。需要注意的重要数据是`repositoryUri`值。这将在稍后的 Docker 堆栈文件中用于命名要检索的镜像。
 
@@ -812,7 +812,7 @@ With the scripts we've written so far, they are executed in the following order
 
 创建一个名为 `tag.sh` 的文件，其中包含以下内容：
 
-```js
+```
 
 The `docker tag` command we have here takes `svc-notes:latest`, or `svc-userauth:latest`, and adds what's called a target image to the local image storage area. The target image name we've used is the same as what will be stored in the ECR repository.
 
@@ -820,7 +820,7 @@ For Windows, you should create a file named `tag.ps1` using the same commands, b
 
 Then, create a file named `push.sh` containing the following:
 
-```js
+```
 
 `docker push` 命令会将目标图像发送到 ECR 仓库。同样，对于 Windows，创建一个名为 `push.ps1` 的文件，其中包含相同的命令，但使用 Windows 风格的环境变量引用。
 
@@ -828,17 +828,17 @@ Then, create a file named `push.sh` containing the following:
 
 我们已经将工作流程实现为脚本，现在让我们看看如何运行它，如下：
 
-```js
+```
 
 This builds the Docker images. When we run `docker build`, it stores the built image in an area on our laptop where Docker maintains images. We can inspect that area using the `docker images` command, like this:
 
-```js
+```
 
 如果我们没有指定标签，`docker build` 命令会自动添加标签 `latest`。
 
 然后，要将图像推送到 ECR 仓库，我们执行以下命令：
 
-```js
+```
 
 Since the images are rather large, it will take a long time to upload them to the AWS ECR. We should add a task to the backlog to explore ways to trim Docker image sizes. In any case, expect this to take a while. 
 
@@ -846,7 +846,7 @@ After a period of time, the images will be uploaded to the ECR repositories, and
 
 Once the Docker images are pushed to the AWS ECR repository, we no longer need to stay with the default Docker context. You will be free to run the following command at any time:
 
-```js
+```
 
 请记住，不要使用 swarm 主机构建 Docker 图像。在本节开始时，我们切换到默认上下文，以便构建发生在我们的笔记本电脑上。
 
@@ -890,7 +890,7 @@ Docker 平台允许使用 compose 文件将服务部署到 swarm。这种情况�
 
 由于我们将需要一些高级的`docker-compose.yml`功能，将版本号更新为以下内容：
 
-```js
+```
 
 For the Compose file we started with, version `'3'` was adequate, but to accomplish the tasks in this chapter the higher version number is required, to enable newer features.
 
@@ -900,7 +900,7 @@ Fortunately, most of this is straightforward and will require very little code.
 
 For the deployment parameters, simply add a `deploy` tag to each service. Most of the options for this tag have perfectly reasonable defaults. To start with, let's add this to every service, as follows:
 
-```js
+```
 
 这告诉 Docker 我们想要每个服务的一个实例。稍后，我们将尝试添加更多的服务实例。我们稍后会添加其他参数，比如放置约束。稍后，我们将尝试为`svc-notes`和`svc-userauth`添加多个副本。将服务的 CPU 和内存限制放在服务上是很诱人的，但这并不是必要的。
 
@@ -908,7 +908,7 @@ For the deployment parameters, simply add a `deploy` tag to each service. Most o
 
 接下来要注意的是镜像名称。虽然存在`build`标签，但要记住它会被忽略。对于 Redis 和数据库容器，我们已经在 Docker Hub 中使用镜像，但对于`svc-notes`和`svc-userauth`，我们正在构建自己的容器。这就是为什么在本章的前面，我们设置了将镜像推送到 ECR 存储库的程序。现在我们可以从堆栈文件中引用这些镜像。这意味着我们必须进行以下更改：
 
-```js
+```
 
 If we use this with `docker-compose`, it will perform the build in the named directories, and then tag the resulting image with the tag in the `image` field. In this case, the `deploy` tag will be ignored as well. However, if we use this with `docker stack deploy`, the `build` tag will be ignored, and the images will be downloaded from the repositories listed in the `image` tag. In this case, the `deploy` tag will be used.
 
@@ -920,7 +920,7 @@ When running the compose file on our laptop, we used `bridge` networking. This w
 
 To use overlay networking, change the `networks` tag to the following:
 
-```js
+```
 
 为了支持在 Swarm 中使用这个文件，或者用于单主机部署，我们可以保留`bridge`网络设置，但将其注释掉。然后，根据上下文的不同，我们可以更改哪个被注释掉，从而改变`overlay`或`bridge`网络的活动状态。
 
@@ -944,19 +944,19 @@ Swarm 模式允许我们声明任何服务的放置要求。有几种实现方�
 
 将`deploy`标签添加到`db-userauth`服务声明中：
 
-```js
+```
 
 The `placement` tag governs where the containers are deployed. Rather than Docker evenly distributing the containers, we can influence the placement with the fields in this tag. In this case, we have two examples, such as deploying a container to a specific node based on the hostname or selecting a node based on the labels attached to the node.
 
 To set a label on a Docker swarm node, we run the following command:
 
-```js
+```
 
 此命令将标签命名为`type`，值为`public`，附加到名为`notes-public`的节点上。我们使用这个来设置标签，正如你所看到的，标签可以有任何名称和任何值。然后可以使用标签和其他属性来影响容器在集群节点上的放置。
 
 对于堆栈文件的其余部分，添加以下放置约束：
 
-```js
+```
 
 This gives us three labels to assign to our EC2 instances: `db`, `svc`, and `public`. These constraints will cause the databases to be placed on nodes where the `type` label is `db`, the user authentication service is on the node of type `svc`, the Notes service is on the `public` node, and the Redis service is on any node that is not the `public` node.
 
@@ -972,7 +972,7 @@ Docker Swarm supports a very interesting method for securely storing secrets and
 
 The process starts with the following command:
 
-```js
+```
 
 这就是我们在 Docker 集群中存储秘密的方法。`docker secret create`命令首先需要秘密的名称，然后是包含秘密文本的文件的说明符。这意味着我们可以将秘密的数据存储在文件中，或者—就像在这种情况下一样—我们使用`-`来指定数据来自标准输入。在这种情况下，我们使用`printf`命令，它适用于 macOS 和 Linux，将值发送到标准输入。
 
@@ -980,13 +980,13 @@ Docker Swarm 安全地记录加密数据作为秘密。一旦您将秘密交给 
 
 在`compose-stack/docker-compose.yml`中，在最后添加此声明：
 
-```js
+```
 
 This lets Docker know that this stack requires the value of those two secrets. 
 
 The declaration for `svc-notes` also needs the following command:
 
-```js
+```
 
 这通知了集群 Notes 服务需要这两个秘密。作为回应，集群将使秘密的数据在容器的文件系统中可用，如`/var/run/secrets/TWITTER_CONSUMER_KEY`和`/var/run/secrets/TWITTER_CONSUMER_SECRET`。它们被存储为内存文件，相对安全。
 
@@ -1006,11 +1006,11 @@ Docker 团队对环境变量配置有一个建议的约定。您可以直接在�
 
 为了支持从文件中读取，将此导入添加到`notes/routes/users.mjs`的顶部：
 
-```js
+```
 
 Then, we'll find the code corresponding to these environment variables further down the file. We should rewrite that section as follows:
 
-```js
+```
 
 这与我们已经使用过的代码类似，但组织方式有点不同。它首先尝试从环境中读取 Twitter 令牌。如果失败，它会尝试从命名文件中读取。因为这段代码是在全局上下文中执行的，所以我们必须使用`readFileSync`来读取文件。
 
@@ -1032,7 +1032,7 @@ Then, we'll find the code corresponding to these environment variables further d
 
 在下一节中，我们将确保 Swarm 中恰好有一个这样的节点。为了确保数据库数据目录位于已知位置，让我们更改`db-userauth`和`db-notes`容器的声明，如下所示：
 
-```js
+```
 
 In `docker-local/docker-compose.yml`, we used the named volumes, `db-userauth-data` and `db-notes-data`. The top-level `volumes` tag is required when doing this. In `docker-swarm/docker-compose.yml`, we've commented all of that out. Instead, we are using a `bind` mount, to mount specific host directories in the `/var/lib/mysql` directory of each database.
 
@@ -1077,7 +1077,7 @@ Earlier, you may have renamed `ec2-public.tf` to `ec2-public.tf-disable`. If so,
 
 Create a new file in the `terraform-swarm` directory named `ec2-private.tf`, as follows:
 
-```js
+```
 
 这声明了两个附加到私有子网的 EC2 实例。除了名称之外，这些实例之间没有区别。因为它们位于私有子网上，所以它们没有分配公共 IP 地址。
 
@@ -1089,7 +1089,7 @@ Create a new file in the `terraform-swarm` directory named `ec2-private.tf`, as 
 
 将以下代码添加到`ec2-private.tf`中：
 
-```js
+```
 
 This is the security group for these EC2 instances. It allows any traffic from inside the VPC to enter the EC2 instances. This is the sort of security group we'd create when in a hurry and should tighten up the ingress rules, since this is very lax.
 
@@ -1097,11 +1097,11 @@ Likewise, the `ec2-public-sg` security group needs to be equally lax. We'll find
 
 In `ec2-public.tf`, edit the `ec2-public-sg` security group to be the following:
 
-```js
+```
 
 这实际上不是最佳实践，因为它允许来自任何 IP 地址的任何网络流量到达公共 EC2 实例。但是，这确实给了我们在此时开发代码而不担心协议的自由。我们稍后会解决这个问题并实施最佳安全实践。看一下以下代码片段：
 
-```js
+```
 
 This outputs the useful attributes of the EC2 instances.
 
@@ -1113,7 +1113,7 @@ Ideally, when we run `terraform apply`, the infrastructure is automatically set 
 
 For this purpose, let's revisit the declaration of `aws_instance.public` in `ec2-public.tf`. Let's rewrite it as follows:
 
-```js
+```
 
 这基本上与以前一样，但有两个更改。第一个是向`depends_on`属性添加对私有 EC2 实例的引用。这将延迟公共 EC2 实例的构建，直到其他两个实例正在运行。
 
@@ -1121,13 +1121,13 @@ For this purpose, let's revisit the declaration of `aws_instance.public` in `ec2
 
 最后的更改是一个脚本，我们将用它来设置 swarm。我们将生成一个脚本来创建 swarm，而不是直接在`user_data`脚本中设置 swarm。在`sh`目录中，创建一个名为`swarm-setup.sh`的文件，其中包含以下内容：
 
-```js
+```
 
 This generates a shell script that will be used to initialize the swarm. Because the setup relies on executing commands on the other EC2 instances, the PEM file for the AWS key pair must be present on the `notes-public` instance. However, it is not possible to send the key-pair file to the `notes-public` instance when running `terraform apply`. Therefore, we use the pattern of generating a shell script, which will be run later.
 
 The pattern being followed is shown in the following code snippet:
 
-```js
+```
 
 `<<EOF`和`EOF`之间的部分作为`cat`命令的标准输入提供。因此，`/home/ubuntu/swarm-setup.sh`最终会以这些标记之间的文本结束。另一个细节是一些变量引用被转义，如`PEM=\$1`。这是必要的，以便在设置此脚本时不评估这些变量，但在生成的脚本中存在。
 
@@ -1135,7 +1135,7 @@ The pattern being followed is shown in the following code snippet:
 
 因此，`swarm-setup.sh`脚本将包含每个 EC2 实例的以下一对命令的副本：
 
-```js
+```
 
 The first line uses SSH to execute the `swarm join` command on the EC2 instance. For this to work, we need to supply the AWS key pair, which must be specified on the command file so that it becomes the `PEM` variable. The second line adds the `type` label with the named value to the named swarm node.
 
@@ -1143,7 +1143,7 @@ What is the `$join` variable? It has the output of running `docker swarm join-to
 
 Docker uses a swarm join token to facilitate connecting Docker hosts as a node in a swarm. The token contains cryptographically signed information that authenticates the attempt to join the swarm. We get the token by running the following command:
 
-```js
+```
 
 这里的`manager`一词意味着我们正在请求一个作为管理节点加入的令牌。要将节点连接为工作节点，只需将`manager`替换为`worker`。
 
@@ -1161,51 +1161,51 @@ Docker uses a swarm join token to facilitate connecting Docker hosts as a node 
 
 我们在 Terraform 文件中声明了所有内容，可以使用以下命令部署我们的完整系统：
 
-```js
+```
 
 This deploys the EC2 instances on AWS. Make sure to record all the output parameters. We're especially interested in the domain names and IP addresses for the three EC2 instances.
 
 As before, the `notes-public` instance should have a Docker swarm initialized. We have added two more instances, `notes-private-db1` and `notes-private-svc1`. Both will have Docker installed, but they are not joined to the swarm. Instead, we need to run the generated shell script for them to become nodes in the swarm, as follows:
 
-```js
+```
 
 我们已经在我们的笔记本电脑上运行了`ssh-add`，因此 SSH 和**安全复制**（**SCP**）命令可以在不明确引用 PEM 文件的情况下运行。然而，`notes-public` EC2 实例上的 SSH 没有 PEM 文件。因此，为了访问其他 EC2 实例，我们需要 PEM 文件可用。因此，我们使用了`scp`将其复制到`notes-public`实例上。
 
 如果您想验证实例正在运行并且 Docker 处于活动状态，请输入以下命令：
 
-```js
+```
 
 In this case, we are testing the private EC2 instances from a shell running on the public EC2 instance. That means we must use the private IP addresses printed when we ran Terraform. This command verifies SSH connectivity to an EC2 instance and verifies its ability to download and execute a Docker image.
 
 Next, we can run `swarm-setup.sh`. On the command line, we must give the filename for the PEM file as the first argument, as follows:
 
-```js
+```
 
 我们可以使用 SSH 在每个 EC2 实例上执行`docker swarm join`命令来看到这一点，从而使这两个系统加入到 swarm 中，并在实例上设置标签，如下面的代码片段所示：
 
-```js
+```
 
 Indeed, these systems are now part of the cluster. 
 
 The swarm is ready to go, and we no longer need to be logged in to `notes-public`. Exiting back to our laptop, we can create the Docker context to control the swarm remotely, as follows:
 
-```js
+```
 
 我们已经看到了这是如何工作的，这样做之后，我们将能够在我们的笔记本电脑上运行 Docker 命令；例如，看一下下面的代码片段：
 
-```js
+```
 
 From our laptop, we can query the state of the remote swarm that's hosted on AWS. Of course, this isn't limited to querying the state; we can run any other Docker command.
 
 We also need to run the following commands, now that the swarm is set up:
 
-```js
+```
 
 请记住，新创建的 swarm 没有任何秘密。要安装秘密，需要重新运行这些命令。
 
 如果您希望创建一个 shell 脚本来自动化这个过程，请考虑以下内容：
 
-```js
+```
 
 This script executes the same commands we just went over to prepare the swarm on the EC2 hosts. It requires the environment variables to be set, as follows:
 
@@ -1236,7 +1236,7 @@ We are ready to deploy the Notes stack to the swarm that we've launched. However
 
 The environment variables for `svc-notes` configuration require a little adjustment. Have a look at the following code block:
 
-```js
+```
 
 我们的主要要求是调整`TWITTER_CALLBACK_HOST`变量。`notes-public`实例的域名在每次部署 AWS 基础设施时都会更改。因此，`TWITTER_CALLBACK_HOST`必须更新以匹配。
 
@@ -1248,7 +1248,7 @@ The environment variables for `svc-notes` configuration require a little adjustm
 
 最后的准备步骤是登录到 ECR 存储库。要做到这一点，只需执行以下命令：
 
-```js
+```
 
 This has to be rerun every so often since the tokens that are downloaded time out after a few hours.
 
@@ -1260,7 +1260,7 @@ In this section, we prepared to run the deployment. We should now be ready to de
 
 We just did the final preparation for deploying the Notes stack to the swarm. Take a deep breath, yell out *Smoke Test*, and type the following command:
 
-```js
+```
 
 这部署了服务，swarm 通过尝试启动每个服务来做出响应。`--with-registry-auth`选项将 Docker Registry 身份验证发送到 swarm，以便它可以从 ECR 存储库下载容器映像。这就是为什么我们必须先登录到 ECR。
 
@@ -1268,7 +1268,7 @@ We just did the final preparation for deploying the Notes stack to the swarm. Ta
 
 使用以下命令来监视启动过程将会很有用：
 
-```js
+```
 
 The `service ls` command lists the services, with a high-level overview. Remember that the service is not the running container and, instead, the services are declared by entries in the `services` tag in the stack file. In our case, we declared one replica for each service, but we could have given a different amount. If so, the swarm will attempt to distribute that number of containers across the nodes in the swarm.
 
@@ -1278,23 +1278,23 @@ The `service ps` command lists information about the tasks deployed for the serv
 
 Sometimes, the `notes_svc-notes` service doesn't launch, and instead, we'll see the following message:
 
-```js
+```
 
 错误`no suitable node`意味着 swarm 无法找到符合放置条件的节点。在这种情况下，`type=public`标签可能没有正确设置。
 
 以下命令很有帮助：
 
-```js
+```
 
 Notice that the `Labels` entry is empty. In such a case, you can add the label by running this command:
 
-```js
+```
 
 一旦运行了这个命令，swarm 将在`notes-public`节点上放置`svc-notes`服务。
 
 如果发生这种情况，将以下命令添加到`aws_instance.public`的`user_data`脚本中可能会有用（在`ec2-public.tf`中），就在设置`type=public`标签之前：
 
-```js
+```
 
 It would appear that this provides a small window of opportunity to allow the swarm to establish itself.
 
@@ -1304,21 +1304,21 @@ Another possible deployment problem is that the database services might fail to 
 
 With remote access from our laptop, we can run the following command:
 
-```js
+```
 
 输出将告诉您当前的状态，例如部署服务时的任何错误。但是，要调查与 EC2 实例的连接，我们必须登录到`notes-public`实例，如下所示：
 
-```js
+```
 
 That gets us access to the public EC2 instance. From there, we can try to ping the `notes-private-db1` instance, as follows:
 
-```js
+```
 
 这应该可以工作，但是`docker node ls`的输出可能会显示节点为`Unreachable`。问问自己：如果一台计算机内存不足会发生什么？然后，认识到我们已经将两个数据库实例部署到只有 1GB 内存的 EC2 实例上——这是写作时` t2.micro` EC2 实例的内存容量。问问自己，您是否可能已经部署到给定服务器的服务已经超负荷了该服务器。
 
 要测试这个理论，在`ec2-private.tf`中进行以下更改：
 
-```js
+```
 
 This changes the instance type from `t2.micro` to `t2.medium`, or even `t2.large`, thereby giving the server more memory.
 
@@ -1348,23 +1348,23 @@ The user authentication service is on one of the private EC2 instances, and its 
 
 We can find out which node the service is deployed on by using the following command:
 
-```js
+```
 
 `notes_svc-userauth`任务已部署到`notes-private-svc1`，正如预期的那样。
 
 要运行`cli.mjs`，我们必须在容器内部获得 shell 访问权限。由于它部署在私有实例上，这意味着我们必须首先 SSH 到`notes-public`实例；然后从那里 SSH 到`notes-private-svc1`实例；然后在那里运行`docker exec`命令，在运行的容器中启动一个 shell，如下面的代码块所示：
 
-```js
+```
 
 We SSHd to the `notes-public` server and, from there, SSHd to the `notes-private-svc1` server. On that server, we ran `docker ps` to find out the name of the running container. Notice that Docker generated a container name that includes a coded string, called a *nonce*, that guarantees the container name is unique. With that container name, we ran `docker exec -it ... bash` to get a root shell inside the container.
 
 Once there, we can run the following command:
 
-```js
+```
 
 这验证了用户认证服务器的工作，并且它可以与数据库通信。为了进一步验证这一点，我们可以访问数据库实例，如下所示：
 
-```js
+```
 
 From there, we can explore the database and see that, indeed, Ashildr's user ID exists.
 
@@ -1380,23 +1380,23 @@ There are a number of possible issues that can cause this error. For example, th
 
 In `notes/appsupport.mjs`, there is a function, `basicErrorHandler`, which will be invoked by this error. In that function, add this line of code:
 
-```js
+```
 
 这将打印完整的错误，包括导致失败的原始错误。您可能会看到打印的以下消息：`getaddrinfo EAI_AGAIN api.twitter.com`。这可能令人困惑，因为该域名肯定是可用的。但是，由于 DNS 配置的原因，它可能在`svc-notes`容器内部不可用。
 
 从`notes-public`实例，我们将能够 ping 该域名，如下所示：
 
-```js
+```
 
 However, if we attempt this inside the `svc-notes` container, this might fail, as illustrated in the following code snippet:
 
-```js
+```
 
 理想情况下，这也将在容器内部起作用。如果在容器内部失败，这意味着 Notes 服务无法访问 Twitter 以处理使用 Twitter 凭据登录所需的 OAuth 过程。
 
 问题在于，在这种情况下，Docker 设置了不正确的 DNS 配置，容器无法为许多域名进行 DNS 查询。在 Docker Compose 文档中，建议在服务定义中使用以下代码：
 
-```js
+```
 
 These two DNS servers are operated by Google, and indeed this solves the problem. Once this change has been made, you should be able to log in to Notes using Twitter credentials.
 
@@ -1410,29 +1410,29 @@ By now, we have deployed the Notes stack to the cluster on our EC2 instances. We
 
 To increase the instances for `svc-notes`, edit `compose-swarm/docker-compose.yml` as follows:
 
-```js
+```
 
 这会增加副本的数量。由于现有的放置约束，两个实例都将部署到具有`type`标签`public`的节点上。要更新服务，只需要重新运行以下命令：
 
-```js
+```
 
 Earlier, this command described its actions with the word *Creating*, and this time it used the word *Updating*. This means that the services are being updated with whatever new settings are in the stack file.
 
 After a few minutes, you may see this:
 
-```js
+```
 
 确实，它显示了`svc-notes`服务的两个实例。`2/2`表示两个实例当前正在运行，而请求的实例数为两个。
 
 要查看详细信息，请运行以下命令：
 
-```js
+```
 
 As we saw earlier, this command lists to which swarm nodes the service has been deployed. In this case, we'll see that both instances are on `notes-public`, due to the placement constraints.
 
 Another useful command is the following:
 
-```js
+```
 
 最终，部署到 Docker 集群的每个服务都包含一个或多个正在运行的容器。
 
@@ -1440,7 +1440,7 @@ Another useful command is the following:
 
 这是由`docker-swarm/docker-compose.yml`中的以下设置引起的：
 
-```js
+```
 
 这表示要发布端口`80`并将其映射到容器上的端口`3000`。
 

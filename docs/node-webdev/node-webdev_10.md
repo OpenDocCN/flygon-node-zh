@@ -56,7 +56,7 @@
 
 然后，在`chap08/users`目录中，运行以下命令：
 
-```js
+```
 
 This gets us ready to start coding. We'll use the `debug` module for logging messages, `js-yaml` to read the Sequelize configuration file, `restify` for its REST framework, and `sequelize/sqlite3` for database access.
 
@@ -72,7 +72,7 @@ First, let's ponder an architectural preference. Just how much should we separat
 
 Create a new file named `users-sequelize.mjs` in `users` containing the following code:
 
-```js
+```
 
 与我们基于 Sequelize 的 Notes 模型一样，我们将使用**YAML Ain't Markup Language** (**YAML**)文件来存储连接配置。我们甚至使用相同的环境变量`SEQUELIZE_CONNECT`，以及相同的覆盖配置字段的方法。这种方法类似，通过`connectDB`函数设置连接并初始化 SQUsers 表。
 
@@ -84,15 +84,15 @@ Passport 项目通过将多个第三方服务提供的用户信息协调为单�
 
 有几个函数需要创建，这些函数将成为管理用户数据的 API。让我们将它们添加到`users-sequelize.mjs`的底部，从以下代码开始：
 
-```js
+```
 
 In Restify, the route handler functions supply the same sort of `request` and `response` objects we've already seen. We'll go over the configuration of the REST server in the next section. Suffice to say that REST parameters arrive in the request handlers as the `req.params` object, as shown in the preceding code block. This function simplifies the gathering of those parameters into a simple object that happens to match the SQUser schema, as shown in the following code block:
 
-```js
+```
 
 当我们从数据库中获取 SQUser 对象时，Sequelize 显然会给我们一个具有许多额外字段和 Sequelize 使用的函数的 Sequelize 对象。我们不希望将这些数据发送给我们的调用者。此外，我们认为不提供*密码*数据超出此服务器的边界将增加安全性。这个函数从 SQUser 实例中产生一个简单的、经过消毒的匿名 JavaScript 对象。我们本可以定义一个完整的 JavaScript 类，但那有什么用呢？这个匿名的 JavaScript 类对于这个简单的服务器来说已经足够了，如下面的代码块所示：
 
-```js
+```
 
 The pair of functions shown in the preceding code block provides some database operations that are used several times in the `user-server.mjs` module. 
 
@@ -100,7 +100,7 @@ In `findOneUser`, we are looking up a single SQUser, and then returning a saniti
 
 If you refer back to the `connectDB` function, there is a `SEQUELIZE_CONNECT` environment variable for the configuration file. Let's create one for SQLite3 that we can name `sequelize-sqlite.yaml`, as follows:
 
-```js
+```
 
 这就像我们在上一章中使用的配置文件一样。
 
@@ -112,19 +112,19 @@ If you refer back to the `connectDB` function, there is a `SEQUELIZE_CONNECT` en
 
 在`package.json`文件中，将`main`标签更改为以下代码行：
 
-```js
+```
 
 This declares that the module we're about to create, `user-server.mjs`, is the main package of this project.
 
 Make sure the scripts section contains the following script:
 
-```js
+```
 
 显然，这是我们启动服务器的方式。它使用上一节的配置文件，并指定我们将在端口`5858`上监听。
 
 然后，创建一个名为`user-server.mjs`的文件，其中包含以下代码：
 
-```js
+```
 
 We're using Restify, rather than Express, to develop this server. Obviously, the Restify API has similarities with Express, since both point to the Ruby framework Sinatra for inspiration. We'll see even more similarities when we talk about the route handler functions.
 
@@ -140,7 +140,7 @@ That leaves the handler simply named *check*. This handler is in `user-server.m
 
 Add the following code to the bottom of `user-server.mjs`:
 
-```js
+```
 
 这个处理程序对每个请求都执行，并紧随`restify.plugins.authorizationParser`。它查找授权数据，特别是 HTTP 基本授权，是否已在 HTTP 请求中提供。然后它循环遍历`apiKeys`数组中的键列表，如果基本授权参数匹配，则接受调用者。
 
@@ -152,7 +152,7 @@ Restify 和 Express 在`next`回调的使用上有很大的区别。在 Express 
 
 考虑以下假设的处理程序函数：
 
-```js
+```
 
 This shows the following three cases: 
 
@@ -180,7 +180,7 @@ By using Commander, we have a simpler path of dealing with the command line. It 
 
 Create a file named `cli.mjs` containing the following code:
 
-```js
+```
 
 这只是命令行工具的起点。对于大多数 REST 处理程序函数，我们还将在此工具中实现一个子命令。我们将在后续章节中处理该代码。现在，让我们专注于命令行工具的设置方式。
 
@@ -188,7 +188,7 @@ Commander 项目建议我们将默认导入命名为`program`，如前面的代�
 
 为了正确解析命令行，`cli.mjs`中的最后一行代码必须如下所示：
 
-```js
+```
 
 The `process.argv` variable is, of course, the command-line arguments split out into an array. Commander, then, is processing those arguments based on the options' declarations.
 
@@ -204,7 +204,7 @@ Where do the values of `program.port`, `program.host`, and `program.url` come fr
 
 Consider the following line of code:
 
-```js
+```
 
 这声明了一个选项，要么是`-p`要么是`--port`，Commander 将从命令行中解析出来。请注意，我们所做的只是写一个文本字符串，从中 Commander 就知道它必须解析这些选项。这不是很容易吗？
 
@@ -214,7 +214,7 @@ Consider the following line of code:
 
 这些声明的一个副作用是 Commander 可以自动生成帮助文本。我们将能够输入以下代码来实现结果：
 
-```js
+```
 
 The text comes directly from the descriptive text we put in the declarations. Likewise, each of the sub-commands also takes a `--help` option to print out corresponding help text.
 
@@ -226,7 +226,7 @@ We have the starting point for the REST server, and the starting point for a com
 
 In `user-server.mjs`, add the following route handler:
 
-```js
+```
 
 这个函数处理了`/create-user` URL 上的`POST`请求。这应该看起来非常类似于 Express 路由处理程序函数，除了使用`next`回调。回顾一下关于这一点的讨论。就像我们在 Notes 应用程序中所做的那样，我们将处理程序回调声明为异步函数，然后使用`try`/`catch`结构来捕获所有错误并将它们报告为错误。
 
@@ -234,13 +234,13 @@ In `user-server.mjs`, add the following route handler:
 
 让我们还向`user-server.mjs`中添加以下代码： 
 
-```js
+```
 
 This is a variation on creating an SQUser. While implementing login support in the Notes application, there was a scenario in which we had an authenticated user that may or may not already have an SQUser object in the database. In this case, we look to see whether the user already exists and, if not, then we create that user.
 
 Let's turn now to `cli.mjs` and implement the sub-commands to handle these two REST functions, as follows:
 
-```js
+```
 
 通过使用`program.command`，我们声明了一个子命令——在这种情况下是`add`。`<username>`声明表示这个子命令需要一个参数。Commander 将会在`action`方法中传递`username`参数的值。
 
@@ -254,21 +254,21 @@ Let's turn now to `cli.mjs` and implement the sub-commands to handle these two R
 
 现在让我们添加对应于`/find-or-create` URL 的子命令，如下所示：
 
-```js
+```
 
 This is very similar, except for calling `/find-or-create`.
 
 We have enough here to run the server and try the following two commands:
 
-```js
+```
 
 我们在一个命令窗口中运行这个命令来启动服务器。在另一个命令窗口中，我们可以运行以下命令：
 
-```js
+```
 
 Over in the server window, it will print a trace of the actions taken in response to this. But it's what we expect: the values we gave on the command line are in the database, as shown in the following code block:
 
-```js
+```
 
 同样，我们成功地使用了`find-or-create`命令。
 
@@ -280,25 +280,25 @@ Over in the server window, it will print a trace of the actions taken in respons
 
 在`user-server.mjs`中，添加以下函数：
 
-```js
+```
 
 And, as expected, that was easy enough. For the `/find` URL, we need to supply the username in the URL. The code simply looks up the SQUser object using the existing utility function.
 
 A related function retrieves the SQUser objects for all users. Add the following code to `user-server.mjs`:
 
-```js
+```
 
 我们从上一章知道，`findAll`操作会检索所有匹配的对象，并且传递一个空的查询选择器，比如这样，会导致`findAll`匹配每个 SQUser 对象。因此，这执行了我们描述的任务，检索所有用户的信息。
 
 然后，在`cli.mjs`中，我们添加以下子命令声明：
 
-```js
+```
 
 This is similarly easy. We pass the username provided on our command line in the `/find` URL and then print out the result. Likewise, for the `list-users` sub-command, we simply call `/list` on the server and print out the result.
 
 After restarting the server, we can test the commands, as follows:
 
-```js
+```
 
 而且，结果正如我们所预期的那样。
 
@@ -310,19 +310,19 @@ After restarting the server, we can test the commands, as follows:
 
 为此，在`user-server.mjs`中添加以下代码：
 
-```js
+```
 
 The caller is to provide the same set of user information parameters, which will be picked up by the `userParams` function. We then use the `update` function, as expected, and then retrieve the modified SQUser object, sanitize it, and send it as the result.
 
 To match that function, add the following code to `cli.mjs`:
 
-```js
+```
 
 预期的是，这个子命令必须使用相同的用户信息参数集。然后，它将这些参数捆绑到一个对象中，将其发布到 REST 服务器上的`/update-user`端点。
 
 然后，为了测试结果，我们运行以下命令：
 
-```js
+```
 
 And, indeed, we managed to change Snuffy's email address.
 
@@ -334,19 +334,19 @@ Our next operation will complete the **create, read, update, and delete** (**CRU
 
 Add the following code to `user-server.mjs`:
 
-```js
+```
 
 这很简单。我们首先查找用户以确保它存在，然后在 SQUser 对象上调用`destroy`函数。不需要任何结果，所以我们发送一个空对象。
 
 为了运行这个函数，将以下代码添加到`cli.mjs`中：
 
-```js
+```
 
 This is simply to send a `DELETE` request to the server on the `/destroy` URL. 
 
 And then, to test it, run the following command:
 
-```js
+```
 
 首先，我们删除了 Snuffy 的用户记录，得到了一个预期的空响应。然后，我们尝试检索他的记录，预期地出现了错误。
 
@@ -358,7 +358,7 @@ And then, to test it, run the following command:
 
 让我们从`user-server.mjs`中的以下函数开始：
 
-```js
+```
 
 This lets us support the checking of user passwords. There are three conditions to check, as follows:
 
@@ -370,13 +370,13 @@ The code neatly determines all three conditions and returns an object indicating
 
 To check it out, let's add the following code to `cli.mjs`:
 
-```js
+```
 
 并且，预期的是，调用此操作的代码很简单。我们从命令行获取`username`和`password`参数，将它们发送到服务器，然后打印结果。
 
 为了验证它是否有效，运行以下命令：
 
-```js
+```
 
 Indeed, the correct password gives us a `true` indicator, while the wrong password gives us `false`.
 
@@ -408,11 +408,11 @@ For documentation, refer to [`www.npmjs.com/package/superagent`](https://www.np
 
 To install the package (again, in the Notes application directory), run the following command:
 
-```js
+```
 
 然后，创建一个新文件`models/users-superagent.mjs`，其中包含以下代码：
 
-```js
+```
 
 The `reqURL` function is similar in purpose to the `connectDB` functions that we wrote in earlier modules. Remember that we used `connectDB` in earlier modules to open a database connection that will be kept open for a long time. With SuperAgent, we don't leave a connection open to the service. Instead, we open a new server connection on each request. For every request, we will formulate the request URL. The base URL, such as `http://localhost:3333/`, is to be provided in the `USER_SERVICE_URL` environment variable. The `reqURL` function modifies that URL, using the new **Web Hypertext Application Technology Working Group** (**WHATWG**) URL support in Node.js, to use a given URL path.
 
@@ -420,7 +420,7 @@ We also added the authentication ID and code required for the server. Obviously,
 
 To handle creating and updating user records, run the following code:
 
-```js
+```
 
 这些是我们的`create`和`update`函数。在每种情况下，它们接受提供的数据，构造一个匿名对象，并将其`POST`到服务器。该函数应提供与 SQUser 模式对应的值。它将提供的数据捆绑在`send`方法中，设置各种参数，然后设置基本身份验证令牌。
 
@@ -434,7 +434,7 @@ SuperAgent 库使用一种称为*方法链*的 API 风格。编码者将方法�
 
 现在，添加以下函数以支持检索用户记录：
 
-```js
+```
 
 This is following the same pattern as before. The `set` methods are, of course, used for setting HTTP headers in the REST call. This means having at least a passing knowledge of the HTTP protocol.
 
@@ -442,19 +442,19 @@ The `Content-Type` header says the data sent to the server is in **JavaScript Ob
 
 Let's now create the function for checking passwords, as follows:
 
-```js
+```
 
 这种方法值得注意的一点是，它可以在 URL 中获取参数，而不是在请求体中获取，就像这里所做的那样。但是，由于请求 URL 经常被记录到文件中，将用户名和密码参数放在 URL 中意味着用户身份信息将被记录到文件中并成为活动报告的一部分。这显然是一个非常糟糕的选择。将这些参数放在请求体中不仅避免了这种糟糕的结果，而且如果使用了与服务的 HTTPS 连接，交易将被加密。
 
 然后，让我们创建我们的 `find-or-create` 函数，如下所示：
 
-```js
+```
 
 The `/find-or-create` function either discovers the user in the database or creates a new user. The `profile` object will come from Passport, but take careful note of what we do with `profile.id`. The Passport documentation says it will provide the username in the `profile.id` field, but we want to store it as `username` instead.
 
 Let's now create a function to retrieve the list of users, as follows:
 
-```js
+```
 
 和以前一样，这非常简单。
 
@@ -466,13 +466,13 @@ Let's now create a function to retrieve the list of users, as follows:
 
 路由模块是我们使用 `passport` 处理用户身份验证的地方。第一项任务是安装所需的模块，如下所示：
 
-```js
+```
 
 The `passport` module gives us the authentication algorithms. To support different authentication mechanisms, the passport authors have developed several *strategy* implementations—the authentication mechanisms, or strategies, corresponding to the various third-party services that support authentication, such as using OAuth to authenticate against services such as Facebook, Twitter, or GitHub.
 
 Passport also requires that we install Express Session support. Use the following command to install the modules:
 
-```js
+```
 
 Express 会话支持，包括所有各种会话存储实现，都在其 GitHub 项目页面上有文档，网址为 [`github.com/expressjs/session`](https://github.com/expressjs/session)。
 
@@ -480,7 +480,7 @@ Express 会话支持，包括所有各种会话存储实现，都在其 GitHub �
 
 让我们从创建路由模块 `routes/users.mjs` 开始，如下所示：
 
-```js
+```
 
 This brings in the modules we need for the `/users` router. This includes the two `passport` modules and the REST-based user authentication model. 
 
@@ -488,7 +488,7 @@ In `app.mjs`, we will be adding *session* support so our users can log in and l
 
 Add the following functions to the end of `routes/users.mjs`:
 
-```js
+```
 
 `initPassport` 函数将从 `app.mjs` 被调用，并在 Express 配置中安装 Passport 中间件。我们将在后面讨论这个的影响，当我们到达 `app.mjs` 的变化时，但 Passport 使用会话来检测这个 HTTP 请求是否经过身份验证。它查看每个进入应用程序的请求，寻找关于这个浏览器是否已登录的线索，并将数据附加到请求对象作为 `req.user`。
 
@@ -496,13 +496,13 @@ Add the following functions to the end of `routes/users.mjs`:
 
 在 `routes/users.mjs` 中添加以下路由处理程序：
 
-```js
+```
 
 Because this router is mounted on `/users`, all these routes will have `/user` prepended. The `/users/login` route simply shows a form requesting a username and password. When this form is submitted, we land in the second route declaration, with a `POST` on `/users/login`. If `passport` deems this a successful login attempt using `LocalStrategy`, then the browser is redirected to the home page. Otherwise, it is redirected back to the `/users/login` page.
 
 Add the following route for handling logout:
 
-```js
+```
 
 当用户请求注销 Notes 时，他们将被发送到 `/users/logout`。我们将在页眉模板中添加一个按钮来实现这个目的。`req.logout` 函数指示 Passport 擦除他们的登录凭据，然后将他们重定向到主页。
 
@@ -510,7 +510,7 @@ Add the following route for handling logout:
 
 添加 `LocalStrategy` 到 Passport，如下所示：
 
-```js
+```
 
 Here is where we define our implementation of `LocalStrategy`. In the callback function, we call `usersModel.userPasswordCheck`, which makes a REST call to the user authentication service. Remember that this performs the password check and then returns an object indicating whether the user is logged in.
 
@@ -520,7 +520,7 @@ You'll notice that Passport uses a callback-style API. Passport provides a `done
 
 Add the following functions to manipulate data stored in the session cookie:
 
-```js
+```
 
 前面的函数负责对会话的身份验证数据进行编码和解码。我们只需要将`username`附加到会话中，就像我们在`serializeUser`中所做的那样。`deserializeUser`对象在处理传入的 HTTP 请求时被调用，这是我们查找用户配置文件数据的地方。Passport 会将其附加到请求对象上。
 
@@ -530,13 +530,13 @@ Add the following functions to manipulate data stored in the session cookie:
 
 添加导入以从用户路由模块中引入函数，如下所示：
 
-```js
+```
 
 The User router supports the `/login` and `/logout` URLs, as well as using Passport for authentication. We need to call `initPassport` for a little bit of initialization.
 
 And now, let's import modules for session handling, as follows:
 
-```js
+```
 
 因为 Passport 使用会话，我们需要在 Express 中启用会话支持，这些模块也这样做。`session-file-store`模块将我们的会话数据保存到磁盘上，这样我们可以在不丢失会话的情况下终止和重新启动应用程序。还可以使用适当的模块将会话保存到数据库中。文件系统会话存储仅在所有 Notes 实例运行在同一台服务器计算机上时才适用。对于分布式部署情况，您需要使用在整个网络服务上运行的会话存储，例如数据库。
 
@@ -544,7 +544,7 @@ And now, let's import modules for session handling, as follows:
 
 将以下代码添加到`app.mjs`中：
 
-```js
+```
 
 Here, we initialize the session support. The field named `secret` is used to sign the session ID cookie. The session cookie is an encoded string that is encrypted in part using this secret. In the Express Session documentation, they suggest the `keyboard cat` string for the secret. But, in theory, what if Express has a vulnerability, such that knowing this secret can make it easier to break the session logic on your site? Hence, we chose a different string for the secret, just to be a little different and—perhaps—a little more secure.
 
@@ -554,7 +554,7 @@ Similarly, the default cookie name used by `express-session` is `connect.sid`. H
 
 In case you see errors on Windows that are related to the files used by `session-file-store`, there are several alternate session store packages that can be used.  The attraction of the `session-file-store` is that it has no dependency on a service like a database server.  Two other session stores have a similar advantage, `LokiStore`, and `MemoryStore`. Both are configured similarly to the `session-file-store package`. For example, to use `MemoryStore`, first use npm to install the `memorystore` package, then use these  lines of code in `app.mjs`:
 
-```js
+```
 
 这是相同的初始化，但是使用`MemoryStore`而不是`FileStore`。
 
@@ -562,7 +562,7 @@ In case you see errors on Windows that are related to the files used by `sessio
 
 挂载用户路由，如下所示：
 
-```js
+```
 
 These are the three routers that are used in the Notes application. 
 
@@ -570,7 +570,7 @@ These are the three routers that are used in the Notes application. 
 
 This router module handles the home page. It does not require the user to be logged in, but we want to change the display a little if they are logged in. To do so, run the following code:
 
-```js
+```
 
 记住，我们确保`req.user`拥有用户配置文件数据，这是在`deserializeUser`中完成的。我们只需检查这一点，并确保在渲染视图模板时添加该数据。
 
@@ -580,13 +580,13 @@ This router module handles the home page. It does not require the user to be log
 
 这里需要的更改更为重要，但仍然很简单，如下面的代码片段所示：
 
-```js
+```
 
 We need to use the `ensureAuthenticated` function to protect certain routes from being used by users who are not logged in. Notice how ES6 modules let us import just the function(s) we require. Since that function is in the User router module, we need to import it from there.
 
 Modify the `/add` route handler, as shown in the following code block:
 
-```js
+```
 
 我们将在整个模块中进行类似的更改，添加对`ensureAuthenticated`的调用，并使用`req.user`来检查用户是否已登录。目标是让几个路由确保路由仅对已登录用户可用，并且在这些路由和其他路由中将`user`对象传递给模板。
 
@@ -598,19 +598,19 @@ Modify the `/add` route handler, as shown in the following code block:
 
 修改`/save`路由处理程序如下：
 
-```js
+```
 
 The `/save` route only requires this change to call `ensureAuthenticated` in order to ensure that the user is logged in.
 
 Modify the `/view` route handler, as follows:
 
-```js
+```
 
 对于这个路由，我们不需要用户已登录。如果有的话，我们需要用户的配置文件信息发送到视图模板。
 
 修改`/edit`和`/destroy`路由处理程序如下：
 
-```js
+```
 
 Remember that throughout this module, we have made the following two changes to router functions:
 
@@ -627,7 +627,7 @@ This means that we can test whether the user is logged in simply by testing for 
 
 In `partials/header.hbs`, make the following additions:
 
-```js
+```
 
 我们在这里做的是控制屏幕顶部显示哪些按钮，这取决于用户是否已登录。较早的更改确保了如果用户已注销，则`user`变量将为`undefined`；否则，它将具有用户配置文件对象。因此，只需检查`user`变量即可，如前面的代码块所示，以渲染不同的用户界面元素。
 
@@ -639,25 +639,25 @@ In `partials/header.hbs`, make the following additions:
 
 我们需要创建`views/login.hbs`，如下所示：
 
-```js
+```
 
 This is a simple form decorated with Bootstrap goodness to ask for the username and password. When submitted, it creates a `POST` request to `/users/login`, which invokes the desired handler to verify the login request. The handler for that URL will start the Passport process to decide whether the user is authenticated.
 
 In `views/notedestroy.hbs`, we want to display a message if the user is not logged in. Normally, the form to cause the note to be deleted is displayed, but if the user is not logged in, we want to explain the situation, as illustrated in the following code block:
 
-```js
+```
 
 这很简单 - 如果用户已登录，则显示表单；否则，在`partials/not-logged-in.hbs`中显示消息。我们根据`user`变量确定要显示其中哪一个。
 
 我们可以在`partials/not-logged-in.hbs`中插入以下代码块中显示的代码：
 
-```js
+```
 
 As the text says, this will probably never be shown to users. However, it is useful to put something such as this in place since it may show up during development, depending on the bugs you create.
 
 In `views/noteedit.hbs`, we require a similar change, as follows:
 
-```js
+```
 
 也就是说，在底部我们添加了一个段落，对于未登录的用户，引入了`not-logged-in`部分。
 
@@ -673,7 +673,7 @@ In `views/noteedit.hbs`, we require a similar change, as follows:
 
 必要的最后一个任务是修改`package.json`的脚本部分，如下所示：
 
-```js
+```
 
 In the previous chapters, we built up quite a few combinations of models and databases for running the Notes application. Since we don't need those, we can strip most of them out from `package.json`. This leaves us with one, configured to use the Sequelize model for Notes, using the SQLite3 database, and to use the new user authentication service that we wrote earlier. All the other Notes data models are still available, just by setting the environment variables appropriately.
 
@@ -681,11 +681,11 @@ In the previous chapters, we built up quite a few combinations of models and dat
 
 In one window, start the user authentication service, as follows:
 
-```js
+```
 
 然后，在另一个窗口中，按照以下方式启动 Notes 应用程序：
 
-```js
+```
 
 You'll be greeted with the following message:
 
@@ -761,23 +761,23 @@ Learn about the `dotenv` package at [`www.npmjs.com/package/dotenv.`](https://w
 
 First, install the package, as follows:
 
-```js
+```
 
 文档表示我们应该加载`dotenv`包，然后在应用程序启动阶段非常早的时候调用`dotenv.config()`，并且我们必须在访问任何环境变量之前这样做。然而，仔细阅读文档后，似乎最好将以下代码添加到`app.mjs`中：
 
-```js
+```
 
 With this approach, we do not have to explicitly call the `dotenv.config` function. The primary advantage is avoiding issues with referencing environment variables from multiple modules.
 
 The next step is to create a file, `.env`, in the `notes` directory. The syntax of this file is very simple, as shown in the following code block:
 
-```js
+```
 
 这正是我们期望的语法，因为它与 shell 脚本的语法相同。在这个文件中，我们需要定义两个变量，`TWITTER_CONSUMER_KEY`和`TWITTER_CONSUMER_SECRET`。我们将在下一节中编写的代码中使用这些变量。由于我们正在将配置值放在`package.json`的`scripts`部分中，因此可以将这些环境变量添加到`.env`中。
 
 下一步是避免将此文件提交到 Git 等源代码控制系统中。为了确保这不会发生，您应该已经在`notes`目录中有一个`.gitignore`文件，并确保其内容类似于以下内容：
 
-```js
+```
 
 These values mostly refer to database files we generated in the previous chapter. In the end, we've added the `.env` file, and because of this, Git will not commit this file to the repository.
 
@@ -793,17 +793,17 @@ The application registration process you just followed at `developer.twitter.com
 
 Let's install the package required to use `TwitterStrategy`, as follows:
 
-```js
+```
 
 在`routes/users.mjs`中，让我们开始做一些更改，如下所示：
 
-```js
+```
 
 This imports the package, and then makes its `Strategy` variable available as `TwitterStrategy`.
 
 Let's now install the `TwitterStrategy`, as follows:
 
-```js
+```
 
 这注册了一个`TwitterStrategy`实例到`passport`，安排在用户注册 Notes 应用程序时调用用户认证服务。当用户成功使用 Twitter 进行身份验证时，将调用此`callback`函数。
 
@@ -821,7 +821,7 @@ Let's now install the `TwitterStrategy`, as follows:
 
 添加以下路由声明：
 
-```js
+```
 
 To start the user logging in with Twitter, we'll send them to this URL. Remember that this URL is really `/users/auth/twitter` and, in the templates, we'll have to use that URL. When this is called, the passport middleware starts the user authentication and registration process using `TwitterStrategy`.
 
@@ -829,7 +829,7 @@ Once the user's browser visits this URL, the OAuth dance begins. It's called a d
 
 Once the OAuth dance concludes, the browser lands at the URL designated in the following router declaration:
 
-```js
+```
 
 这个路由处理回调 URL，并且它对应于之前配置的`callbackURL`设置。根据它是否指示成功注册，Passport 将重定向浏览器到首页或者回到`/users/login`页面。
 
@@ -841,7 +841,7 @@ Once the OAuth dance concludes, the browser lands at the URL designated in the f
 
 在`partials/header.hbs`中，对代码进行以下更改：
 
-```js
+```
 
 This adds a new button that, when clicked, takes the user to `/users/auth/twitter`, which—of course—kicks off the Twitter authentication process. The button is enabled only if Twitter support is enabled, as determined by the `twitterLogin` variable. This means that the router functions must be modified to pass in this variable.
 
@@ -851,13 +851,13 @@ For the URL shown here, the corresponding project directory is named `public/as
 
 In `routes/index.mjs`, make the following change:
 
-```js
+```
 
 这导入了变量，然后在传递给`res.render`的数据中，我们添加了这个变量。这将确保该值传递到`partials/header.hbs`。
 
 在`routes/notes.mjs`中，我们需要在几个路由函数中进行类似的更改：
 
-```js
+```
 
 This is the same change, importing the variable and passing it to `res.render`.
 
@@ -865,7 +865,7 @@ With these changes, we're ready to try logging in with Twitter.
 
 Start the user information server as shown previously, and then start the Notes application server, as shown in the following code block:
 
-```js
+```
 
 然后，使用浏览器访问`http://localhost:3000`，如下所示：
 
@@ -895,21 +895,21 @@ Start the user information server as shown previously, and then start the Notes 
 
 您可以通过执行我们之前所做的操作来运行 Notes 应用程序的多个实例，如下所示：
 
-```js
+```
 
 Then, in one command window, run the following command:
 
-```js
+```
 
 在另一个命令窗口中，运行以下命令：
 
-```js
+```
 
 As previously, this starts two instances of the Notes server, each with a different value in the `PORT` environment variable. In this case, each instance will use the same user authentication service. As shown here, you'll be able to visit the two instances at `http://localhost:3000` and `http://localhost:3002`. As before, you'll be able to start and stop the servers as you wish, see the same notes in each, and see that the notes are retained after restarting the server.
 
 Another thing to try is to fiddle with the **session store**. Our session data is being stored in the `sessions` directory. These are just files in the filesystem, and we can take a look with normal tools such as `ls`, as shown in the following code block:
 
-```js
+```
 
 这是使用 Twitter 账户登录后。您可以看到 Twitter 账户名称存储在会话数据中。
 
@@ -943,7 +943,7 @@ Another thing to try is to fiddle with the **session store**. Our session data i
 
 在`notes`和`users`目录中安装`bcrypt`，执行以下命令：
 
-```js
+```
 
 The `bcrypt` documentation says that the correct version of this package must be used precisely for the Node.js version in use. Therefore, you should adjust the version number appropriately to the Node.js version you are using.
 
@@ -957,7 +957,7 @@ Because of our command-line tool, we can easily test end-to-end password encrypt
 
 In `cli.mjs`, add the following code near the top:
 
-```js
+```
 
 这引入了`bcrypt`包，然后我们配置了一个常量，该常量控制解密密码所需的 CPU 时间。`bcrypt`文档指向了一篇讨论为什么`bcrypt`算法非常适合存储加密密码的博客文章。论点归结为解密所需的 CPU 时间。针对密码数据库的暴力攻击更加困难，因此如果使用强加密加密密码，测试所有密码组合所需的 CPU 时间更长，因此成功的可能性更小。
 
@@ -965,13 +965,13 @@ In `cli.mjs`, add the following code near the top:
 
 接下来，添加以下函数：
 
-```js
+```
 
 This takes a plain text password and runs it through the encryption algorithm. What's returned is the hash for the password.
 
 Next, in the commands for `add`, `find-or-create`*,* and `update`, we make this same change, as follows:
 
-```js
+```
 
 也就是说，在每个地方，我们将回调函数设置为异步函数，以便我们可以使用`await`。然后，我们调用`hashpass`函数来加密密码。
 
@@ -981,35 +981,35 @@ Next, in the commands for `add`, `find-or-create`*,* and `update`, we make th
 
 在`user-server.mjs`的顶部，添加以下导入：
 
-```js
+```
 
 Of course, we need to bring in the module here to use its decryption function. This module will no longer store a plain text password, but instead, it will now store encrypted passwords. Therefore, it does not need to generate encrypted passwords, but the `bcrypt` package also has a function to compare a plain text password against the encrypted one in the database, which we will use.
 
 Next, scroll down to the `password-check` handler and modify it, like so:
 
-```js
+```
 
 `bcrypt.compare`函数比较明文密码，这些密码将作为`req.params.password`到达，与我们存储的加密密码进行比较。为了处理加密，我们需要重构检查，但我们正在测试相同的三个条件。更重要的是，对于这些条件返回相同的对象。
 
 要测试它，像之前一样启动用户信息服务器，如下所示：
 
-```js
+```
 
 In another window, we can create a new user, as follows:
 
-```js
+```
 
 我们之前已经完成了这两个步骤。不同之处在于我们接下来要做什么。
 
 让我们检查数据库，看看存储了什么，如下所示：
 
-```js
+```
 
 Indeed, the password field no longer has a plain text password, but what is—surely—encrypted text.
 
 Next, we should check that the `password-check` command behaves as expected: 
 
-```js
+```
 
 我们之前进行了相同的测试，但这次是针对加密密码。
 
@@ -1021,13 +1021,13 @@ Next, we should check that the `password-check` command behaves as expected: 
 
 在`users-superagent.mjs`中，添加以下代码到顶部：
 
-```js
+```
 
 As before, this imports the `bcrypt` package and configures the complexity that will be used, and we have the same encryption function because we will use it from multiple places.
 
 Next, we must change the functions that interface with the backend server, as follows:
 
-```js
+```
 
 在适当的地方，我们必须加密密码。不需要其他更改。
 

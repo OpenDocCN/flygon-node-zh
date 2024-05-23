@@ -84,19 +84,19 @@ Multipass 是由 Canonical 开发的开源工具。它是一个非常轻量级�
 
 安装了 Multipass 后，您可以运行以下命令中的一些来尝试它：
 
-```js
+```
 
 Because we did not supply a name for the machine, Multipass created a random name. It isn't shown in the preceding snippet, but the first command included the download and setup of a VM image. The `shell` command starts a login shell inside the newly created VM, where you can use tools like `ps` or `htop` to see that there is indeed a full complement of processes running already.
 
 Since one of the first things you do with a new Ubuntu install is to update the system, let's do so the Multipass way:
 
-```js
+```
 
 这按预期工作，您会看到`apt-get`首先更新其可用软件包的列表，然后要求您批准下载和安装软件包以进行更新，之后它会这样做。熟悉 Ubuntu 的人会觉得这很正常。不同之处在于从主机计算机的命令行环境中执行此操作。
 
 这很有趣，但我们有一些工作要做，我们对 Multipass 基于野马的机器名称不满意。让我们学习如何删除 Multipass 实例：
 
-```js
+```
 
 We can easily delete a VM image with the `delete` command; it is then marked as `Deleted`*.* To truly remove the VM, we must use the `purge` command.
 
@@ -108,7 +108,7 @@ There might be difficulties using Multipass on Windows, so let's talk about that
 
 The Multipass team makes their application available to on run Windows systems, but issues like the following can crop up:
 
-```js
+```
 
 它通过设置实例的所有步骤，但在最后一步，我们收到了这条消息，而不是成功。运行`multipass list`可能会显示实例处于`Running`状态，但没有分配 IP 地址，运行`multipass shell`也会导致超时。
 
@@ -144,11 +144,11 @@ WSL2 和 Multipass 都使用 Hyper-V。这是 Windows 的虚拟化引擎，它�
 
 1.  然后，在该目录中创建一个名为`create-svc-userauth.sh`的文件，其中包含以下内容：
 
-```js
+```
 
 On Windows, instead create a file named `create-svc-userauth.ps1` containing the following:
 
-```js
+```
 
 这两者几乎相同，只是计算当前目录的方法不同。
 
@@ -158,17 +158,17 @@ Multipass 中的`mount`命令将主机目录附加到给定位置的实例中。
 
 1.  通过运行脚本创建实例：
 
-```js
+```
 
 Or, on Windows, run this:
 
-```js
+```
 
 运行脚本中的命令，将启动实例并从主机文件系统挂载目录。
 
 1.  创建一个名为`install-packages.sh`的文件，其中包含以下内容：
 
-```js
+```
 
 This installs Node.js 14.x and sets up other packages required to run the authentication service. This includes a MySQL server instance and the MySQL client.
 
@@ -178,13 +178,13 @@ A side effect of installing the `mysql-server` package is that it launches a r
 
 5.  Execute this script inside the instance like so:
 
-```js
+```
 
 正如我们之前讨论的，`exec`命令会导致在主机系统上运行此命令，从而在容器内部执行命令。
 
 1.  在`users`目录中，编辑`user-server.mjs`并更改以下内容：
 
-```js
+```
 
 Previously, we had specified a hardcoded `'localhost'` here. The effect of this was that the user authentication service only accepted connections from the same computer. To implement our vision of *Notes* and the user authentication services running on different computers, this service must support connections from elsewhere.
 
@@ -194,25 +194,25 @@ As you edit the source files, notice that the changes are immediately reflected 
 
 7.  Create a file called `users/sequelize-mysql.yaml` containing the following:
 
-```js
+```
 
 这是允许用户服务与本地 MySQL 实例连接的配置。`dbname`、`username`和`password`参数必须与之前显示的配置脚本中的值匹配。
 
 1.  然后，在`users/package.json`文件中，将这些条目添加到`scripts`部分：
 
-```js
+```
 
 The `on-server` script contains the runtime configuration we'll use on the server.
 
 9.  Next, in the `users` directory, run this command:
 
-```js
+```
 
 由于我们现在正在使用 MySQL，我们必须安装驱动程序包。
 
 1.  现在创建一个名为`configure-svc-userauth.sh`的文件，其中包含以下内容：
 
-```js
+```
 
 This script is meant to execute inside the Ubuntu system managed by Multipass. The first section sets a user identity in the database. The second section copies the user authentication service code, from `/build-users` to `/userauth`, into the instance, followed by installing the required packages.
 
@@ -222,7 +222,7 @@ But, why are some files removed before copying them into the instance? The prima
 
 11.  Run the `configure-svc-userauth` script like so:
 
-```js
+```
 
 请记住源代码中的`multipass`目录被挂载到实例内部作为`/build`。一旦我们创建了这个文件，它就会出现在`/build`目录中，我们可以在实例内部执行它。
 
@@ -230,7 +230,7 @@ But, why are some files removed before copying them into the instance? The prima
 
 1.  现在我们可以启动用户认证服务器，就像这样：
 
-```js
+```
 
 Notice that our notation is to use `$` to represent a command typed on the host computer, and `ubuntu@svc-userauth:~$` to represent a command typed inside the instance. This is meant to help you understand where the commands are to be executed.
 
@@ -244,7 +244,7 @@ Notice that the URL printed is `http://[::]:5858`. This is shorthand for listen
 
 On our laptop, we can see the following:
 
-```js
+```
 
 Multipass 为实例分配了一个 IP 地址。您的 IP 地址可能会有所不同。
 
@@ -252,7 +252,7 @@ Multipass 为实例分配了一个 IP 地址。您的 IP 地址可能会有所�
 
 在您的笔记本电脑上，而不是在 Multipass 内部的常规命令环境中，运行这些命令：
 
-```js
+```
 
 Make sure to specify the correct host IP address and port number.
 
@@ -260,7 +260,7 @@ If you remember, the script retrieves the newly created user entry and prints it
 
 In another command window on your laptop, type these commands:
 
-```js
+```
 
 这显示了我们创建的用户的数据库条目。请注意，当登录到 Multipass 实例时，我们可以使用任何 Ubuntu 命令，因为我们面前有完整的操作系统。
 
@@ -280,7 +280,7 @@ PowerShell 脚本文件名必须以`.ps1`扩展名结尾。对于大多数这些
 
 要执行这些脚本，您可能需要更改 PowerShell 执行策略：
 
-```js
+```
 
 Obviously, there are security considerations with this change, so change the execution policy back when you're done.
 
@@ -298,59 +298,59 @@ There are several tasks in the `multipass` directory to prepare this second se
 
 1.  Create a script named `multipass/create-svc-notes.sh` containing the following:
 
-```js
+```
 
 这个任务是启动 Multipass 实例，并且与`create-svc-userauth`非常相似，但是更改为使用单词`notes`。
 
 对于 Windows，创建一个名为`multipass/create-svc-notes.ps1`的文件，其中包含以下内容：
 
-```js
+```
 
 This is the same as before, but using `(get-location)` this time.
 
 2.  Create the instance by running the script as follows:
 
-```js
+```
 
 或者，在 Windows 上，运行以下命令：
 
-```js
+```
 
 Either one runs the commands in the scripts that will launch the instance and mount directories from the host filesystem.
 
 3.  Install the required packages like so:
 
-```js
+```
 
 此脚本安装了 Node.js、MySQL 服务器和其他一些必需的软件包。
 
 1.  现在创建一个文件，`notes/models/sequelize-mysql.yaml`，其中包含以下内容：
 
-```js
+```
 
 This is the database name, username, and password credentials for the database configured previously.
 
 5.  Because we are now using MySQL, run this command:
 
-```js
+```
 
 我们需要 MySQL 驱动程序包来使用 MySQL。
 
 1.  然后，在`notes/package.json`文件中，将此条目添加到`scripts`部分：
 
-```js
+```
 
 This uses the new database configuration for the MySQL server and the IP address for the user authentication service. Make sure that the IP address matches what Multipass assigned to `svc-userauth`.
 
 You'll, of course, get the IP address in the following way:
 
-```js
+```
 
 `on-server`脚本将需要相应地更新。
 
 1.  复制`multipass/configure-svc-userauth.sh`以创建一个名为`multipass/configure-svc-notes.sh`的脚本，并将最后两个部分更改为以下内容：
 
-```js
+```
 
 This is also similar to what we did for `svc-userauth`. This also changes things to use the word `notes` where we used `userauth` before.
 
@@ -358,17 +358,17 @@ Something not explicitly covered here is ensuring the `.env` file you created 
 
 8.  Run the `configure-svc-notes` script like so:
 
-```js
+```
 
 请记住，源树中的`multipass`目录被挂载到实例内部作为`/build`。一旦我们创建了这个文件，它就会出现在`/build`目录中，并且我们可以在实例内部执行它。
 
 1.  现在可以使用以下命令运行 Notes 服务：
 
-```js
+```
 
 As with `svc-userauth`, we shell into the server, change the directory to `/opt/notes`, and run the `on-server` script. If you want Notes to be visible on port `80`, simply change the `PORT` environment variable. After that, the URL in the `TWITTER_CALLBACK_HOST` variable must contain the port number on which Notes is listening. For that to work, the `on-server` script needs to run as `root`, so therefore we will run the following:
 
-```js
+```
 
 更改是使用`sudo`以`root`身份执行命令。
 
@@ -396,19 +396,19 @@ As with `svc-userauth`, we shell into the server, change the directory to `/op
 
 接下来要做的是更改*Notes*应用程序，以便在`svc-notes`服务器上使用这个新的回调 URL。在`routes/users.mjs`中，默认值是`http://localhost:3000`，用于我们的笔记本电脑。但是现在我们需要使用服务器的 IP 地址。幸运的是，我们事先考虑到了这一点，软件有一个环境变量来实现这个目的。在`notes/package.json`中，将以下环境变量添加到`on-server`脚本中：
 
-```js
+```
 
 Use the actual IP address or domain name assigned to the server being used. In a real deployment, we'll have a domain name to use here. 
 
 Additionally, to enable Twitter login support, it is required to supply Twitter authentication tokens in the environment variables:
 
-```js
+```
 
 这不应该添加在`package.json`中，而应通过其他方式提供。我们还没有找到合适的方法，但我们确实发现将这些变量添加到`package.json`中意味着将它们提交到源代码存储库，这可能会导致这些值泄漏给公众。
 
 目前，服务器可以这样启动：
 
-```js
+```
 
 This is still a semi-manual process of starting the server and specifying the Twitter keys, but you'll be able to log in using Twitter credentials. Keep in mind that we still need a solution for this that avoids committing these keys to a source repository.
 
@@ -422,7 +422,7 @@ We have two servers, `svc-notes` and `svc-userauth`, configured so we can run
 
 To see the problem, start another command window and run these commands:
 
-```js
+```
 
 服务器实例正在 Multipass 下运行，`restart`命令导致命名实例`stop`，然后`start`。这模拟了服务器的重启。由于两者都在前台运行，您将看到每个命令窗口退出到主机命令 shell，并且再次运行`multipass list`将显示两个实例处于`Running`状态。最重要的是，两个服务都不再运行。
 
@@ -436,23 +436,23 @@ To see the problem, start another command window and run these commands:
 
 首先在`svc-userauth`服务器上运行以下命令：
 
-```js
+```
 
 The result of these commands is an npm project directory containing the PM2 program and a `package.json` file that we can potentially use to record some scripts.
 
 Now let's start the user authentication server using PM2:
 
-```js
+```
 
 这归结为运行`pm2 start ./user-server.mjs`，只是我们添加了包含配置值的环境变量，并且指定了 PM2 的完整路径。这样可以在后台运行我们的用户服务器。
 
 我们可以重复使用`cli.mjs`来列出已知的身份验证服务器用户的测试：
 
-```js
+```
 
 Since we had previously launched this service and tested it, there should be user IDs already in the authentication server database. The server is running, but because it's not in the foreground, we cannot see the output. Try this command:
 
-```js
+```
 
 因为 PM2 捕获了服务器进程的标准输出，任何输出都被保存起来。`logs`命令让我们查看那些输出。
 
@@ -470,7 +470,7 @@ Since we had previously launched this service and tested it, there should be use
 
 暂时，让我们关闭它并删除受管进程：
 
-```js
+```
 
 We have familiarized ourselves with PM2, but this setup is not quite suitable for any kind of deployment. Let's instead set up scripts that will manage the Notes services under PM2 more cleanly. 
 
@@ -484,13 +484,13 @@ Let's start by creating two directories, `multipass/pm2-notes` and `multipass
 
 In `pm2-notes`, create a file, `package.json`, containing the following:
 
-```js
+```
 
 这为我们记录了对 PM2 的依赖，因此可以轻松安装它，以及一些有用的脚本可以在 PM2 上运行。
 
 然后在同一目录中，创建一个包含以下内容的`ecosystem.json`文件：
 
-```js
+```
 
 The `ecosystem.json` file is how we describe a process to be monitored to PM2.
 
@@ -504,13 +504,13 @@ These environment variables are the same as we set in `notes/package.json` –
 
 In `pm2-userauth`, create a file named `package.json` containing the folllowing:
 
-```js
+```
 
 这与`pm2-notes`相同，只是名称不同。
 
 然后，在`pm2-userauth`中，创建一个名为`ecosystem.json`的文件，其中包含以下内容：
 
-```js
+```
 
 This describes the user authentication service. On the server, it is stored in the `/userauth` directory and is launched using the `user-server.mjs` script, with that set of environment variables.
 
@@ -518,7 +518,7 @@ Next, on both servers create a directory called `/opt/pm2`. Copy the files in 
 
 On both `svc-notes` and `svc-userauth`, you can run these commands:
 
-```js
+```
 
 这样做会启动两个服务器实例上的服务。 `npm run logs` 命令让我们可以实时查看日志输出。我们已经在更符合 DevOps 的日志配置中配置了两个服务，没有启用 DEBUG 日志，并且使用了*common*日志格式。
 
@@ -538,7 +538,7 @@ On both `svc-notes` and `svc-userauth`, you can run these commands:
 
 让我们从`svc-userauth`开始，运行这些命令：
 
-```js
+```
 
 With `npm run save`, we run the `pm2 save` command. This command saves the current configuration into a file in your home directory. 
 
@@ -550,19 +550,19 @@ Do the same on `svc-notes` to implement the background service there as well.
 
 And now we can test restarting the two servers with the following commands:
 
-```js
+```
 
 机器应该能够正确重启，并且在我们不进行干预的情况下，服务将会运行。您应该能够对*Notes*应用程序进行测试，并查看它是否正常工作。此时 Twitter 登录功能将无法使用，因为我们没有提供 Twitter 令牌。
 
 在每台服务器上运行这个命令尤其有益：
 
-```js
+```
 
 The `monit` command starts a monitoring console showing some statistics including CPU and memory use, as well as logging output.
 
 When done, run the following command:
 
-```js
+```
 
 当然，这将关闭服务实例。由于我们所做的工作，您随时可以重新启动它们。
 

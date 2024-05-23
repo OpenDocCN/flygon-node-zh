@@ -38,7 +38,7 @@ npm 包存储库是一个庞大的模块库，供所有 Node.js 开发人员使�
 
 在第二章中的`ls.js`示例中，*设置 Node.js*，我们编写了以下代码来引入`fs`模块，从而可以访问其函数：
 
-```js
+```
 
 The `require` function is given a *module identifier,* and it searches for the module named by that identifier. If found, it loads the module definition into the Node.js runtime and making its functions available. In this case, the `fs` object contains the code (and data) exported by the `fs` module. The `fs` module is part of the Node.js core and provides filesystem functions.
 
@@ -52,15 +52,15 @@ The `module` object contains several fields that you might find useful. Refe
 
 Because `exports` is an alias of `module.exports`, the following two lines of code are equivalent:
 
-```js
+```
 
 您可以选择使用`module.exports`还是`exports`。但是，绝对不要做以下类似的事情：
 
-```js
+```
 
 Any assignment to `exports` will break the alias, and it will no longer be equivalent to `module.exports`. Assignments to `exports.something` are okay, but assigning to `exports` will cause failure. If your intent is to assign a single object or function to be returned by `require`, do this instead:
 
-```js
+```
 
 有些模块导出单个函数，因为这是模块作者设想提供所需功能的方式。
 
@@ -68,7 +68,7 @@ Any assignment to `exports` will break the alias, and it will no longer be equ
 
 为了给我们一个简单的例子，让我们创建一个简单的模块，名为`simple.js`：
 
-```js
+```
 
 We have one variable, `count`, which is not attached to the `exports` object, and a function, `next`, which is attached. Because `count` is not attached to `exports`, it is private to the module. 
 
@@ -76,7 +76,7 @@ Any module can have private implementation details that are not exported and are
 
 Now, let's use the module we just wrote:
 
-```js
+```
 
 模块中的`exports`对象是由`require('./simple')`返回的对象。因此，每次调用`s.next`都会调用`simple.js`中的`next`函数。每次返回（并递增）局部变量`count`的值。试图访问私有字段`count`会显示它在模块外部不可用。
 
@@ -88,17 +88,17 @@ Node.js 包格式源自 CommonJS 模块系统（[`commonjs.org`](http://commonjs
 
 例如，可以将像 CSS 或图像文件这样的资源存储在相对于模块的目录中。然后应用框架可以通过 HTTP 服务器提供这些文件。在 Express 中，我们可以使用以下代码片段来实现：
 
-```js
+```
 
 This says that HTTP requests on the `/assets/vendor/jquery` URL are to be handled by the static handler in Express, from the contents of a directory relative to the directory containing the module. Don't worry about the details because we'll discuss this more carefully in a later chapter. Just notice that `__dirname` is useful to calculate a filename relative to the location of the module source code.
 
 To see it in action, create a file named `dirname.js` containing the following:
 
-```js
+```
 
 这让我们看到我们收到的值：
 
-```js
+```
 
 Simple enough, but as we'll see later these values are not directly available in ES6 modules.
 
@@ -114,17 +114,17 @@ The ES6 and CommonJS modules are conceptually similar. Both support exporting da
 
 Let's start with defining an ES6 module. Create a file named `simple2.mjs` in the same directory as the `simple.js` example that we looked at earlier:
 
-```js
+```
 
 这与`simple.js`类似，但添加了一些内容以演示更多功能。与以前一样，`count`是一个未导出的私有变量，`next`是一个导出的函数，用于递增`count`。
 
 `export`关键字声明了从 ES6 模块中导出的内容。在这种情况下，我们有几个导出的函数和两个导出的变量。`export`关键字可以放在任何顶层声明的前面，比如变量、函数或类声明：
 
-```js
+```
 
 The effect of this is similar to the following:
 
-```js
+```
 
 两者的目的本质上是相同的：使函数或其他对象可供模块外部的代码使用。但是，我们不是显式地创建一个对象`module.exports`，而是简单地声明要导出的内容。例如`export function next()`这样的语句是一个命名导出，意味着导出的函数（就像这里）或对象有一个名称，模块外部的代码使用该名称来访问对象。正如我们在这里看到的，命名导出可以是函数或对象，也可以是类定义。
 
@@ -134,19 +134,19 @@ The effect of this is similar to the following:
 
 现在让我们看看如何使用 ES2015 模块。创建一个名为`simpledemo.mjs`的文件，内容如下：
 
-```js
+```
 
 The `import` statement does what it says: it imports objects exported from a module. Because it uses the `import * as foo` syntax, it imports everything from the module, attaching everything to an object, in this case named `simple2`. This version of the `import` statement is most similar to a traditional Node.js `require` statement because it creates an object with fields containing the objects exported from the module.
 
 This is how the code executes:
 
-```js
+```
 
 过去，ES6 模块格式是隐藏在一个选项标志`--experimental-module`后面的，但是从 Node.js 13.2 开始，不再需要该标志。访问`default`导出是通过访问名为`default`的字段来实现的。访问导出的值，比如`meaning`字段，是不需要括号的，因为它是一个值而不是一个函数。
 
 现在来看一种从模块中导入对象的不同方法，创建另一个文件，名为`simpledemo2.mjs`，内容如下：
 
-```js
+```
 
 In this case, the import is treated similarly to an ES2015 destructuring assignment. With this style of import, we specify exactly what is to be imported, rather than importing everything. Furthermore, instead of attaching the imported things to a common object, and therefore executing `simple2.next()`, the imported things are executed using their simple name, as in `next()`.
 
@@ -154,7 +154,7 @@ The import for `default as simple` is the way to declare an alias of an import
 
 Node.js modules can be used from the ES2015 `.mjs` code. Create a file named `ls.mjs` containing the following:
 
-```js
+```
 
 这是第二章中`ls.js`示例的重新实现，*设置 Node.js*。在这两种情况下，我们都使用了`fs`包的`promises`子模块。要使用`import`语句，我们访问`fs`模块中的`promises`导出，并使用`as`子句将`fs.promises`重命名为`fs`。这样我们就可以使用异步函数而不是处理回调。
 
@@ -162,15 +162,15 @@ Node.js modules can be used from the ES2015 `.mjs` code. Create a file named 
 
 执行脚本会得到以下结果：
 
-```js
+```
 
 The last thing to note about ES2015 module code is that the `import` and `export` statements must be top-level code. Try putting an `export` inside a simple block like this:
 
-```js
+```
 
 这个无辜的代码导致了一个错误：
 
-```js
+```
 
 While there are a few more details about the ES2015 modules, these are their most important attributes.
 
@@ -188,15 +188,15 @@ Using `import.meta.url`, we can compute `__dirname` and `__filename`.
 
 If we make a duplicate of `dirname.js` as `dirname.mjs`, so it will be interpreted as an ES6 module, we get the following:
 
-```js
+```
 
 由于`__dirname`和`__filename`不是 JavaScript 规范的一部分，它们在 ES6 模块中不可用。输入`import.meta.url`对象，我们可以计算`__dirname`和`__filename`。要看它的运行情况，创建一个包含以下内容的`dirname-fixed.mjs`文件：
 
-```js
+```
 
 We are importing a couple of useful functions from the `url` and `path` core packages. While we could take the `import.meta.url` object and do our own computations, these functions already exist. The computation is to extract the pathname portion of the module URL, to compute `__filename`, and then use `dirname` to compute `__dirname`.
 
-```js
+```
 
 我们看到模块的`file://` URL，以及使用内置核心函数计算的`__dirname`和`__filename`的值。
 
@@ -230,15 +230,15 @@ Node.js 团队强烈建议包作者在`package.json`中包含一个`type`字段�
 
 考虑一个具有这个声明的`package.json`：
 
-```js
+```
 
 This, of course, informs Node.js that the package defaults to ES6 modules. Therefore, this command interprets the module as an ES6 module:
 
-```js
+```
 
 这个命令将执行相同的操作，即使没有`package.json`条目：
 
-```js
+```
 
 If instead, the `type` field had the `commonjs`, or the `--input-type` flag specified as `commonjs`, or if both those were completely missing, then `my-module.js` would be interpreted as a CommonJS module.
 
@@ -252,11 +252,11 @@ Since the `import()` function is available in both CommonJS and ES6 modules, tha
 
 To see how this works, create a file named `simple-dynamic-import.js` containing the following:
 
-```js
+```
 
 这是一个使用我们之前创建的 ES6 模块的 CommonJS 模块。它只是调用了一些函数，除了它在我们之前说过的只有 ES6 模块中才能使用`import`之外，没有什么激动人心的地方。让我们看看这个模块的运行情况：
 
-```js
+```
 
 This is a CommonJS module successfully executing code contained in an ES6 module simply by using `import()`.
 
@@ -266,11 +266,11 @@ The `import` statement is itself an asynchronous process, and by extension the
 
 In this case, we executed `import()` inside an `async` function using the `await` keyword. Therefore, even if `import()` were used in the global scope, it would be tricky getting a global-scope variable to hold the reference to that module. To see, why let's rewrite that example as `simple-dynamic-import-fail.js`:
 
-```js
+```
 
 这是相同的代码，但在全局范围内运行。在全局范围内，我们不能使用`await`关键字，所以我们应该期望`simple2`将包含一个挂起的 Promise。运行脚本会导致失败：
 
-```js
+```
 
 We see that `simple2` does indeed contain a pending Promise, meaning that `import()` has not yet finished. Since `simple2` does not contain a reference to the module, attempts to call the exported function fail.
 
@@ -286,7 +286,7 @@ Node.js modules provide a simple encapsulation mechanism to hide implementation 
 
 In practice, CommonJS modules are treated as if they were written as follows:
 
-```js
+```
 
 因此，模块内的一切都包含在一个匿名的私有命名空间上下文中。这就解决了全局对象问题：模块中看起来全局的一切实际上都包含在一个私有上下文中。这也解释了注入的变量实际上是如何注入到模块中的。它们是创建模块的函数的参数。
 
@@ -294,17 +294,17 @@ In practice, CommonJS modules are treated as if they were written as follows:
 
 让我们来看一个封装的实际演示。创建一个名为`module1.js`的文件，其中包含以下内容：
 
-```js
+```
 
 Then, create a file named `module2.js`, containing the following:
 
-```js
+```
 
 使用这两个模块，我们可以看到每个模块都是其自己受保护的泡泡。
 
 然后按照以下方式运行它：
 
-```js
+```
 
 This artificial example demonstrates encapsulation of the values in `module1.js` from those in `module2.js`. The `A` and `B` values in `module1.js` don't overwrite `A` and `B` in `module2.js` because they're encapsulated within `module1.js`. The `values` function in `module1.js` does allow code in `module2.js` access to the values; however, `module2.js` cannot directly access those values. We can modify the object `module2.js` received from `module1.js`. But doing so does not change the values within `module1.js`.
 
@@ -314,29 +314,29 @@ In Node.js modules can also be data, not just code.
 
 Node.js supports using `require('./path/to/file-name.json')` to import a JSON file in a CommonJS module. It is equivalent to the following code:
 
-```js
+```
 
 也就是说，JSON 文件是同步读取的，文本被解析为 JSON。生成的对象作为模块导出的对象可用。创建一个名为`data.json`的文件，其中包含以下内容：
 
-```js
+```
 
 Now create a file named `showdata.js` containing the following:
 
-```js
+```
 
 它将执行如下：
 
-```js
+```
 
 The `console.log` function outputs information to the Terminal. When it receives an object, it prints out the object content like this. And this demonstrates that `require` correctly read the JSON file since the resulting object matched the JSON.
 
 In an ES6 module, this is done with the `import` statement and requires a special flag. Create a file named `showdata-es6.mjs` containing the following:
 
-```js
+```
 
 到目前为止，这相当于该脚本的 CommonJS 版本，但使用`import`而不是`require`。
 
-```js
+```
 
 Currently using `import` to load a JSON file is an experimental feature. Enabling the feature requires these command-line arguments, causing this warning to be printed. We also see that instead of `data` being an anonymous object, it is an object with the type `Module`.
 
@@ -350,7 +350,7 @@ For an example of using Babel to transpile ES6 code for older Node.js versions, 
 
 The better method of using ES6 modules on Node.js 6.x is the `esm` package. Simply do the following:
 
-```js
+```
 
 有两种方法可以使用这个模块：
 
@@ -362,7 +362,7 @@ The better method of using ES6 modules on Node.js 6.x is the `esm` package. Simp
 
 因此，我们可以使用这个模块来改装 ES6 模块支持；它不改装其他功能，比如`async`函数。成功执行`ls.mjs`示例需要对`async`函数和箭头函数的支持。由于 Node.js 6.x 不支持任何一个，`ls.mjs`示例将能够正确加载，但仍将失败，因为它使用了其他不受支持的功能。
 
-```js
+```
 
 It is, of course, possible to use Babel in such cases to convert the full set of ES2015+ features to run on older Node.js releases.
 
@@ -395,17 +395,17 @@ It is also possible to use an absolute pathname as the module identifier. In a C
 
 One difference between CommonJS and ES6 modules is the ability to use extensionless module identifiers. The CommonJS module loader allows us to do this, which you should save as `extensionless.js`:
 
-```js
+```
 
 这使用了一个无扩展名的模块标识符来加载我们已经讨论过的模块`simple.js`：
 
-```js
+```
 
 And we can run it with the `node` command using an extension-less module identifier.
 
 But if we specify an extension-less identifier for an ES6 module:
 
-```js
+```
 
 我们收到了错误消息，清楚地表明 Node.js 无法解析文件名。同样，在 ES6 模块中，给`import`语句的文件名必须带有文件扩展名。
 
@@ -421,7 +421,7 @@ ES6 `import`语句中的模块标识符是一个 URL。有几个重要的考虑�
 
 由于`?`和`#`在 URL 中具有特殊意义，它们对`import`语句也具有特殊意义，如下例所示：
 
-```js
+```
 
 This loads the module named `module-name.mjs` with a query string containing `query=1`. By default, this is ignored by the Node.js module loader, but there is an experimental loader hook feature by which you can do something with the module identifier URL.
 
@@ -435,11 +435,11 @@ They start out as source code within the Node.js build tree. The build process c
 
 We've already seen how the core modules are used. In a CommonJS module, we might use the following:
 
-```js
+```
 
 在 ES6 模块中的等效代码如下：
 
-```js
+```
 
 In both cases, we're loading the `http` and `fs` core modules that would then be used by other code in the module.
 
@@ -465,7 +465,7 @@ There is the same risk of confusion caused by overloading the word *module* si
 
 The `package.json` file describes the package. A minimal set of fields are defined by Node.js, specifically as follows:
 
-```js
+```
 
 `name`字段给出了包的名称。如果存在`main`字段，它将命名要在加载包时使用的 JavaScript 文件，而不是`index.js`。像 npm 和 Yarn 这样的包管理应用程序支持`package.json`中的更多字段，它们用来管理依赖关系、版本和其他一切。
 
@@ -581,7 +581,7 @@ Node.js 包标识符解析算法允许我们安装两个或更多版本的同一
 
 使用该包的代码所使用的深度导入模块标识符不必是包源内部使用的路径名。我们可以在 `package.json` 中放置声明，描述每个深度导入标识符的实际路径名。例如，具有内部模块命名为 `./src/cjs-module.js` 和 `./src/es6-module.mjs` 的包可以在 `package.json` 中使用此声明进行重新映射：
 
-```js
+```
 
 With this, code using such a package can load the inner module using `require('module-name/cjsmodule')` or `import 'module-name/es6module'`. Notice that the filenames do not have to match what's exported.
 
@@ -605,7 +605,7 @@ Earlier we discussed what happens if two modules (modules A and B) list a depend
 
 That's the situation we see with `express/node_modules/cookie`. To verify this, we can use an `npm` command to query for all references to the module:
 
-```js
+```
 
 这表示 `cookie-parser` 模块依赖于 `cookie` 的 0.1.3 版本，而 Express 依赖于 0.1.5 版本。
 
@@ -619,11 +619,11 @@ That's the situation we see with `express/node_modules/cookie`. To verify this, 
 
 默认情况下，CommonJS 模块无法加载 ES6 模块。但正如我们在 `simple-dynamic-import.js` 示例中看到的，CommonJS 模块可以使用 `import()` 加载 ES6 模块。由于 `import()` 函数是一个异步操作，它返回一个 Promise，因此我们不能将结果模块用作顶级对象。但我们可以在函数内部使用它：
 
-```js
+```
 
 And at the top-level of a Node.js script, the best we can do is the following:
 
-```js
+```
 
 这与 `simple-dynamic-import.js` 示例相同，但我们明确处理了 `import()` 返回的 Promise，而不是使用异步函数。虽然我们可以将 `simple2` 赋给全局变量，但使用该变量的其他代码必须适应赋值可能尚未完成的可能性。
 
@@ -637,27 +637,27 @@ ES6 模块可以有多个命名导出。在我们之前使用的 `simple2.mjs` �
 
 通过 `simpledemo2.mjs`，我们看到可以只从模块中导入所需的内容：
 
-```js
+```
 
 In this case, we use the exports as just the name, without referring to the module: `simple()`, `hello()`, and `next()`.
 
 It is possible to import just the default export:
 
-```js
+```
 
 在这种情况下，我们可以调用函数为 `simple()`。我们还可以使用所谓的命名空间导入；这类似于我们导入 CommonJS 模块的方式：
 
-```js
+```
 
 In this case, each property exported from the module is a property of the named object in the `import` statement. 
 
 An ES6 module can also use `import` to load a CommonJS module. Loading the `simple.js` module we used earlier is accomplished as follows:
 
-```js
+```
 
 这类似于 ES6 模块所示的 *默认导出* 方法，我们可以将 CommonJS 模块内的 `module.exports` 对象视为默认导出。实际上，`import` 可以重写为以下形式：
 
-```js
+```
 
 This demonstrates that the CommonJS `module.exports` object is surfaced as `default` when imported.
 
@@ -673,11 +673,11 @@ The `npm` application extends on the package format for Node.js, which in turn i
 
 An npm package is a directory structure with a `package.json` file describing the package. This is exactly what was referred to earlier as a directory module, except that npm recognizes many more `package.json` tags than Node.js does. The starting point for npm's `package.json` file is the CommonJS Packages/1.0 specification. The documentation for the npm `package.json` implementation is accessed using the following command:
 
-```js
+```
 
 一个基本的 `package.json` 文件如下：
 
-```js
+```
 
 Npm recognizes many more fields than this, and we'll go over some of them in the coming sections. The file is in JSON format, which, as a JavaScript programmer, you should be familiar with.
 
@@ -689,7 +689,7 @@ The main `npm` command has a long list of subcommands for specific package m
 
 You can view the list of these commands just by typing `npm` (with no arguments). If you see one you want to learn more about, view the help information:
 
-```js
+```
 
 帮助文本将显示在您的屏幕上。
 
@@ -707,7 +707,7 @@ npm 工具使得初始化 Node.js 项目目录变得容易。这样的目录包�
 
 `package.json`文件可以手动创建 - 毕竟它只是一个 JSON 文件 - npm 工具提供了一个方便的方法：
 
-```js
+```
 
 In a blank directory, run `npm init`, answer the questions, and as quick as that you have the starting point for a Node.js project.
 
@@ -717,7 +717,7 @@ This is, of course, a starting point, and as you write the code for your project
 
 By default, `npm` packages are retrieved over the internet from the public package registry maintained on [`npmjs.com`](http://npmjs.com). If you know the module name, it can be installed simply by typing the following:
 
-```js
+```
 
 但是如果您不知道模块名称怎么办？如何发现有趣的模块？网站[`npmjs.com`](http://npmjs.com)发布了一个可搜索的模块注册表索引。npm 包还具有命令行搜索功能，可以查询相同的索引：
 
@@ -725,7 +725,7 @@ By default, `npm` packages are retrieved over the internet from the public p
 
 当然，在找到一个模块后，它会被安装如下：
 
-```js
+```
 
 The npm repository uses a few `package.json` fields to aid in finding packages.
 
@@ -735,7 +735,7 @@ For a package to be easily found in the npm repository requires a good package n
 
 The relevant `package.json` fields are as follows:
 
-```js
+```
 
 `npm view`命令向我们显示了给定包的`package.json`文件中的信息，并且使用`--json`标志，我们可以看到原始的 JSON 数据。
 
@@ -755,7 +755,7 @@ The relevant `package.json` fields are as follows:
 
 `npm install`命令使得在找到梦寐以求的包后安装变得容易，如下所示：
 
-```js
+```
 
 The named module is installed in `node_modules` in the current directory. During the installation process, the package is set up. This includes installing any packages it depends on and running the `preinstall` and `postinstall` scripts. Of course, installing the dependent packages also involves the same installation process of installing dependencies and executing pre-install and post-install scripts. 
 
@@ -769,13 +769,13 @@ Version number matching in npm is powerful and flexible. With it, we can targe
 
 The package version is declared in the `package.json` file, so let's look at the relevant fields:
 
-```js
+```
 
 `version`字段显然声明了当前包的版本。`dist-tags`字段列出了包维护者可以使用的符号标签，以帮助用户选择正确的版本。这个字段由`npm dist-tag`命令维护。
 
 `npm install`命令支持这些变体：
 
-```js
+```
 
 The last two are what they sound like. You can specify `express@4.16.2` to target a precise version, or `express@">4.1.0 < 5.0"` to target a range of Express V4 versions. We might use that specific expression because Express 5.0 might include breaking changes.
 
@@ -799,7 +799,7 @@ As awesome as the npm repository is, we don't want to push everything we do th
 *   **URL**: You can specify any URL that downloads a tarball, that is, a `.tar.gz` file. For example, GitHub or GitLab repositories can easily export a tarball URL. Simply go to the Releases tab to find them.
 *   **Git URL**: Similarly, any Git repository can be accessed with the right URL, for example:
 
-```js
+```
 
 +   **GitHub 快捷方式**：对于 GitHub 存储库，您可以只列出存储库标识符，例如`expressjs/express`。可以使用`expressjs/express#tag-name`引用标签或提交。
 
@@ -813,11 +813,11 @@ As awesome as the npm repository is, we don't want to push everything we do th
 
 在某些情况下，您可能希望全局安装一个模块，以便可以从任何目录中使用它。例如，Grunt 或 Babel 构建工具非常有用，您可能会发现如果这些工具全局安装会很有用。只需添加`-g`选项：
 
-```js
+```
 
 If you get an error, and you're on a Unix-like system (Linux/Mac), you may need to run this with `sudo`:
 
-```js
+```
 
 当然，这种变体会以提升的权限运行`npm install`。
 
@@ -825,7 +825,7 @@ npm 网站提供了更多信息的指南，网址为[`docs.npmjs.com/resolving-e
 
 如果本地软件包安装到`node_modules`中，全局软件包安装会在哪里？在类 Unix 系统上，它会安装到`PREFIX/lib/node_modules`中，在 Windows 上，它会安装到`PREFIX/node_modules`中。在这种情况下，`PREFIX`表示安装 Node.js 的目录。您可以按以下方式检查目录的位置：
 
-```js
+```
 
 The algorithm used by Node.js for the `require` function automatically searches the directory for packages if the package is not found elsewhere.
 
@@ -851,11 +851,11 @@ These two commands make it easy and convenient to set up a project, and to keep 
 
 You can manage the dependencies manually by editing `package.json`. Or you can use npm to assist you with editing the dependencies. You can add a new dependency like so:
 
-```js
+```
 
 使用`--save`标志，npm 将在`package.json`中添加一个`dependencies`标签：
 
-```js
+```
 
 With the added dependency, when your application is installed, `npm` will now install the package along with any other `dependencies` listed in `package.json` file.
 
@@ -863,7 +863,7 @@ The `devDependencies` lists modules used during development and testing. The f
 
 By default, when `npm install` is run, modules listed in both `dependencies` and `devDependencies` are installed. Of course, the purpose of having two dependency lists is to control when each set of dependencies is installed.
 
-```js
+```
 
 这将安装“生产”版本，这意味着只安装`dependencies`中列出的模块，而不安装`devDependencies`中的任何模块。例如，如果我们在开发中使用像 Babel 这样的构建工具，该工具就不应该在生产环境中安装。
 
@@ -873,7 +873,7 @@ By default, when `npm install` is run, modules listed in both `dependencies`�
 
 使用 npm@5（也称为 npm 版本 5），一个变化是不再需要向`npm install`命令添加`--save`。相反，`npm`默认会像您使用了`--save`命令一样操作，并会自动将依赖项添加到`package.json`中。这旨在简化使用`npm`，可以说`npm`现在更方便了。与此同时，`npm`自动修改`package.json`对您来说可能会非常令人惊讶和不便。可以使用`--no-save`标志来禁用此行为，或者可以使用以下方法永久禁用：
 
-```js
+```
 
 The `npm config` command supports a long list of settable options for tuning the behavior of npm. See `npm help config` for the documentation and `npm help 7 config` for the list of options.
 
@@ -889,7 +889,7 @@ Sometimes, you will find that the package maintainers are unprepared to issue a 
 
 One approach to fixing this problem is **pinning** the package version number to one that's known to work. You might know that version 6.1.2 was the last release against which your application functioned and that starting with version 6.2.0 your application breaks. Hence, in `package.json`:
 
-```js
+```
 
 这将冻结您对特定版本号的依赖。然后，您可以自由地花时间更新您的代码以适应模块的后续版本。一旦您的代码更新了，或者上游项目更新了，就相应地更改依赖关系。
 
@@ -939,15 +939,15 @@ One approach to fixing this problem is **pinning** the package version number 
 
 假设我们已经安装了`hexy`命令，如下所示：
 
-```js
+```
 
 As a local install, this creates a command as `node_modules/.bin/hexy`. We can attempt to use it as follows:
 
-```js
+```
 
 但这会出错，因为命令不在`PATH`中列出的目录中。解决方法是使用完整路径名或相对路径名：
 
-```js
+```
 
 But obviously typing the full or partial pathname is not a user-friendly way to execute the command. We want to use the commands installed by modules, and we want a simple process for doing so. This means, we must add an appropriate value in the `PATH` variable, but what is it?
 
@@ -959,7 +959,7 @@ How we do this depends on the command shell you use and your operating system.
 
 On a Unix-like system, the command shells are `bash` and `csh`. Your `PATH` variable would be set up in one of these ways:
 
-```js
+```
 
 下一步是将命令添加到你的登录脚本中，这样变量就会一直设置。在`bash`上，添加相应的行到`~/.bashrc`，在`csh`上，添加到`~/.cshrc`。
 
@@ -981,7 +981,7 @@ On a Unix-like system, the command shells are `bash` and `csh`. Your `PATH`�
 
 另一个选择是使用`npx`命令来执行这些命令。这个工具会自动安装在`npm`命令旁边。这个命令要么执行来自本地安装包的命令，要么在全局缓存中静默安装命令：
 
-```js
+```
 
 Using `npx` is this easy.
 
@@ -993,11 +993,11 @@ The coder codes, updating their package, leaving you in the dust unless you keep
 
 To find out whether your installed packages are out of date, use the following command:
 
-```js
+```
 
 报告显示了当前的 npm 包、当前安装的版本，以及`npm`仓库中的当前版本。更新过时的包非常简单：
 
-```js
+```
 
 Specifying a package name updates just the named package. Otherwise, it updates every package that would be printed by `npm outdated`.
 
@@ -1007,11 +1007,11 @@ Npm handles more than package management, it has a decent built-in task automati
 
 The `npm` command handles not just installing packages, it can also be used to automate running tasks related to the project. In `package.json`, we can add a field, `scripts`, containing one or more command strings. Originally scripts were meant to handle tasks related to installing an application, such as compiling native code, but they can be used for much more. For example, you might have a deployment task using `rsync` to copy files to a server. In `package.json`, you can add this:
 
-```js
+```
 
 重要的是，我们可以添加任何我们喜欢的脚本，`scripts`条目记录了要运行的命令：
 
-```js
+```
 
 Once it has been recorded in `scripts`, running the command is this easy.
 
@@ -1030,7 +1030,7 @@ Npm also defines a pattern for scripts that run before or after another script, 
 
 A practical example is to run a test script in a `prepublish` script to ensure the package is tested before publishing it to the npm repository:
 
-```js
+```
 
 有了这个组合，如果测试作者输入`npm publish`，`prepublish`脚本将导致`test`脚本运行，然后使用`mocha`运行测试套件。
 
@@ -1044,7 +1044,7 @@ A practical example is to run a test script in a `prepublish` script to ensure t
 
 这个依赖在`package.json`中使用`engines`标签声明：
 
-```js
+```
 
 版本字符串类似于我们可以在`dependencies`和`devDependencies`中使用的。在这种情况下，我们定义了该包与 Node.js 8.x、9.x 和 10.x 兼容。
 

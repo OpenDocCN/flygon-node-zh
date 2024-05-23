@@ -2,7 +2,7 @@
 
 Web 的原始设计模型类似于 20 世纪 70 年代主机的工作方式。旧式的哑终端，如 IBM 3270，和 Web 浏览器都遵循请求-响应范式。用户发送请求，远程计算机发送响应。这种请求-响应范式在 Node.js HTTP 服务器 API 中是明显的，如下面的代码所示：
 
-```js
+```
 
 The paradigm couldn't be more explicit than this. The `request` and the `response` are right there.
 
@@ -61,25 +61,25 @@ We won't make changes to the user authentication microservice, but we will use i
 
 In the Notes source directory, install these new modules:
 
-```js
+```
 
 我们将在一些实时交互中结合使用`passport`模块进行用户身份验证，该模块在第八章 *使用微服务对用户进行身份验证*中使用。
 
 在`app.mjs`的开头，将此添加到`import`语句中：
 
-```js
+```
 
 This code brings in the required modules. The `socket.io` package supplies the core event-passing service. The `passport.socketio` module integrates Socket.IO with PassportJS-based user authentication. We will be reorganizing `app.mjs` so that session management will be shared between Socket.IO, Express, and Passport. 
 
 The first change is to move the declaration of some session-related values to the top of the module, as we've done here:
 
-```js
+```
 
 这样做的是创建一对全局范围的变量来保存与会话配置相关的对象。在设置 Express 会话支持时，我们一直在使用这些值作为常量。现在我们需要将这些值与 Socket.IO 和 Express 会话管理器共享。当我们初始化 Express 和 Socket.IO 会话处理程序时，有一个初始化对象接受初始化参数。在每个对象中，我们将传入相同的值作为`secret`和`sessionStore`字段，以确保它们保持一致。
 
 下一个更改是将与设置服务器对象相关的一些代码从`app.mjs`的底部移到靠近顶部，如下所示：
 
-```js
+```
 
 In addition to moving some code from the bottom of `app.mjs`, we've added the initialization for Socket.IO. This is where the Socket.IO library wraps itself around the HTTP server object. Additionally, we're integrating it with the Passport library so that Socket.IO knows which sessions are authenticated.
 
@@ -93,7 +93,7 @@ The `io.use` function installs functions in Socket.IO that are similar to Expr
 
 Because we are sharing session management between Express and Socket.IO, we must make the following change:
 
-```js
+```
 
 这与我们在第八章 *使用微服务对用户进行身份验证*中添加的 Express 会话支持的配置相同，但修改为使用我们之前设置的配置变量。这样做，Express 和 Socket.IO 会话处理都是从相同的信息集中管理的。
 
@@ -125,7 +125,7 @@ Because we are sharing session management between Express and Socket.IO, we must
 
 在`models/Notes.mjs`中，进行以下更改：
 
-```js
+```
 
 We imported the `EventEmitter` class, made `AbstractNotesStore` a subclass of `EventEmitter`, and then added some methods to emit events. As a result, every `NotesStore` implementation now has an `on` and `emit` method, plus these three helper methods.
 
@@ -135,7 +135,7 @@ In the interest of space, we'll show the modifications to one of the `NotesStore
 
 Modify these functions in `models/notes-sequelize.mjs` as shown in the following code:
 
-```js
+```
 
 这些更改并未改变这些方法的原始合同，因为它们仍然创建、更新和销毁笔记。其他`NotesStore`实现需要类似的更改。新的是现在这些方法会为可能感兴趣的任何代码发出适当的事件。
 
@@ -143,13 +143,13 @@ Modify these functions in `models/notes-sequelize.mjs` as shown in the followi
 
 在`routes/index.mjs`和`routes/notes.mjs`中，添加以下函数：
 
-```js
+```
 
 This function is meant to be in place of such initialization.
 
 Then, in `app.mjs`, make this change:
 
-```js
+```
 
 这导入了两个`init`函数，为它们提供了唯一的名称，然后在`NotesStore`设置完成后调用它们。目前，这两个函数什么也不做，但很快会改变。重要的是这两个`init`函数将在`NotesStore`完全初始化后被调用。
 
@@ -161,13 +161,13 @@ Notes 模型现在在创建、更新或销毁笔记时发送事件。为了让�
 
 在`routes/index.mjs`的顶部，将其添加到导入列表中：
 
-```js
+```
 
 Remember that this is the initialized Socket.IO object we use to send messages to and from connected browsers. We will use it to send messages to the Notes home page.
 
 Then refactor the `router` function:
 
-```js
+```
 
 这将原本是`router`函数主体的内容提取到一个单独的函数中。我们不仅需要在主页的`router`函数中使用这个函数，还需要在为主页发出 Socket.IO 消息时使用它。
 
@@ -175,7 +175,7 @@ Then refactor the `router` function:
 
 然后，在底部添加这个：
 
-```js
+```
 
 The primary purpose of this section is to listen to the create/update/destroy events, so we can update the browser. For each, the current list of Notes is gathered, then sent to the browser.
 
@@ -205,19 +205,19 @@ Initially, we simply put JavaScript code required by Bootstrap and FeatherJS at 
 
 Create a file, `partials/footerjs.hbs`, containing the following code:
 
-```js
+```
 
 这段代码原本位于`views/layout.hbs`的底部，这是我们刚提到的共享代码片段。这意味着它将用于每个页面模板，并在自定义 JavaScript 之后使用。
 
 现在我们需要修改`views/layout.hbs`如下：
 
-```js
+```
 
 That is, we'll leave `layout.hbs` pretty much as it was, except for removing the JavaScript tags from the bottom. Those tags are now in `footerjs.hbs`. 
 
 We'll now need to modify every template (`error.hbs`, `index.hbs`, `login.hbs`, `notedestroy.hbs`, `noteedit.hbs`, and `noteview.hbs`) to, at the minimum, load the `footerjs` partial.
 
-```js
+```
 
 有了这个，每个模板都明确地在页面底部加载了 Bootstrap 和 FeatherJS 的 JavaScript 代码。它们以前是在`layout.hbs`的页面底部加载的。这给我们带来的好处是可以在加载 Bootstrap 和 jQuery 之后加载 Socket.IO 客户端代码。
 
@@ -229,7 +229,7 @@ We'll now need to modify every template (`error.hbs`, `index.hbs`, `login.h
 
 在`views/index.hbs`中，在`footerjs`部分之后添加以下内容：
 
-```js
+```
 
 This is what we meant when we said that each page will have its own Socket.IO client implementation. This is the client for the home page, but the client for the Notes view page will be different. This Socket.IO client connects to the `/home` namespace, then for `notetitles` events, it redraws the list of Notes on the home page.
 
@@ -243,7 +243,7 @@ In this case, the client connects a `socket` object to the `/home` namespace, wh
 
 Additionally, for this script to function, this change is required elsewhere in the template:
 
-```js
+```
 
 您会注意到脚本中引用了`$("#notetitles")`来清除现有的笔记标题列表，然后添加一个新列表。显然，这需要在这个`<div>`上有一个`id="notetitles"`属性。
 
@@ -257,11 +257,11 @@ Additionally, for this script to function, this change is required elsewhere in 
 
 像之前一样，在一个窗口中启动用户信息微服务：
 
-```js
+```
 
 Then, in another window, start the Notes application:
 
-```js
+```
 
 然后，在浏览器窗口中，转到`http://localhost:3000`并登录 Notes 应用程序。要查看实时效果，请打开多个浏览器窗口。如果您可以从多台计算机上使用 Notes，则也可以这样做。
 
@@ -277,13 +277,13 @@ Then, in another window, start the Notes application:
 
 在服务器端，这是一个有用的`DEBUG`环境变量设置：
 
-```js
+```
 
 This enables debug tracing for the Notes application and the Socket.IO package.
 
 Enabling this in a browser is a little different since there are no environment variables. Simply open up the JavaScript console in your browser and enter this command:
 
-```js
+```
 
 立即，您将开始看到来自 Socket.IO 的不断交谈的消息。您将了解到的一件事是，即使应用程序处于空闲状态，Socket.IO 也在来回通信。
 
@@ -307,17 +307,17 @@ Enabling this in a browser is a little different since there are no environment 
 
 在`routes/notes.mjs`中，确保像这样导入`io`对象：
 
-```js
+```
 
 This, of course, makes the `io` object available to code in this module. We're also importing a function from `index.mjs` that is not currently exported. We will need to cause the home page to be updated, and therefore in `index.mjs`, make this change:
 
-```js
+```
 
 这只是添加了`export`关键字，以便我们可以从其他地方访问该函数。
 
 然后，将`init`函数更改为以下内容：
 
-```js
+```
 
 First, we handle `connect` events on the `/notes` namespace. In the handler, we're looking for a `query` object containing the `key` for a Note. Therefore, in the client code, when calling `io('/notes')` to connect with the server, we'll have to arrange to send that `key` value. It's easy to do, and we'll learn how in a little while.
 
@@ -325,7 +325,7 @@ Calling `socket.join(roomName)` does what is suggested—it causes this connecti
 
 The next thing is to add listeners for the `noteupdated` and `notedestroyed` messages. In both, we are using this pattern:
 
-```js
+```
 
 这就是我们如何使用 Socket.IO 向连接到给定命名空间和房间的任何浏览器发送消息。
 
@@ -339,19 +339,19 @@ The next thing is to add listeners for the `noteupdated` and `notedestroyed`
 
 就像我们在主页模板中所做的那样，这些事件中包含的数据必须对用户可见。我们不仅需要向模板`views/noteview.hbs`中添加客户端代码；我们还需要对模板进行一些小的更改：
 
-```js
+```
 
 In this section of the template, we add a pair of IDs to two elements. This enables the JavaScript code to target the correct elements.
 
 Add this client code to `noteview.hbs`:
 
-```js
+```
 
 在此脚本中，我们首先连接到`/notes`命名空间，然后为`noteupdated`和`notedestroyed`事件创建监听器。
 
 连接到`/notes`命名空间时，我们传递了一个额外的参数。这个函数的可选第二个参数是一个选项对象，在这种情况下，我们传递了`query`选项。`query`对象在形式上与`URL`类的`query`对象相同。这意味着命名空间就像是一个 URL，比如`/notes?key=${notekey}`。根据 Socket.IO 文档，我们可以传递一个完整的 URL，如果连接是这样创建的，它也可以工作：
 
-```js
+```
 
 While we could set up the URL query string this way, it's cleaner to do it the other way.
 
@@ -361,7 +361,7 @@ For the `noteupdated` event, we take the new note content and display it on the 
 
 Additionally in `partials/header.hbs`, we needed to make this change as well:
 
-```js
+```
 
 我们还需要在页面顶部更新标题，这个`id`属性有助于定位正确的元素。
 
@@ -401,13 +401,13 @@ Additionally in `partials/header.hbs`, we needed to make this change as well:
 
 创建一个新文件`models/messages-sequelize.mjs`，其中包含以下内容：
 
-```js
+```
 
 This sets up the modules being used and also initializes the `EventEmitter` interface. We're also exporting the `EventEmitter` as `emitter` so other modules can be notified about messages as they're created or deleted.
 
 Now add this code for handling the database connection:
 
-```js
+```
 
 `connectDB`的结构与我们在`notes-sequelize.mjs`中所做的类似。我们使用相同的`connectSequlz`函数与相同的数据库连接，并且如果数据库已经连接，我们会立即返回。
 
@@ -431,7 +431,7 @@ Now add this code for handling the database connection:
 
 继续添加这个函数：
 
-```js
+```
 
 The `sanitizedMessage` function performs the same function as `sanitizedUser`. In both cases, we are receiving a Sequelize object from the database, and we want to return a simple object to the caller. These functions produce that simplified object.
 
@@ -439,7 +439,7 @@ Next, we have several functions to store new messages, retrieve messages, and de
 
 The first is this function:
 
-```js
+```
 
 当用户发布新评论/消息时将调用此函数。我们将其存储在数据库中，并且钩子发出一个事件，表示消息已创建。
 
@@ -451,13 +451,13 @@ The first is this function:
 
 然后，添加这个函数：
 
-```js
+```
 
 This is to be called when a user requests that a message should be deleted. With Sequelize, we must first find the message and then delete it by calling its `destroy` method.
 
 Add this function:
 
-```js
+```
 
 这个函数检索最近的消息，立即使用情况是在渲染`/notes/view`页面时使用。
 
@@ -477,13 +477,13 @@ Add this function:
 
 在`routes/notes.mjs`中，将这个添加到`import`语句中：
 
-```js
+```
 
 This imports the functions we just created so we can use them. And we also set up `debug` and `error` functions for tracing.
 
 Add these event handlers to the `init` function in `routes/notes.mjs`:
 
-```js
+```
 
 这些接收来自`models/messages-sequelize.mjs`的新消息或已销毁消息的通知，然后将通知转发到浏览器。请记住，消息对象包含命名空间和房间，因此这让我们能够将此通知发送到任何 Socket.IO 通信通道。
 
@@ -493,7 +493,7 @@ Add these event handlers to the `init` function in `routes/notes.mjs`:
 
 在`init`函数中的`connect`监听器中，添加这两个新的事件监听器：
 
-```js
+```
 
 This is the existing function to listen for connections from `/notes/view` pages, but with two new Socket.IO event handler functions. Remember that in the existing client code in `notesview.hbs`, it connects to the `/notes` namespace and supplies the note `key` as the room to join. In this section, we build on that by also setting up listeners for `create-message` and `delete-message` events when a note `key` has been supplied.
 
@@ -505,7 +505,7 @@ So far, we've used the Socket.IO `emit` method with an event name and a data obj
 
 This means our client code will do this:
 
-```js
+```
 
 第三个参数中的函数成为`create-message`事件处理程序函数中的`fn`参数。然后，提供给`fn`调用的任何内容都将作为`result`参数传递到此函数中。不管是浏览器通过连接到服务器提供该函数，还是在服务器上调用该函数，Socket.IO 都会负责将响应数据传输回浏览器代码并在那里调用确认函数。最后要注意的是，我们在错误报告方面有些懒惰。因此，将一个任务放在待办事项中，以改进向用户报告错误。
 
@@ -529,13 +529,13 @@ Bootstrap 框架包括对模态窗口的支持。它们与桌面应用程序中�
 
 让我们首先添加一个按钮，用户将请求添加评论。在当前设计中，笔记文本下方有一排两个按钮。在`views/noteview.hbs`中，让我们添加第三个按钮：
 
-```js
+```
 
 This is directly out of the documentation for the Bootstrap Modal component. The `btn-outline-dark` style matches the other buttons in this row, and between the `data-toggle` and the `data-target` attributes, Bootstrap knows which Modal window to pop up.
 
 Let's insert the definition for the matching Modal window in `views/noteview.hbs`:
 
-```js
+```
 
 这是直接来自 Bootstrap 模态组件的文档，以及一个简单的表单来收集消息。
 
@@ -549,13 +549,13 @@ Let's insert the definition for the matching Modal window in `views/noteview.hbs
 
 在`views/noteview.hbs`中，我们有一个包含客户端代码的`$(document).ready`部分。在该函数中，添加一个仅在`user`对象存在时存在的部分，如下所示：
 
-```js
+```
 
 That is, we want a section of jQuery code that's active only when there is a `user` object, meaning that this Note is being shown to a logged-in user.
 
 Within that section, add this event handler:
 
-```js
+```
 
 这与我们刚刚创建的表单中的按钮相匹配。通常在`type="submit"`按钮的事件处理程序中，我们会使用`event.preventDefault`来防止正常结果，即重新加载页面。但在这种情况下不需要。
 
@@ -573,13 +573,13 @@ Within that section, add this event handler:
 
 在`routes/notes.mjs`中，修改`/view`路由器函数如下：
 
-```js
+```
 
 That's simple enough: we retrieve the recent messages, then supply them to the `noteview.hbs` template. When we retrieve the messages, we supply the `/notes` namespace and a room name of the note `key`. It is now up to the template to render the messages.
 
 In the `noteview.hbs` template, just below the *delete*, edit, and *comment* buttons, add this code:
 
-```js
+```
 
 如果有一个`messages`对象，这些步骤会遍历数组，并为每个条目设置一个 Bootstrap `card`组件来显示消息。消息显示在`<div id="noteMessages">`中，我们稍后会在 DOM 操作中进行定位。每条消息的标记直接来自 Bootstrap 文档，稍作修改。
 
@@ -591,7 +591,7 @@ In the `noteview.hbs` template, just below the *delete*, edit, and *comment* 
 
 在`submitNewComment`按钮的处理程序下面，添加以下内容：
 
-```js
+```
 
 This is a handler for the Socket.IO `newmessage` event. What we have done is taken the same markup as is in the template, substituted values into it, and used jQuery to prepend the text to the top of the `noteMessages` area.
 
@@ -611,13 +611,13 @@ To make the `message-del-button` button active, we need to listen to click even
 
 Below the `newmessage` event handler, add this button click handler:
 
-```js
+```
 
 `socket`对象已经存在，并且是与此笔记的 Socket.IO 连接。我们向房间发送一个`delete-message`事件，其中包含按钮上存储的数据属性的值。
 
 正如我们已经看到的，在服务器上，`delete-message`事件调用`destroyMessage`函数。该函数从数据库中删除消息，并发出一个`destroymessage`事件。`routes/notes.mjs`中接收到该事件，并将消息转发到浏览器。因此，我们需要在浏览器中添加一个事件监听器来接收`destroymessage`事件：
 
-```js
+```
 
 回头看看，每条消息显示`card`都有一个符合这里显示模式的`id`参数。因此，jQuery 的`remove`函数负责从显示中删除消息。
 

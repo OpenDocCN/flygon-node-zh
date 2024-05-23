@@ -103,15 +103,15 @@ Node.js 的主要重点是高性能、高可扩展性的 Web 应用程序，但�
 
 代码块设置如下：
 
-```js
+```
 
 When we wish to draw your attention to a particular part of a code block, the relevant lines or items are set in bold:
 
-```js
+```
 
 任何命令行输入或输出都以以下形式编写：
 
-```js
+```
 
 **粗体**：表示新术语、重要单词或屏幕上看到的单词。例如，菜单或对话框中的单词会在文本中以这种方式出现。例如："单击提交按钮。"
 

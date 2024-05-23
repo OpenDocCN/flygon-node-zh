@@ -182,7 +182,7 @@ Node.js 是实现微服务的优秀平台。我们稍后会详细介绍。
 
 为了帮助我们理解为什么会这样，Node.js 的创始人 Ryan Dahl 在 2010 年 5 月的 Cinco de NodeJS 演示中提供了以下示例。([`www.youtube.com/watch?v=M-sc73Y-zQA`](https://www.youtube.com/watch?v=M-sc73Y-zQA)) Dahl 问我们当我们执行这样的代码行时会发生什么：
 
-```js
+```
 
 Of course, the program pauses at this point while the database layer sends the query to the database and waits for the result or the error. This is an example of a blocking function call. Depending on the query, this pause can be quite long (well, a few milliseconds, which is ages in computer time). This pause is bad because the execution thread can do nothing while it waits for the result to arrive. If your software is running on a single-threaded platform, the entire server would be blocked and unresponsive. If instead your application is running on a thread-based server platform, a thread-context switch is required to satisfy any other requests that arrive. The greater the number of outstanding connections to the server, the greater the number of thread-context switches. Context switching is not free because more threads require more memory per thread state and more time for the CPU to spend on thread management overheads.
 
@@ -214,7 +214,7 @@ What do these asynchronous function calls look like?
 
 In Node.js, the query that we looked at previously will read as follows:
 
-```js
+```
 
 程序员提供一个在结果（或错误）可用时被调用的函数（因此称为*回调函数*）。`query`函数仍然需要相同的时间。它不会阻塞执行线程，而是返回到事件循环，然后可以处理其他请求。Node.js 最终会触发一个事件，导致调用此回调函数并返回结果或错误指示。
 
@@ -222,13 +222,13 @@ In Node.js, the query that we looked at previously will read as follows:
 
 JavaScript 语言的进步为我们提供了新的选择。与 ES2015 promises 一起使用时，等效的代码如下：
 
-```js
+```
 
 This is a little better, especially in instances of deeply nested event handling.
 
 The big advance came with the ES-2017 `async` function:
 
-```js
+```
 
 除了`async`和`await`关键字之外，这看起来像我们在其他语言中编写的代码，并且更容易阅读。由于`await`的作用，它仍然是异步代码执行。
 
@@ -246,7 +246,7 @@ Node.js 引起了一些兴奋是因为它的吞吐量（每秒请求量）。对
 
 一个流传的基准是以下简单的 HTTP 服务器（从[`nodejs.org/en/`](https://nodejs.org/en/)借来的），它直接从内存中返回一个`Hello World`消息：
 
-```js
+```
 
 This is one of the simpler web servers that you can build with Node.js. The `http` object encapsulates the HTTP protocol, and its `http.createServer` method creates a whole web server, listening on the port specified in the `listen` method. Every request (whether a `GET` or `POST` on any URL) on that web server calls the provided function. It is very simple and lightweight. In this case, regardless of the URL, it returns a simple `text/plain` that is the `Hello World` response.
 
@@ -276,11 +276,11 @@ A key to maintaining high throughput of Node.js applications is by ensuring that
 
 The Fibonacci sequence, serving as a stand-in for heavy computational tasks, quickly becomes computationally expensive to calculate for a naïve implementation such as this:
 
-```js
+```
 
 这是一个特别简单的方法来计算斐波那契数。是的，有很多更快的计算斐波那契数的方法。我们展示这个作为 Node.js 在事件处理程序缓慢时会发生什么的一个一般性例子，而不是讨论计算数学函数的最佳方法。考虑以下服务器：
 
-```js
+```
 
 This is an extension of the simple web server shown earlier. It looks in the request URL for an argument, `n`, for which to calculate the Fibonacci number. When it's calculated, the result is returned to the caller.
 
@@ -292,13 +292,13 @@ Does this mean that Node.js is a flawed platform? No, it just means that the pro
 
 A simple rewrite dispatches the computations through the event loop, letting the server continue to handle requests on the event loop. Using callbacks and closures (anonymous functions), we're able to maintain asynchronous I/O and concurrency promises, as shown in the following code:
 
-```js
+```
 
 这是一个同样愚蠢的计算斐波那契数的方法，但是通过使用`process.nextTick`，事件循环有机会执行。
 
 因为这是一个需要回调函数的异步函数，它需要对服务器进行小的重构：
 
-```js
+```
 
 We've added a callback function to receive the result. In this case, the server is able to handle multiple Fibonacci number requests. But there is still a performance issue because of the inefficient algorithm.
 
@@ -324,7 +324,7 @@ The last couple of years have been an exciting time for JavaScript programmers. 
 
 A few pages ago, you saw this:
 
-```js
+```
 
 这是 Ryan Dahl 的一个重要洞察，也是推动 Node.js 流行的原因。某些操作需要很长时间才能运行，比如数据库查询，不应该和快速从内存中检索数据的操作一样对待。由于 JavaScript 语言的特性，Node.js 必须以一种不自然的方式表达这种异步编码结构。结果不会出现在下一行代码，而是出现在这个回调函数中。此外，错误必须以一种不自然的方式处理，出现在那个回调函数中。
 
@@ -334,7 +334,7 @@ A few pages ago, you saw this:
 
 但正如我们之前所看到的，这是在 Node.js 中编写异步代码的新首选方式：
 
-```js
+```
 
 相反，ES2017 的`async`函数使我们回到了这种非常自然的编程意图表达。结果和错误会在正确的位置上，同时保持了使 Node.js 变得伟大的出色的事件驱动的异步编程模型。我们将在本书的后面看到这是如何工作的。
 
