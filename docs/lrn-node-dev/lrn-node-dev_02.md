@@ -42,7 +42,9 @@
 
 我们在终端中的第一步是创建一个目录来存储所有这些文件。我们将使用`cd Desktop`命令从我们的主目录导航到桌面：
 
-[PRE0]
+```js
+cd Desktop
+```
 
 然后，我们将创建一个文件夹来存储这个项目的所有课程文件。
 
@@ -50,11 +52,15 @@
 
 现在，我们将使用`mkdir`命令来创建那个文件夹，这是**make directory**的缩写。让我们将文件夹命名为`notes-node`，如下所示：
 
-[PRE1]
+```js
+mkdir notes-node
+```
 
 我们将在 Node 中制作一个笔记应用，所以`notes-node`似乎很合适。然后我们将`cd`进入`notes-node`，然后我们可以开始玩一些内置模块：
 
-[PRE2]
+```js
+cd notes-node
+```
 
 这些模块是内置的，所以不需要在终端中安装任何东西。我们可以直接在我们的 Node 文件中引入它们。
 
@@ -76,7 +82,9 @@
 
 现在，为了开始，我将首先使用`console.log`打印`Starting app`，如下面的代码所示：
 
-[PRE3]
+```js
+console.log('Starting app');
+```
 
 我们这样做的唯一原因是为了跟踪我们的文件如何执行，我们只会在第一个项目中这样做。在以后，一旦你熟悉了文件的加载和运行方式，我们就可以删除这些`console.log`语句，因为它们将不再必要。
 
@@ -112,7 +120,9 @@
 
 然后我们会给它一个名字，`fs`，并将其设置为`require()`，如下面的代码所示：
 
-[PRE4]
+```js
+const fs = require()
+```
 
 在这里，`require()`是一个可以在任何 Node.js 文件中使用的函数。你不需要做任何特殊的事情来调用它，只需要像前面的代码中所示的那样调用它。在参数列表中，我们只需要传入一个字符串。
 
@@ -120,19 +130,36 @@
 
 在我们的例子中，我们将传入模块名`fs`，并在末尾加上一个分号，如下面的代码所示：
 
-[PRE5]
+```js
+const fs = require('fs');
+```
 
 这将告诉 Node，你想要获取`fs`模块的所有内容，并将它们存储在`fs`变量中。此时，我们可以访问`fs`模块上的所有可用函数，包括`fs.appendFile`，我们在文档中探索过。
 
 回到 Atom，我们可以通过调用 `fs.appendFile` 来调用 `appendFile`，传入我们将使用的两个参数；第一个将是文件名，所以我们添加 `greetings.txt`，第二个将是你想要追加到文件中的文本。在我们的例子中，我们将追加 `Hello world!`，如下面的代码所示：
 
-[PRE6]
+```js
+fs.appendFile('greetings.txt', 'Hello world!');
+```
 
 让我们保存文件，如上面的命令所示，并从终端运行它，看看会发生什么。
 
 **在 Node v7 上运行程序时的警告** 如果你在 Node v7 或更高版本上运行，当你在终端内运行程序时会收到一个小警告。现在，在 v7 上，它仍然可以工作，只是一个警告，但你可以使用以下代码来摆脱它：
 
-[PRE7]
+```js
+// Orignal line 
+fs.appendFile('greetings.txt', 'Hello world!');
+
+// Option one
+fs.appendFile('greetings.txt', 'Hello world!', function (err){
+  if (err) { 
+    console.log('Unable to write to file');
+  }
+});
+
+// Option two
+fs.appendFileSync('greetings.txt', 'Hello world!');
+```
 
 在上面的代码中，我们有我们程序中的原始行。
 
@@ -152,7 +179,13 @@
 
 如前面的代码所示，我们得到了我们的一个 `console.log` 语句，`Starting app.`。所以我们知道应用程序已经正确启动了。此外，如果我们转到 Atom，我们实际上会看到一个全新的 `greetings.txt` 文件，如下面的代码所示。这是由 `fs.appendFile` 创建的文本文件：
 
-[PRE8]
+```js
+console.log('Starting app.');
+
+const fs = require('fs');
+
+fs.appendFile('greetings.txt', 'Hello world!');
+```
 
 在这里，`fs.appendFile` 尝试将 `greetings.txt` 追加到一个文件中；如果文件不存在，它就会简单地创建它：
 
@@ -182,17 +215,42 @@ os.userInfo([options])方法被调用并返回有关当前登录用户的各种�
 
 要开始，我们必须要求 OS。这意味着我们将回到 Atom 内部。现在，在我创建`fs`常量的下面，我将创建一个名为`os`的新常量，将其设置为`require()`; 这作为一个函数调用，并传递一个参数，模块名称`os`，如下所示：
 
-[PRE9]
+```js
+console.log('Starting app.');
+
+const fs = require('fs');
+const os = require('os');
+
+fs.appendFile('greetings.txt', 'Hello world!');
+```
 
 从这里开始，我们可以开始调用 OS 模块上可用的方法，例如 os.userInfo([optional])。
 
 让我们创建一个名为`user`的新变量来存储结果。变量 user 将被设置为`os.userInfo`，我们可以调用`userInfo`而不带任何参数：
 
-[PRE10]
+```js
+console.log('Starting app.');
+
+const fs = require('fs');
+const os = require('os');
+
+var user = os.userInfo();
+
+fs.appendFile('greetings.txt', 'Hello world!');
+```
 
 现在，在我们对`fs.appendFile`行执行任何操作之前，我将对其进行注释，并使用`console.log`打印用户变量的内容：
 
-[PRE11]
+```js
+console.log('Starting app.');
+
+const fs = require('fs');
+const os = require('os');
+
+var user = os.userInfo();
+console.log(user);
+// fs.appendFile('greetings.txt', 'Hello world!');
+```
 
 这将让我们准确地探究我们得到了什么。在终端中，我们可以使用上箭头键和回车键重新运行我们的程序，并且在下面的代码中，你可以看到我们有一个带有一些属性的对象：
 
@@ -202,7 +260,16 @@ os.userInfo([options])方法被调用并返回有关当前登录用户的各种�
 
 这意味着回到 Atom 内部，我们可以在`appendFile`中使用`user.username`。我将删除`console.log`语句并取消注释我们对`fs.appendFile`的调用：
 
-[PRE12]
+```js
+console.log('Starting app.');
+
+const fs = require('fs');
+const os = require('os');
+
+var user = os.userInfo();
+
+fs.appendFile('greetings.txt', 'Hello world!');
+```
 
 现在，在`fs.appendFile`中的`world`处，我们将其与`user.username`交换。我们可以以两种方式做到这一点。
 
@@ -210,7 +277,16 @@ os.userInfo([options])方法被调用并返回有关当前登录用户的各种�
 
 第一种方法是删除`world!`并连接`user.username`。然后我们可以使用`+`（加号）运算符连接另一个字符串，如下面的代码所示：
 
-[PRE13]
+```js
+console.log('Starting app.');
+
+const fs = require('fs');
+const os = require('os');
+
+var user = os.userInfo();
+
+fs.appendFile('greetings.txt', 'Hello' + user.username + '!');
+```
 
 现在，如果我们运行这个，一切都会按预期工作。在终端中，我们可以重新运行我们的应用程序。它会打印`Starting app`：
 
@@ -226,608 +302,1142 @@ os.userInfo([options])方法被调用并返回有关当前登录用户的各种�
 
 第二种方法是使用 ES6 功能模板字符串来交换`fs.appendFile`中的`world`与`user.username`。模板字符串以`` ` ``（对勾）运算符开头和结尾，位于键盘上*1*键的左侧。然后你像平常一样打字。
 
-This means that we'll first type `hello`, then we'll add a space with the `!` (exclamation) mark, and just before `!`, we will put the name:
+这意味着我们首先输入`hello`，然后我们会用`!`（感叹号）标记添加一个空格，在`!`之前，我们会放置名字：
 
-[PRE14]
+```js
+console.log('Starting app.');
 
-To insert a JavaScript variable inside your template string, you use the `$` (dollar) sign followed by opening and closing curly braces. Then we will just reference a variable such as `user.username`:
+const fs = require('fs');
+const os = require('os');
 
-[PRE15]
+var user = os.userInfo();
 
-Notice that the Atom editor actually picks up on the syntax of curly braces.
+fs.appendFile('greetings.txt', `Hello !`);
+```
 
-This is all it takes to use template strings; it's an ES6 feature available because you're using Node v6\. This syntax is much easier to understand and update than the string/concatenation version we saw earlier.
+要在模板字符串中插入 JavaScript 变量，你需要使用`$`（美元）符号，后面跟上大括号。然后我们将引用一个变量，比如`user.username`：
 
-If you run the code, it will produce the exact same output. We can run it, view the text file, and this time around, we have `Hello Gary!` twice, which is what we want here:
+```js
+console.log('Starting app.');
+
+const fs = require('fs');
+const os = require('os');
+
+var user = os.userInfo();
+
+fs.appendFile('greetings.txt', `Hello ${user.username}!`);
+```
+
+请注意，Atom 编辑器实际上可以识别出大括号的语法。
+
+这就是使用模板字符串所需要的。它是一个 ES6 功能，因为你使用的是 Node v6。这种语法比我们先前看到的字符串/串联版本容易理解和更新。
+
+如果你运行这段代码，它将产生完全相同的输出。我们可以运行它，查看文本文件，这一次我们有两次`Hello Gary!`，这正是我们想要的：
 
 ![](img/3f725d56-9605-46bb-84cb-dd044a1308d7.png)
 
-With this in place, we are now done with our very basic example and we're ready to start creating our own files for our notes application and requiring them inside `app.js` in the next section.
+有了这个配置，我们现在已经完成了我们非常基础的示例，并准备在下一节中开始创建我们的笔记应用程序的文件并在`app.js`中要求它们。
 
-First up, you learned that we can use `require` to load in modules. This lets us take existing functionality written by either the Node developers, a third-party library, or ourselves, and load it into a file so that it can be reusable. Creating reusable code is essential for building large apps. If you have to build everything in an app every time, no one would ever get anything done because they would get stuck at building the basics, things such as HTTP servers and web servers. There are already modules for such stuff, and we'll be taking advantage of the great npm community. In this case, we used two built-in modules, `fs` and `os`. We loaded them in using require and we stored the module results inside two variables. These variables store everything available to us from the module; in the case of `fs`, we use the `appendFile` method, and in the case of OS, we use the `userInfo` method. Together, we were able to grab the username and save it into a file, which is fantastic.
+首先，你已经学到了我们可以使用`require`来加载模块。这让我们可以使用 Node 开发者、第三方库或者自己编写的现有功能，并将其加载到文件中，以便可以重复使用。创建可重复使用的代码对于构建大型应用程序至关重要。如果每次都必须在应用程序中构建所有内容，那么没有人会有所作为，因为他们会被困在构建基础设施上，比如 HTTP 服务器和 Web 服务器等。这些东西已经有模块了，我们将利用 npm 社区的伟大作用。在这种情况下，我们使用了两个内置模块，`fs`和`os`。我们使用`require`将它们加载进来，并将模块结果存储在两个变量中。这些变量存储了模块中提供给我们的所有内容；在`fs`的情况下，我们使用`appendFile`方法，而在 OS 的情况下，我们使用`userInfo`方法。一起，我们能够获取用户名并将其保存到文件中，这太棒了。
 
-# Require own files
+# 要求自己的文件
 
-In this section, you will learn how to use `require()` to load in other files that you created inside your project. This will let you move functions outside `app.js` into more specific files; this will make your application easier to scale, test, and update. To get started, the first thing we'll do is to make a new file.
+在本节中，你将学习如何使用`require()`来加载项目中创建的其他文件。这将让你将函数从`app.js`移到更具体的文件中；这将使你的应用程序更容易扩展、测试和更新。要开始，我们要做的第一件事就是创建一个新文件。
 
-# Making a new file to load other files
+# 创建一个新文件来加载其他文件
 
-In the context of our notes app, the new file will store various functions for writing and reading notes. As of now, you don't need to worry about that functionality, as we'll get into the detail later in the section, but we will create the file where it will eventually live. This file will be `notes.js`, and we'll save it inside the root of our application, right alongside `app.js` and `greetings.txt`, as shown here:
+在我们的笔记应用程序的上下文中，新文件将存储各种用于编写和阅读笔记的函数。目前，你不需要担心该功能，因为我们稍后将详细介绍，但我们将创建文件，它最终将存放在那里。这个文件将是`notes.js`，我们将把它保存在应用程序的根目录下，就在`app.js`和`greetings.txt`旁边，如下所示：
 
 ![](img/37116f0e-f983-4ff1-a0b8-54ff1f419b0a.png)
 
-For the moment, all we'll do inside `notes` is to use `console.log` to print a little log showing the file has been executed using the following code:
+目前，我们在`notes`中所做的就是使用`console.log`打印一小段日志，显示文件已经被执行，使用以下代码：
 
-[PRE16]
+```js
+console.log('Starting notes.js');
+```
 
-Now, we have `console.log` on the top of `notes` and one on the top of `app.js`. I'll change `console.log` in the `app.js` from `Starting app.` to `Starting app.js`. With this in place, we can now require the notes file. It doesn't export any functionality, but that's fine.
+现在，我们在`notes`的顶部和`app.js`的顶部都有了`console.log`。我将把`app.js`中的`console.log`从`Starting app.`更改为`Starting app.js`。有了这个配置，我们现在可以 require notes 文件。它没有导出任何功能，但没关系。
 
-By the way, when I say export, I mean the notes file doesn't have any functions or properties that another file can take advantage of.
+顺便说一下，当我说导出时，我指的是 notes 文件没有任何其他文件可以利用的函数或属性。
 
-We'll look at how to export stuff later in the section. For now though, we'll load our module in much the same way we loaded in the built-in Node modules.
+我们将在后面的部分讨论如何导出东西。不过，目前我们将以与加载内置 Node 模块相同的方式加载我们的模块。
 
-Let's make `const`; I'll call this one notes and set it equal to the return result from `require()`:
+让我们创建`const`；我会将其命名为 notes，将其设置为从`require()`返回的结果：
 
-[PRE17]
+```js
+console.log('Starting app.js');
 
-Inside the parentheses, we will pass in one argument that will be a string, but it will be a little different. In the previous section, we typed in the module name, but what we have in this case is not a module, but a file, `notes.js`. What we need to do is to tell Node where that file lives using a relative path.
+const fs = require('fs');
+const os = require('os');
+const notes = require('');
 
-Now, relative paths start with `./` (a dot forward slash), which points to the current directory that the file is in. In this case, this points us to the `app.js` directory, which is the root of our project `notes-node`. From here, we don't have to go into any other folders to access `notes.js`, it's in the root of our project, so we can type its name, as shown in the following code:
+var user = os.userInfo();
 
-[PRE18]
+fs.appendFile('greetings.txt', `Hello ${user.username}!`);
+```
 
-With this in place, we can now save `app.js` and see what happens when we run our application. I'll run the app using the `node app.js` command:
+在括号内，我们将传入一个参数，这个参数将是一个字符串，但它会有一点不同。在之前的部分中，我们键入了模块名称，但在这种情况下，我们拥有的不是一个模块，而是一个文件，`notes.js`。我们需要做的是告诉 Node 文件的位置，使用相对路径。
+
+现在，相对路径以`./`（点斜杠）开头，指向文件所在的当前目录。在这种情况下，这将指向我们的项目根目录`notes-node`的`app.js`目录。从这里开始，我们不必进入任何其他文件夹来访问`notes.js`，它就在我们项目的根目录中，所以我们可以输入它的名称，如下面的代码所示：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const os = require('os');
+const notes = require('./notes.js');
+
+var user = os.userInfo();
+
+fs.appendFile('greetings.txt', `Hello ${user.username}!`);
+```
+
+有了这个配置，当我们保存`app.js`并运行我们的应用程序时，我们就可以看到发生了什么。我将使用`node app.js`命令运行应用程序：
 
 ![](img/037c3e53-2739-4a42-ae40-953bee14a3ca.png)
 
-As shown in the preceding code output, we get our two logs. First, we get `Starting app.js` and then we get `Starting notes.js`. Now, `Starting notes.js` comes from the `note.js` file, and it only runs because we required the file inside of `app.js`.
+如前面的代码输出所示，我们得到了两个日志。首先，我们得到了`Starting app.js`，然后我们得到了`Starting notes.js`。现在，`Starting notes.js`来自于`note.js`文件，并且它只能执行，因为我们在`app.js`内部需要了这个文件。
 
-Comment out this command line from the `app.js` file, as shown here:
+从`app.js`文件中注释掉这条命令行，如下所示：
 
-[PRE19]
+```js
+console.log('Starting app.js');
 
-Save the file, and rerun it from Terminal; you can see the `notes.js` file never executes because we never explicitly touch it.
+const fs = require('fs');
+const os = require('os');
+// const notes = require('./notes.js');
 
-We never call it inside Terminal as we do in the preceding example, and we never require.
+var user = os.userInfo();
 
-For now though, we will be requiring it, so I'll uncomment that line.
+fs.appendFile('greetings.txt', `Hello ${user.username}!`);
+```
 
-By the way, I'm using command / (forward slash) to comment and uncomment lines quickly. This is a keyboard shortcut available in most text editors; if you're on Windows or Linux, it might not be *command*, it might be *Ctrl* or something else.
+保存文件，并从终端重新运行它；您可以看到`notes.js`文件从未被执行，因为我们从未明确地触摸它。
 
-# Exporting files from note.js to use in app.js
+我们从来没有像前面的示例那样在终端中调用它，并且我们也从未 require 过。
 
-For now though, the focus will be to export something from `notes.js` which we can use in `app.js`. Inside `notes.js` (actually, inside all of our Node files), we have access to a variable called `module`. I'll use `console.log` to print `module` to the screen so that we can explore it over in Terminal, as shown here:
+目前，我们将需要 require 它，所以我将取消注释。
 
-[PRE20]
+顺便说一下，我使用命令/（斜线）来快速注释和取消注释行。这是大多数文本编辑器中可用的键盘快捷键；如果您使用的是 Windows 或 Linux，它可能不是*command*，可能是*Ctrl*或其他内容。
 
-Let's rerun the file to explore it. As shown in the following screenshot, we get a pretty big object, that is, different properties related to the `notes.js` file:
+# 从 notes.js 中导出文件以在 app.js 中使用
+
+现在，焦点将是从`notes.js`中导出东西，我们可以在`app.js`中使用。在`notes.js`内部（实际上，在我们所有的 Node 文件中），我们可以访问一个名为`module`的变量。我会用`console.log`来将`module`打印到屏幕上，这样我们就可以在终端中探索它，如下所示：
+
+```js
+console.log('Starting notes.js');
+
+console.log(module);
+```
+
+让我们重新运行文件来探索它。如下截图所示，我们得到了一个相当大的对象，即与`notes.js`文件相关的不同属性：
 
 ![](img/a98531ef-4b8b-4456-99b1-5c2e44de387a.png)
 
-Now, to tell the truth, we'll not be using most of these properties. We have things such as `id`, `exports`, `parent`, and `filename`. The only one property we'll ever use in this book is `exports`.
+现在，说实话，我们将不会使用大部分这些属性。我们有诸如`id`、`exports`、`parent`和`filename`之类的东西。在本书中，我们唯一会使用的属性是`exports`。
 
-The `exports` object on the `module` property and everything on this object gets exported. This object gets set as the `const` variable, `notes`. This means that we can set properties on it, they will get set on notes, and we can use them inside `app.js`.
+`exports`对象位于`module`属性上，该对象上的一切都会被导出。此对象会被设置为`const`变量`notes`。这意味着我们可以在其上设置属性，它们将被设置在 notes 上，并且我们可以在`app.js`内部使用它们。
 
-# A simple example of the working of the exports object
+# exports 对象工作的一个简单示例
 
-Let's take a quick look at how that works. What we'll do is to define an `age` property using `module.exports`, the object we just explored over in Terminal. Also, we know that it's an object because we can see it in the preceding screenshot (`exports: {}`); this means that I can add a property, `age`, and set it equal to my age, which is `25`, as shown here:
+让我们快速看看它是如何工作的。我们将定义一个`age`属性使用`module.exports`，刚刚在终端中探索过的对象。我们知道这是一个对象，因为我们在之前的截图中可以看到（`exports: {}`）；这意味着我可以添加一个属性`age`，并将其设置为我的年龄`25`，如下所示：
 
-[PRE21]
+```js
+console.log('Starting notes.js');
 
-Then I can save this file and move into `app.js` to take advantage of this new `age` property. The `const` variable notes will be storing all of my exports, in the present case, just age.
+module.exports.age = 25;
+```
 
-In `fs.appendFile`, after the `greeting.txt` file, I'll add `You are` followed by the age. Inside template strings, we will use `$` with curly braces, `notes.age`, and a period at the end, as shown here:
+然后我可以保存这个文件并移动到`app.js`利用这个新的`age`属性。在当前情况下，`const`变量 notes 将存储我所有的输出，现在只有 age。
 
-[PRE22]
+在`fs.appendFile`中，`greeting.txt`文件后面，我将添加`You are`，然后是年龄。在模板字符串内，我们将使用`$`和花括号，`notes.age`，以及末尾的句号，如下所示：
 
-Now our greeting should say `Hello Gary! You are 25`. It's getting the `25` value from our separate file (that is, `note.js`), which is fantastic.
+```js
+console.log('Starting app.js');
 
-Let's take a quick moment to rerun the program over in Terminal using the up arrow key and e*nter* keys:
+const fs = require('fs');
+const os = require('os');
+const notes = require('./notes.js');
+
+var user = os.userInfo();
+
+fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+现在我们的问候应该是`Hello Gary! You are 25`。它得到了我们单独文件（即`note.js`）中的`25`值，这太棒了。
+
+让我们花点时间使用上箭头键和回车键在终端重新运行程序：
 
 ![](img/093236f1-6c23-40e7-8649-618d90932157.png)
 
-Back inside the app, we can open `greetings.txt`, and as shown in the following screenshot, we have `Hello Gary! You are 25`:
+回到应用程序内部，我们可以打开`greetings.txt`，如下截图所示，我们有`Hello Gary! You are 25`：
 
 ![](img/087ca523-8167-4c0d-8ae4-0617bed2c9a0.png)
 
-Using `require()`, we were able to require a file that we created, and this file stored some properties that were advantageous to the rest of the project.
+使用`require()`，我们能够引入一个我们创建的文件，这个文件存储了对项目其他部分有利的一些属性。
 
-# Exporting the functions
+# 导出函数
 
-Now, obviously, the preceding example is pretty contrived. We'll not be exporting static numbers; the real goal of exports is to be able to export functions that get used inside `app.js`. Let's take a quick moment to export two functions. In the `notes.js` file, I'll set `module.exports.addnote` equal to a function; the `function` keyword followed by opening and closing parentheses, which is followed by the curly braces:
+很明显，上面的例子是相当刻意的。我们不会导出静态数字；导出的真正目的是能够导出在`app.js`内部使用的函数。让我们花点时间导出两个函数。在`notes.js`文件中，我将设置`module.exports.addnote`等于一个函数；`function`关键字后跟随圆括号，然后是花括号：
 
-[PRE23]
+```js
+console.log('Starting notes.js');
 
-Now, throughout the course, I'll be using arrow functions where I can, as shown in the preceding code. To convert a regular ES5 function into an arrow function, all you do is remove the `function` keyword and replace it with an `=>` sign right between the parentheses and the opening curly braces, as shown here:
+module.exports.addNote = function () {
 
-[PRE24]
+} 
+```
 
-Now, there are some more subtleties to arrow functions that we'll be talking about throughout the book, but if you have an anonymous function, you can swap it with an arrow function without any problems. The big difference is that the arrow function is not going to bind the `() => {}` keyword or the arguments array, which we'll be exploring throughout the book. So if you do get some errors, it's good to know that the arrow function could be the cause.
+现在，在整个课程中，我将尽可能使用箭头函数，如前面的代码所示。要将常规的 ES5 函数转换为箭头函数，你只需删除`function`关键字，然后在括号和开放花括号之间用`=>`符号替换，如下所示：
 
-For now though, we'll keep things really simple, using `console.log` to print `addNote`. This will let us know that the `addNote` function was called. We'll return a string, `'New note'`, as shown here:
+```js
+console.log('Starting notes.js');
 
-[PRE25]
+module.exports.addNote = () => {
 
-Now, the `addNote` function is being defined in `notes.js`, but we can take advantage of it over in `app.js`.
+} 
+```
 
-Let's take a quick second to comment out both the `appendFile` and user line in `app.js`:
+现在，箭头函数还有一些更微妙的地方需要在整本书中讨论，但如果你有一个匿名函数，你可以毫不费力地用箭头函数代替。主要区别在于箭头函数不会绑定`() => {}`关键字或参数数组，这是我们将在整本书中探讨的。所以如果你遇到一些错误，知道箭头函数可能是引起错误的原因是很好的。
 
-[PRE26]
+不过目前，我们将保持事情非常简单，使用`console.log`来打印`addNote`。这将让我们知道`addNote`函数已被调用。我们将返回一个字符串，`'New note'`，如下所示：
 
-I'll add a variable, call the result, (`res` for short), and set it equal to the return result from `notes.addNote`:
+```js
+console.log('Starting notes.js');
 
-[PRE27]
+module.exports.addNote = () => {
+  console.log('addNote');
+  return 'New note';
+};
+```
 
-Now, the `addNote` function is a dummy function for the moment. It doesn't take any arguments and it doesn't actually do anything, so we can call it without any arguments.
+现在，`addNote`函数在`notes.js`中被定义了，但我们可以在`app.js`中利用它。
 
-Then we'll print the result variable, as shown in the following code, and we would expect the result variable to be equal to the `New note` string:
+让我们快速地注释掉`app.js`中的`appendFile`和用户行：
 
-[PRE28]
+```js
+console.log('Starting app.js');
 
-If I save both of my files (`app.js` and `notes.js`) and rerun things from Terminal, you can see that `New note` prints to the screen at the very end and just before `addNote` prints:
+const fs = require('fs');
+const os = require('os');
+const notes = require('./notes.js');
+
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+我将添加一个变量，称为结果，（简称`res`），并将其设置为`notes.addNote`的返回结果：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const os = require('os');
+const notes = require('./notes.js');
+
+var res = notes.addNote();
+
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+现在，`addNote`函数目前只是一个虚拟函数。它不需要任何参数，也实际上什么也不做，所以我们可以无需任何参数地调用它。
+
+然后我们将打印结果变量，如下面的代码所示，我们期望结果变量等于字符串`New note`：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const os = require('os');
+const notes = require('./notes.js');
+
+var res = notes.addNote();
+console.log(res);
+
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+如果我保存我的两个文件（`app.js`和`notes.js`），然后在终端重新运行，你会看到`New note`打印到屏幕最后并在`addNote`之前打印：
 
 ![](img/effc1e66-5430-4eda-a5b0-9c0496ffcaa5.png)
 
-This means that we successfully required the notes file we called `addNote`, and its return result was successfully returned to `app.js`.
+这意味着我们成功地引入了我们称为`addNote`的笔记文件，并且它的返回结果成功地返回给了`app.js`。
 
-Using this exact pattern, we'll be able to define our functions for adding and removing notes over in our `notes.js` file, but we'll be able to call them anywhere inside of our app, including in `app.js`.
+使用这个确切的模式，我们将能够在我们的`notes.js`文件中定义添加和删除笔记的函数，但我们将能够在我们的应用程序内的任何地方调用它们，包括在`app.js`中。
 
-# Exercise – adding a new function to the export object
+# 练习 - 在导出对象中添加一个新函数
 
-Now it's time for a quick challenge. What I'd like you to do is make a new function in `notes.js` called `add`. This `add` function will get set on the `exports` object.
+现在是时候进行一个快速的挑战了。我想让你在`notes.js`中创建一个名为`add`的新函数。这个`add`函数将被设置在`exports`对象上。
 
-Remember, `exports` is an object, so you can set multiple properties.
+记住，`exports`是一个对象，所以你可以设置多个属性。
 
-This `add` function will take two arguments, `a` and `b`; it'll add them together and return the result. Then over in `app.js`, I'd like you to call that `add` function, passing in two numbers, whatever you like, such as `9` and `-2`, then print the result to the screen and make sure it works correctly.
+这个`add`函数将接受两个参数`a`和`b`；它会将它们相加并返回结果。然后在`app.js`中，我想让你调用`add`函数，传入两个你喜欢的数字，比如`9`和`-2`，然后将结果打印到屏幕上并确保它正常工作。
 
-You can get started by removing the call to `addNote` since this will not be needed for the challenge.
+你可以开始移除对`addNote`的调用，因为在这个挑战中将不再需要它。
 
-So, take a moment, create that `add` function inside `notes.js`, call it inside `app.js`, and make sure the proper result prints to the screen. How'd it go? Hopefully, you were able to make that function and call it from `app.js`.
+所以，请花一点时间，在`notes.js`内创建`add`函数，在`app.js`内调用它，并确保正确的结果打印到屏幕上。进行得如何？希望你能够创建该函数并从`app.js`中调用它。
 
-# Solution to the exercise
+# 练习的解决方案
 
-The first step in the process will be to define the new function. In `notes.js`, I'll set `module.exports.add` equal to that function, as shown here:
+过程中的第一步是定义新函数。在`notes.js`中，我将`module.exports.add`设置为该函数，如下所示：
 
-[PRE29]
+```js
+console.log('Starting notes.js');
 
-Let's set it equal to an arrow function. If you used a regular function, that is perfectly fine, I just prefer using the arrow function when I can. Also, inside parentheses, we will be getting two arguments, we'll be getting `a` and `b`, as shown here:
+module.exports.addNote = () => {
+  console.log('addNote');
+  return 'New note';
+}; 
 
-[PRE30]
+module.exports.add =
+```
 
-All we need to do is return the result, which is really simple. So we'll enter `return a + b`:
+让我们将其等于箭头函数。如果你使用普通函数，那完全没问题，我只是更喜欢在我可以的时候使用箭头函数。此外，在括号内，我们将会有两个参数，我们将得到`a`和`b`，就像这里展示的一样：
 
-[PRE31]
+```js
+console.log('Starting notes.js');
 
-Now, this was the first part of your challenge, defining a utility function in `notes.js`; the second part was to actually use it over in `app.js`.
+module.exports.addNote = () => {
+  console.log('addNote');
+  return 'New note';
+}; 
 
-In `app.js`, we can use our function by printing the `console.log` result with a colon `:` (this is just for formatting). As the second argument, we'll print the actual results, `notes.add`. Then, we'll add up two numbers; we'll add `9` and `-2`, as shown in this code:
+module.exports.add = (a, b) => {
 
-[PRE32]
+};
+```
 
-The result in this case should be `7`. If we run the program you can see that we get just that, `7` prints to the screen:
+我们需要做的只是返回结果，这非常简单。所以我们将输入`return a + b`：
+
+```js
+console.log('Starting notes.js');
+
+module.exports.addNote = () => {
+  console.log('addNote');
+  return 'New note';
+}; 
+
+module.exports.add = (a, b) => {
+  return a + b;
+};
+```
+
+现在，这是你的挑战的第一部分，在`notes.js`中定义一个实用函数；第二部分是实际在`app.js`中使用它。
+
+在`app.js`中，我们可以通过打印带有冒号`:`的`console.log`结果来使用我们的函数（这只是为了格式化）。作为第二个参数，我们将打印实际结果，`notes.add`。然后，我们将两个数字相加；我们将加上`9`和`-2`，就像这段代码展示的那样：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const os = require('os');
+const notes = require('./notes.js');
+
+console.log('Result:', notes.add(9, -2));
+
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+在这种情况下，结果应该是`7`。如果我们运行程序，你可以看到，我们得到了`7`，它打印到屏幕上：
 
 ![](img/2d99dcfd-a8d3-4bee-9ed0-3cb9376d14e6.png)
 
-If you were able to get this, congratulations, you successfully completed one of your first challenges. These challenges will be sprinkled throughout the book and they'll get progressively more complex. But don't worry, we'll keep the challenges pretty explicit; I'll tell you exactly what I want and exactly how I want it done. Now, you can play around with different ways to do it, the real goal is to just get you writing code independent of following someone else's lead. That is where the real learning happens.
+如果你能理解这个，恭喜你，你成功完成了你的第一个挑战。这些挑战将分布在整本书中，并且会变得越来越复杂。但不要担心，我们会将挑战描述得很明确；我会告诉你我想要什么，以及我想要它如何完成。现在，你可以尝试不同的方法去做，真正的目标是让你能够独立编写代码，而不是跟随他人的步伐。这才是真正的学习过程。
 
-In the next section, we will explore how to use third-party modules. From there, we'll start building the notes application.
+在下一节中，我们将探讨如何使用第三方模块。从那里开始，我们将开始构建笔记应用程序。
 
-# Third-party modules
+# 第三方模块
 
-You now know two out of the three ways to use `require()`, and in this section, we'll explore the last way, which is to require a package you've installed from npm. As I mentioned in the first chapter, npm is a big part of what makes Node so fantastic. There is a huge community of developers that have created thousands of packages that already solve some of the most common problems in Node applications. We will be taking advantage of quite a few packages throughout the book.
+你现在已经知道了使用`require()`的三种方式中的两种，在本节中，我们将探索最后一种方式，即要求你从 npm 安装的软件包中获取。正如我在第一章中提到的，npm 是 Node 变得如此奇妙的重要部分。有一个庞大的开发者社区已经创建了成千上万的软件包，已经解决了 Node 应用程序中一些最常见的问题。我们将在整本书中利用相当多的软件包。
 
-# Creating projects using npm modules
+# 使用 npm 模块创建项目
 
-Now, in the npm packages, there's nothing magical, it's regular Node code that aims to solve a specific problem. The reason you'd want to use it is so you don't have to spend all your time writing these utility functions that already exist; not only do they exist, they've been tested, they've been proven to work, and others have used them and documented them.
+现在，在 npm 软件包中，没有什么神奇的，这是普通的 Node 代码，旨在解决特定的问题。你想要使用它的原因是，这样你就不必花费所有时间编写这些已经存在的实用函数；它们不仅存在，而且已经经过测试，已经被证明有效，而且其他人已经使用它们并记录了它们。
 
-Now, with all that said, how do we get started? Well, to get started, we actually have to run a command from the Terminal to tell our application we want to use npm modules. This command will be run over in the Terminal. Make sure you've navigated inside your project folder and inside the `notes-node` directory. Now, when you installed Node, you also installed something called npm.
+现在，这么多话说了，我们应该如何开始呢？好吧，要开始，我们实际上必须从终端运行一个命令，告诉我们的应用程序我们想要使用 npm 模块。这个命令将在终端上运行。确保你已经进入了你的项目文件夹，并且在`notes-node`目录中。当你安装了 Node 时，你也安装了一个叫做 npm 的东西。
 
-At one point, npm stood for **Node package manager**, but that's now a running joke because there are plenty of things on npm that are not specific to Node. A lot of frontend frameworks, such as jQuery and react, now live on npm as well, so they've pretty much ditched the Node package manager explanation and now on their site, they cycle through a bunch of hilarious things that happen to match up with npm.
+有一段时间，npm 代表**Node 包管理器**，但那现在是一个笑话，因为有很多东西在 npm 上并不特定于 Node。许多前端框架，如 jQuery 和 react，现在也存在于 npm 上，所以他们几乎抛弃了 Node 包管理器的解释，在他们的网站上，现在他们循环播放一堆与 npm 相匹配的滑稽事情。
 
-We will be running some npm commands and you can test that you have it installed by running `npm`, a space, and `-v` (we're running npm with the `v` flag). This should print the version, as shown in the following code:
+我们将运行一些 npm 命令，你可以通过运行`npm`，一个空格，和`-v`（我们正在用`v`标志运行 npm）。这将打印版本，如下面的代码所示：
 
 ![](img/2fbd827c-06bf-47f8-b0cd-c92078d62e5d.png)
 
-It's okay if your version is slightly different, that's not important; what is important is that you have npm installed.
+如果你的版本略有不同，也没有关系；重要的是你已经安装了 npm。
 
-Now, we'll run a command called `npm init` in Terminal. This command will prompt us to fill out a few questions about our npm project. We can run the command and we can cycle through the questions, as shown in the following screenshot:
+现在，我们将在终端中运行一个名为`npm init`的命令。这个命令将提示我们回答关于我们的 npm 项目的一些问题。我们可以运行这个命令，并且可以按照下面的截图循环回答问题：
 
 ![](img/fa3bdede-390d-4877-b36f-fab82a4d2bbb.png)
 
-In the preceding screenshot, at the top is a quick description of what's happening, and down below it'll start asking you a few questions, as shown in the following screenshot:
+在上述截图中，顶部是正在发生的事情的快速描述，下面将开始提出一些问题，如下面的截图所示：
 
 ![](img/8d36696c-4caf-408a-b352-db86a16cf7e7.png)
 
-The questions include the following:
+这些问题包括以下内容：
 
-*   name: Your name can't have uppercase characters or spaces; you can use `notes-node`, for example. You can hit *enter* to use the default value, which is in parentheses.
-*   version: 1.0.0 works fine too; we will leave most of these at their default value.
-*   description: We can leave this empty at the moment.
-*   entry point: This will be `app.js`, make sure that shows up properly.
-*   test command: We'll explore testing later in the book, so for now, we can leave this empty.
-*   git repository: We'll leave that empty for now as well.
-*   keywords: These are used for searching for modules. We'll not be publishing this module so we can leave those empty.
-*   author: You might as well type your name.
-*   license: For the license, we'll stick with ISC at the moment; since we're not publishing it, it doesn't really matter.
++   名称：你的名称不能包含大写字符或空格；你可以使用`notes-node`，例如。你可以按“回车”使用默认值，括号中就是默认值。
 
-After answering these questions, if we hit e*nter*, we'll get the following on our screen and a final question:
++   版本：1.0.0 也可以正常工作；我们将大多数设置保留在默认值。
+
++   描述：我们暂时可以将其保留为空。
+
++   入口点：这将是`app.js`，确保它正确显示。
+
++   测试命令：我们将在本书的后面探索测试，所以现在可以将其保留为空。
+
++   git 仓库：我们现在也将其保留为空。
+
++   关键词：这些用于搜索模块。我们不会发布这个模块，所以可以将其保留为空。
+
++   作者：你可能会输入你的名字。
+
++   许可证：对于许可证，我们暂时将使用 ISC；因为我们不打算发布它，所以这并不重要。
+
+回答了这些问题后，如果我们按“回车”，我们将在屏幕上看到以下内容和一个最终问题：
 
 ![](img/e71f1d89-0400-4a57-8405-8cbfceead0f6.png)
 
-Now, I want to dispel the myth that this command is doing anything magical. All this command is doing is creating a single file inside your project. It'll be in the root of the project and it's called `package.json`, and the file will look exactly like the preceding screenshot.
+现在，我想驱散这个命令有任何神奇的谣言。这个命令所做的就是在你的项目内创建一个单个文件。它将位于项目的根目录，并且被称为`package.json`，该文件将与上述截图完全一样。
 
-To the final question, as shown down below in the preceding image, you can hit e*nter* or type `yes` to confirm that this is what you want to do:
+对于最后一个问题，如上面截图下面所示，你可以按“回车”或者输入`yes`来确认这是你想要做的事情：
 
 ![](img/9be2c9e8-b3f9-4a8b-a116-058652e2f3e7.jpg)
 
-Now that we have created the file, we can actually view it inside our project. As shown in the following code, we have the `package.json` file:
+现在我们已经创建了文件，我们可以实际在项目内查看它。如下面的代码所示，我们有`package.json`文件：
 
-[PRE33]
+```js
+{
+  "name": "notes-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+```
 
-And this is all it is, it's a simple description of your application. Now, as I mentioned, we'll not be publishing our app to npm, so a lot of this information really isn't important to us. What is important, though, is that `package.json` is where we define the third-party modules we want to install in our application.
+并且这就是它，这是对你的应用程序的简单描述。就像我提到的，我们不打算将我们的应用程序发布到 npm 上，所以很多这些信息对我们来说并不重要。然而，重要的是，`package.json`是我们定义要在应用程序中安装的第三方模块的地方。
 
-# Installing the lodash module in our app
+# 在我们的应用程序中安装 lodash 模块
 
-To install a module in the app, we will run a command over in the Terminal. In this chapter, we'll be installing a module called `lodash`. The `lodash` module comes with a ton of utility methods and functions that make developing inside Node or JavaScript a heck of a lot easier. To take a look at what exactly we're getting into, let's move into the browser.
+要在应用程序中安装模块，我们将在终端中运行一个命令。在本章中，我们将安装一个名为`lodash`的模块。`lodash`模块附带了大量的实用方法和函数，使得在 Node 或 JavaScript 中开发变得更加容易。让我们看看我们到底要接触到什么，让我们进入浏览器。
 
-We'll to go to [`www.npmjs.com`](https://www.npmjs.com). Then we'll search for the package, `lodash`, and you can see it comes up, as shown in the following screenshot:
+我们将前往[`www.npmjs.com`](https://www.npmjs.com)。然后我们将搜索`lodash`包，你会看到它出现在下面的截图中：
 
 ![](img/76628499-5b5d-48cd-af2b-adbb78842b1a.png)
 
-When you click on it, you should be taken to the package page, and the package page will show you a lot of statistics about the module and the documentation, as shown here:
+当你点击它时，你应该会进入到包页面，包页面将向你展示有关该模块的很多统计信息和文档，如下所示：
 
 ![](img/3d77137e-bdad-4eb0-a259-d73aedbdbe5f.png)
 
-Now, I use the `lodash` package page when I'm looking for new modules; I like to see how many downloads it has and when it was last updated. On the package page, you can see it was updated recently, which is great it means the package is most likely compatible with the latest versions of Node, and if you go further down the page, you can see this is actually one of the most popular npm packages, with over a million downloads a day. We will be using this module to explore how to install npm modules and how to actually use them in a project.
+现在，我在寻找新模块时使用`lodash`包页面；我喜欢看看它有多少下载量以及上次更新是什么时候。在包页面上，你可以看到它最近更新过，这很棒，这意味着该包很可能与 Node 的最新版本兼容，如果你向页面下方看，你会看到这实际上是一个最受欢迎的 npm 包之一，每天有超过一百万次的下载。我们将使用这个模块来探索如何安装 npm 模块以及如何在项目中实际使用它们。
 
-# Installation of lodash
+# 安装 lodash
 
-To install `lodash`, the first thing you need to grab is just a module name, which is `lodash`. Once you have that information, you're ready to install it.
+要安装`lodash`，你需要的第一件事就是获取一个模块名，就是`lodash`。一旦你有了这个信息，你就可以开始安装了。
 
-Coming to Terminal, we'll run the `npm install` command. After installing, we'll specify the module, `lodash`. Now, this command alone would work; what we'll also do, though, is provide the `save` flag.
+进入终端，我们将运行`npm install`命令。在安装后，我们将指定模块`lodash`。单独运行这个命令也可以；但我们还会提供`save`标志。
 
-The `npm install lodash` command will install the module, and the `save` flag, `--` (two) hyphens followed by the word `save`, will update the contents of the `package.json` file. Let's run this command:
+`npm install lodash`命令将安装该模块，`save`标志，即`--`（两个）破折号后跟单词`save`，将更新`package.json`文件的内容。让我们运行这个命令：
 
-[PRE34]
+```js
+npm install loadsh --save
+```
 
-The preceding command will go off to the npm servers and fetch the code and install it inside your project, and any time you install an npm module, it'll live in your project in a `node_modules` folder.
+上述命令将前往 npm 服务器并获取代码，然后将其安装到你的项目中，每当你安装一个 npm 模块时，它都将存放在`node_modules`文件夹中。
 
-Now, if you open that `node_modules` folder, you'll see the `lodash` folder as shown in the following code. This is the module that we just installed:
+现在，如果你打开`node_modules`文件夹，你会看到下面的代码所示的`lodash`文件夹。这就是我们刚刚安装的模块：
 
-[PRE35]
+```js
+{
+  "name": "notes-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
+```
 
-As you can see over in `package.json` in the preceding figure, we've also had some updates automatically take place. There's a new `dependencies` attribute that has an object with key value pairs, where the key is the module we want to use in our project and the value is the version number, in this case, the most recent version, version `4.17.4`. With this in place, we can now require our module inside the project.
+就像您在上图的`package.json`中所看到的那样，我们还进行了一些自动更新。有一个新的`dependencies`属性，其中有一个键值对对象，其中键是我们想在项目中使用的模块，值是版本号，本例中是最新版本，版本`4.17.4`。有了这个，我们现在可以在项目中引入我们的模块了。
 
-Over inside `app.js`, we can take advantage of everything that comes in `lodash` by going through the same process of requiring it. We'll make a `const`, we'll name that `const _`, (which is a common name for the `lodash` utility library), and we'll set it equal to `require()`. Inside the require parentheses, we'll pass in the module name exactly as it appears in the `package.json` file. This is the same module name you used when you ran `npm install`. Then, we'll type `lodash`, as shown here:
+在`app.js`内部，我们可以通过相同的要求过程利用`lodash`中的所有内容。我们将创建一个`const`，我们将把这个`const`命名为`_`（这是`lodash`实用程序库的常见名称），并将其设置为`require()`。在 require 括号内，我们将传入与`package.json`文件中完全相同的模块名称。这是您在运行`npm install`时所使用的相同模块名称。然后，我们会输入`lodash`，如下所示：
 
-[PRE36]
+```js
+console.log('Starting app.js');
 
-Now, the order of operations is pretty important here. Node will first look for a core module with the name `lodash`. It'll not find one because there is no core module, so the next place it will look is the `node_modules` folder. As shown in the following code, it will find `lodash` and load that module, returning any of the exports it provides:
+const fs = require('fs');
+const os = require('os');
+const _ = require('lodash');
+const notes = require('./notes.js');
 
-[PRE37]
+console.log('Result:', notes.add(9, -2));
 
-# Using the utilities of lodash
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
 
-With the exports in place, we can now take advantage of some of the utilities that come with Lodash. We'll quickly explore two in this section, and we'll be exploring more throughout the book since Lodash is basically just a set of really handy utilities. Before we do, we should take a look at the documentation so we know exactly what we're getting into.
+现在，操作的顺序非常重要。Node 首先会查找`lodash`的核心模块。它找不到核心模块，所以下一个地方它会查找是`node_modules`文件夹。如下代码所示，它会找到`lodash`并加载该模块，返回任何它提供的输出：
 
-This is a really common step when you're using an npm module: first, you install it; second, you've got to look at those docs and make sure that you can get done what you want to get done.
+```js
+console.log('Starting app.js');
 
-On the npm page, click the lodash link given there, or go to [lodash.com](https://lodash.com) and click the API Documentation page, as shown here:
+const fs = require('fs');
+const os = require('os');
+const _ = require('lodash');
+const notes = require('./notes.js');
+
+console.log('Result:', notes.add(9, -2));
+
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+# 使用 Lodash 的实用工具
+
+现在，有了输出，我们可以利用 Lodash 带来的一些实用工具。我们将在本节快速探讨其中的两个，并且在整本书中将更多地探索，因为 Lodash 基本上就是一组非常实用的工具。在我们开始之前，我们应该先看一下文档，这样我们才知道我们要做什么。
+
+当您使用 npm 模块时，这是一个非常常见的步骤：首先安装它；第二，你必须查看那些文档，并确保你能做你想做的事情。
+
+在 npm 页面上，点击那里给出的 lodash 链接，或者前往[lodash.com](https://lodash.com)，点击 API 文档页面，如下所示：
 
 ![](img/7e1fe429-f974-4343-b6d8-c522192df5d9.png)
 
-You can view all of the various methods you have available to you, as shown in the following screenshot:
+您可以查看您可用的各种方法，如下截图所示：
 
 ![](img/1396d946-2797-48fe-ba6a-877176597a7f.png)
 
-In our case, we'll be using *command* + *F* (*Ctrl* + *F* for Windows users) to search for `_.isString`. Then in the docs, we can click on it, opening it up in the main page, as shown in the following screenshot:
+在我们的情况下，我们将使用*command* + *F*（Windows 用户为*Ctrl* + *F*）来搜索`_.isString`。然后在文档中，我们可以点击它，将其在主页面打开，如下截图所示：
 
 ![](img/cb9b613b-b3cf-438e-94c1-2e3cef5ad7af.png)
 
-The `_.isString` is a utility that comes with `lodash`, and it returns `true` if the variable you pass in is a string, and it returns `false` if the value you pass in is not a string. And we can prove that by using it over in Atom. Let's use this.
+`_.isString`是与 `lodash` 一起的一个实用工具，如果您传入的变量是字符串，它将返回`true`，如果您传入的值不是字符串，它将返回`false`。我们可以在 Atom 中使用它来验证。让我们来试一试。
 
-# Using the _.isString utility
+# 使用 _.isString 实用工具
 
-To use the `_.isString` utility, we'll add `console.log` in `app.js` to show the result to the screen and we'll use `_.isString`, passing in a couple of values. Let's pass in `true` first, then we can duplicate this line and we'll pass in a string such as `Gary`, as shown here:
+要使用`_.isString`实用程序，我们将在`app.js`中添加`console.log`以显示结果并且我们将使用`_.isString`，传入一些值。首先让我们传入`true`，然后我们可以复制这行，并传入一个字符串，比如`Gary`，如下所示：
 
-[PRE38]
+```js
+console.log('Starting app.js');
 
-We can run our project over in the Terminal using the same command we've used previously, `node app.js`, to run our file:
+const fs = require('fs');
+const os = require('os');
+const _ = require('lodash');
+const notes = require('./notes.js');
+
+console.log(_.isString(true));
+console.log(_.isString('Gary'));
+
+// console.log('Result:', notes.add(9, -2));
+
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+我们可以在终端中使用先前使用的相同命令`node app.js`来运行我们的文件：
 
 ![](img/9561c991-5646-4e82-a72e-3ccbb9a76eb6.png)
 
-When we run the file, we get our two prompts that we've started both files, and we get `false` and then `true`. `false` comes because the Boolean is not a string, and `true` comes up because `Gary` is indeed a string, so it passes the test of `_.isString`. This is one of the many utility functions that comes bundled with `lodash`.
+当我们运行文件时，我们会得到两个提示，一个是我们已经开始了两个文件，一个是`false`，然后是`true`。 `false` 是因为布尔值不是字符串，`true` 是因为 `Gary` 确实是一个字符串，所以它通过了`_.isString`的测试。这是`lodash`捆绑的许多实用函数中的一个。
 
-Now, `lodash` can do a lot more than simple type checking. It comes with a bunch of other utility methods we can take advantage of. Let's explore one more utility.
+现在，`lodash`可以做的远不止简单的类型检查。它附带了一堆其他我们可以利用的实用方法。让我们探索另一个实用程序。
 
-# Using _.uniq
+# 使用 _.uniq
 
-Back inside the browser, we can use c*ommand + F* again to search for a new utility, which is `_.uniq`:
+回到浏览器中，我们可以再次使用`command + F`来搜索一个新的实用程序，即`_.uniq`：
 
 ![](img/d4ce4612-1d7d-40cb-8d7e-67113d61f06b.png)
 
-This unique method, simply takes an array and it returns that array with all duplicates removed. That means if I have the same number a few times or the same string, it'll remove any duplicates. Let's run this.
+这个唯一的方法，简单地获取一个数组，并返回删除所有重复项的数组。这意味着如果我有好几次相同的数字或相同的字符串，它将删除任何重复内容。让我们运行一下。
 
-Back inside Atom, we can add this utility into our project, we'll comment out our `_.isString` calls and we will make a variable called `filteredArray`. This will be the array without the duplicates, and what we'll do is call, after the equal sign, `_.uniq`.
+回到 Atom 中，我们可以将这个实用工具添加到我们的项目中，我们将注释掉`_.isString`的调用，并且我们将创建一个名为`filteredArray`的变量。这将是没有重复项的数组，我们将调用`_.uniq`。
 
-Now, as we know, this takes an array. And since we're trying to use the unique function, we'll pass in an array with some duplicates. Use your name twice as a string; I'll use my name once, followed by the number `1`, followed by my name again. Then I can use `1`, `2`, `3`, and `4` as shown here:
+现在，正如我们所知，这需要一个数组。由于我们正在尝试使用唯一功能，我们将传入一个具有一些重复项的数组。将你的名字作为字符串用两次；我将使用一次我的名字，然后跟着数字`1`，然后再用一次我的名字。然后我可以使用`1`，`2`，`3`和`4`，如下所示：
 
-[PRE39]
+```js
+console.log('Starting app.js');
 
-Now, if things go as planned, we should get an array with all the duplicates removed, which means we'll have one instance of `Gary`, one instance of `1`, and then `2`, `3`, and `4`, which don't have duplicates.
+const fs = require('fs');
+const os = require('os');
+const _ = require('lodash');
+const notes = require('./notes.js');
 
-The last thing to do is to print that using `console.log` so we can view it inside the Terminal. I'll pass in this `filteredArray` variable to our `console.log` statement as shown in the following code:
+// console.log(_.isString(true));
+// console.log(_.isString('Gary'));
+var filteredArray = _.uniq(['Gary', 1, 'Gary', 1, 2, 3, 4]);
+console.log();
 
-[PRE40]
+// console.log('Result:', notes.add(9, -2));
 
-From here, we can run our project inside Node. I'll use the last command, then I can press the e*nter* key, and you can see we get our array with all duplicates removed, as shown in the following code output:
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+现在，如果一切按计划进行，我们应该得到一个删除了所有重复项的数组，这意味着我们将有一个`Gary`的实例，一个`1`的实例，然后没有重复的`2`，`3`和`4`。
+
+最后要做的事情是用`console.log`打印出来，这样我们就可以在终端中查看了。我将把这个`filteredArray`变量传递给我们的`console.log`语句，如下面的代码所示：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const os = require('os');
+const _ = require('lodash');
+const notes = require('./notes.js');
+
+// console.log(_.isString(true));
+// console.log(_.isString('Gary'));
+var filteredArray = _.uniq(['Gary', 1, 'Gary', 1, 2, 3, 4]);
+console.log(filteredArray);
+
+// console.log('Result:', notes.add(9, -2));
+
+// var user = os.userInfo();
+//
+// fs.appendFile('greetings.txt', `Hello ${user.username}! You are ${notes.age}.`);
+```
+
+从这里，我们可以在 Node 中运行我们的项目。我将使用上次的命令，然后我可以按下回车键，你会看到我们得到了一个删除了所有重复项的数组，如下代码输出所示：
 
 ![](img/36269bde-30dd-40e0-83e2-54aeaaba939a.png)
 
-We have one instance of the string `Gary`, one instance of the number `1`, and then we have `2`, `3`, `4`, exactly what we expected.
+我们有一个字符串`Gary`的实例，一个数字`1`的实例，然后有`2`，`3`，`4`，正是我们所期望的。
 
-The `lodash` utility really is endless. There are so many functions that it can be kind of overwhelming to explore at first, but as you start creating more JavaScript and Node projects, you'll find yourself solving a lot of the same problems over and over again when it comes to sorting, filtering, or type checking, and in that case, it's best to use a utility such as `lodash` to get that lifting done. The `lodash` utility is great for the following reasons:
+`lodash`工具确实是无穷无尽的。有很多函数，一开始探索起来可能有点压倒，但当你开始创建更多的 JavaScript 和 Node 项目时，你会发现自己在排序、过滤或类型检查方面一遍又一遍地解决许多相同的问题，在这种情况下，最好使用`lodash`这样的工具来完成这一工作。`lodash`工具之所以如此优秀，有以下几个原因：
 
-*   You don't have to keep rewriting your methods
-*   It is well tested and it has been tried in production
++   你不必不断地重写你的方法
 
-If there were any issues, they've been sorted out by now.
++   经过充分测试，已在生产环境中使用过
 
-# The node_modules folder
+如果有任何问题，现在已经解决了。
 
-Now that you know how to use a third-party module, there is one more thing I want to discuss. That is the `node_modules` folder in general. When you take your Node project and you put it on GitHub, or you're copying it around or sending it to a friend, the `node_modules` folder really shouldn't be taken with you.
+# `node_modules`文件夹
 
-The `node_modules` folder contains generated code. This is not code you've written and you should never make any updates to the files inside Node modules because there's a pretty good chance they'll get overwritten next time you install some modules.
+现在你知道如何使用第三方模块了，我还想讨论一件事。那就是`node_modules`文件夹的一般情况。当你将你的 Node 项目放在 GitHub 上，或者你在拷贝它或发送给朋友时，`node_modules`文件夹实际上不应该跟着一起走。
 
-In our case, we've already defined the modules and the versions inside `package.json` as shown in the following code because we used that handy `save` flag:
+`node_modules`文件夹包含生成的代码。这不是你编写的代码，你不应该对 Node 模块内部的文件进行任何更新，因为很有可能下次安装一些模块时它们会被覆盖。
 
-[PRE41]
+在我们的情况下，我们已经在`package.json`文件中定义了模块和版本，如下面的代码所示，因为我们使用了方便的`save`标志：
 
-This actually means we can delete the `node_modules` folder completely. Now, we can copy the folder and give it to a friend, we can put it on GitHub, or whatever we want to do. When we want to get that `node_modules` folder back, all we have to do inside the Terminal is run the `npm install` command without any module names or any flags.
+```js
+{
+  "name": "notes-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
+```
 
-This command, when run without any names or flags, is going to load in your `package.json` file, grab all of the dependencies and install them. After running this command, the `node_modules` folder is going to look exactly as it looked before we deleted it. Now, when you are using Git and GitHub, instead of deleting the `node_modules` folder, you'll just ignore it from your repository.
+这实际上意味着我们可以彻底删除`node_modules`文件夹。现在，我们可以拷贝这个文件夹并给朋友，可以放在 GitHub 上，或者任何我们想做的事情。当我们想要恢复`node_modules`文件夹时，我们只需在终端内运行`npm install`命令，而不带任何模块名或任何标志。
 
-Now, what we have explored so far is a process we'll be going through a lot more throughout the book. So if npm still seems foreign or you're not quite sure why it's even useful, it will become clear as we do more with our third-party modules, rather than just type checking or looking for unique items in an array. There's a ton of power behind the npm community and we'll be harnessing that to our fullest as we make real-world apps.
+当不带任何名称或标志运行此命令时，它将加载你的`package.json`文件，抓取所有的依赖项并安装它们。运行完这个命令后，`node_modules`文件夹将看起来和我们删除它之前一模一样。现在，当你使用 Git 和 GitHub 时，你只需忽略`node_modules`文件夹，而不是删除它。
 
-# Global modules
+现在，到目前为止我们所探索的内容是我们将在整本书中经常进行的过程。因此，如果 npm 看起来还很陌生，或者你不太确定它到底有什么用，当我们与第三方模块做更多事情时，它将变得清晰明了，而不仅仅是进行类型检查或在数组中查找唯一的项目。npm 社区背后有着巨大的力量，我们将充分利用这一点，以便我们创建真实世界的应用。
 
-One of the major complaints I get is the fact that students have to restart the app from the Terminal every time they want to see the changes they just made inside their text editor. So, in this section, we'll take a look at how we can automatically restart our app as we make changes to the file. That means if I change from `Gary` to `Mike` and save it, it will automatically restart over in the Terminal.
+# 全局模块
 
-# Installing the nodemon module
+我得到的一个主要的抱怨是学生们每次想要在文本编辑器内看到他们刚刚做出的更改时，都必须从终端重新启动应用。因此，在这一部分，我们将学习如何在文件更改时自动重新启动应用程序。这意味着，如果我从`Gary`更改为`Mike`并保存，它将在终端上自动重新启动。
 
-Now, to automatically restart our app as we make changes to a file, we have to install a command-line utility, and we'll do this using npm. To get started, we'll go to Google Chrome (or the browser you are using) and head over to [`www.npmjs.com`](https://www.npmjs.com), as we did previously in the I*nstalling the* *lodash* *module in our app* section, and the module we're looking for is called **nodemon**.
+# 安装 nodemon 模块
 
-The nodemon will be responsible for watching our app for changes and restarting the app when those changes occur. Right here, as we see in the following screenshot, we can view the docs for nodemon as well as various other things such as current version numbers and so on:
+现在，为了在我们对文件进行更改时自动重新启动我们的应用程序，我们必须安装一个命令行实用程序，并且我们将使用 npm 来完成这个步骤。要开始，请打开 Google Chrome（或您使用的浏览器）并转到[`www.npmjs.com`](https://www.npmjs.com)，就像我们在*I*nstalling the* *lodash* *module in our app*部分以及我们正在寻找的模块之前所做的一样，这个模块叫做**nodemon**。
+
+nodemon 将负责监视我们应用程序的更改，并在这些更改发生时重新启动应用程序。正如我们在下面截图中所见，我们还可以查看`nodemon`的文档，以及其他各种内容，比如当前版本号等：
 
 ![](img/a70450e3-59e6-400c-9696-682c4daebf72.png)
 
-You will also notice that it's a really popular module, with over 30,000 downloads a day. Now, this module is a little different from the one we used in the last section, that is, `lodash`. The `lodash` got installed and added into our project's `package.json` file as shown in the following code block:
+您还将注意到它是一个非常受欢迎的模块，每天有超过 30,000 次下载。现在，这个模块与我们上一节使用的`lodash`有些不同。`lodash`会被安装并添加到我们项目的`package.json`文件中，如下所示： 
 
-[PRE42]
+```js
+{
+ "name": "notes-node",
+ "version": "1.0.0",
+ "description": "",
+ "main": "app.js",
+ "scripts": {
+ "test": "echo \"Error: no test specified\" && exit 1"
+ },
+ "author": "",
+ "license": "ISC",
+ "dependencies": {
+ "lodash": "^4.17.4"
+ }
+}
+```
 
-That means it went into our `node_modules` folder and we were able to require it in our `app.js` file (refer to the previous section for more detail). Nodemon, however, works a little differently. It's a command-line utility that gets executed from the Terminal. It will be a completely new way of starting our application, and to install modules to be run from the command line, we have to tweak the `install` command that we used in the last section.
+这意味着它进入我们的`node_modules`文件夹，我们可以在我们的`app.js`文件中引用它（更多细节请参考前面的部分）。但是，Nodemon 的工作方式有些不同。这是一个从终端执行的命令行实用程序。这将是启动我们应用程序的一个全新方式，并且要安装模块以在命令行中运行，我们必须调整上一节中使用的`install`命令。
 
-For now, we can start off much the same way, though. We'll use `npm install` and type the name just like we did in the *Installing the* *lodash* *module in our app* section, but instead of using the `save` flag, we'll use the `g` flag, which is short for global, as shown here:
+现在，我们可以以类似的方式开始，但是稍微不同。我们将使用`npm install`并输入名字，就像我们在*Installing the* *lodash* *module in our app*部分所做的那样，但是我们将使用`g`标志而不是使用`save`标志，`g`标志代表全局，如下所示：
 
-[PRE43]
+```js
+npm install nodemon -g
+```
 
-This command installs `nodemon` as a global utility on your machine, which means it'll not get added to your specific project and you'll never require `nodemon`. Instead, you'll be running the `nodemon` command from Terminal, as shown here:
+该命令会在您的机器上将`nodemon`安装为全局实用程序，这意味着它不会添加到您具体的项目中，你也不会需要`nodemon`。相反，你将在终端中运行`nodemon`命令，如下所示：
 
 ![](img/55de7da7-2315-4ef3-90fa-9d1258a72b46.png)
 
-When we install `nodemon` using the preceding command, it'll go off to npm and fetch all of the code that comes with `nodemon`.
+当我们使用前面的命令安装`nodemon`时，它将去 npm 中获取与`nodemon`一起的所有代码。
 
-And it'll add it into the installation where Node and npm live on your machine, outside the project you're working on.
+它会将其添加到 Node 和 npm 位于您机器上的安装位置，而不是添加到您正在工作的项目之外。
 
-The `npm install nodemon -g` command could be executed from anywhere in your machine; it does not need to be executed from the project folder since it doesn't actually update the project at all. With this in place, though, we now have a brand new command on our machine, `nodemon`.
+`npm install nodemon -g`命令可以在您机器上的任何地方执行；它不需要在项目文件夹中执行，因为它实际上并不更新项目。不过，这样一来，我们现在在我们的机器上有了一个全新的命令，`nodemon`。
 
-# Executing nodemon
+# 执行 nodemon
 
-Nodemon will get executed as Node did, where we type the command and then we type the file we want to start. In our case, `app.js` is the root of our project. When you run it, you'll see a few things, as shown here:
+Nodemon 将像 Node 一样执行，我们键入命令，然后键入我们要启动的文件。在我们的案例中，`app.js`是我们项目的根。运行时，您将会看到一些东西，如下所示：
 
 ![](img/3b8e4ff2-fdf4-40f5-9937-ef2c3f108cc8.png)
 
-We'll see a combination of our app's output, along with `nodemon` logs that show you what's happening. As shown in the preceding code, you can see the version `nodemon` is using, the files it's watching, and the command it actually ran. Now, at this point, it's waiting for more changes; it already ran through the entire app and it'll keep running until another change happens or until you shut it down.
+我们将看到我们应用程序的输出，以及显示发生了什么的`nodemon`日志。如前面的代码所示，您可以看到`nodemon`正在使用的版本，它监视的文件以及它实际运行的命令。此时，已经等待进行更多更改；它已经运行完整个应用程序，并将继续运行，直到发生另一个更改或直到您关闭它。
 
-Inside Atom, we'll make a few changes to our app. Let's get started by changing `Gary` to `Mike` in `app.js`, and then we'll change the `filteredArray` variable to `var filteredArray = _.uniq(['Mike'])`, as shown in the following code:
+在 Atom 中，我们将对我们的应用程序进行一些更改。让我们开始通过在`app.js`中将`Gary`更改为`Mike`，然后将`filteredArray`变量更改为`var filteredArray = _.uniq(['Mike'])`，如下所示的代码：
 
-[PRE44]
+```js
+console.log('Starting app.js');
 
-Now, I'll be saving the file. In the Terminal window, you can see the app automatically restarted, and within a split second, the new output is shown on the screen:
+const fs = require('fs');
+const os = require('os');
+const _ = require('lodash');
+const notes = require('./notes.js');
+
+// console.log(_.isString(true));
+// console.log(_.isString('Gary'));
+var filteredArray = _.uniq(['Mike']);
+console.log(filteredArray);
+```
+
+现在，我将保存文件。在终端窗口中，您可以看到应用程序已自动重新启动，并且在瞬间屏幕上显示了新的输出：
 
 ![](img/278c0e02-c056-47a8-9076-9c52309dd3fb.png)
 
-As shown in the preceding screenshot, we now have our array with one item of string, `Mike`. And this is the real power of `nodemon`.
+如前面的截图所示，我们现在有一个包含一个字符串`Mike`的数组。这就是`nodemon`的真正威力。
 
-You can create your applications and they will automatically restart over in the Terminal, which is super useful. It'll save you a ton of time and a ton of headaches. You won't have to switch back and forth every time you make a small tweak. This also prevents a ton of errors where you are running a web server, you make a change, and you forget to restart the web server. You might think your change didn't work as expected because the app is not working as expected, but in reality, you just never restarted the app.
+您可以创建您的应用程序，并它们将在终端中自动重启，这非常有用。这将节省您大量时间和许多头痛。每次进行小修改时，您都不必来回切换。这还可以防止很多错误，比如当您正在运行 Web 服务器时，您进行了更改，但忘记重新启动 Web 服务器。您可能认为您的更改与预期不同，因为应用程序不按预期工作，但实际上，您只是从未重新启动应用程序。
 
-For the most part, we will be using `nodemon` throughout the book since it's super useful. It's only used for development purposes, which is exactly what we're doing on our local machine. Now, we'll move forward and start exploring how we can get input from the user to create our notes application. That will the topic of the next few sections.
+在大部分情况下，我们将在整本书中使用`nodemon`，因为它非常有用。它仅用于开发目的，这正是我们在本地机器上正在进行的操作。现在，我们将继续并开始探索如何从用户那里获取输入来创建我们的笔记应用程序。这将是接下来几节的主题。
 
-Before we get started, we should clean up a lot of the code we've already written in this section. I'll remove all of the commented-out code in `app.js`. Then, I'll simply remove `os`, where we have `fs`, `os` and `lodash`, since we'll not be using it throughout the project. I'll also be adding a space between the third-party and Node modules and the files I've written, which are as follows:
+在开始之前，我们应该清理本节中已经编写的大部分代码。我将删除`app.js`中所有被注释掉的代码。然后，我将简单地删除`os`，因为在整个项目中我们将不再使用它，而我们已经有了`fs`、`os`和`lodash`。我还将在第三方和 Node 模块与我编写的文件之间添加一个空格，这些文件如下：
 
-[PRE45]
+```js
+console.log('Starting app.js');
 
-I find this to be a good syntax that makes it a lot easier to quickly scan for either third-party or Node modules, or the modules that I've created and required.
+const fs = require('fs');
+const _ = require('lodash');
 
-Next up, over in `notes.js`, we'll remove the `add` function; this was only added for demonstration purposes, as shown in the following figure. Then we can save both the `notes.js` and `app.js` files, and `nodemon` will automatically restart:
+const notes = require('./notes.js');
+```
 
-[PRE46]
+我发现这是一个很好的语法，让人很容易快速浏览第三方模块或 Node 模块，或者我创建和需要的模块。
 
-Now we can remove the `greetings.txt` file. That was used to demonstrate how the `fs` module works, and since we already know how it works, we can wipe that file. And last but not least, we can always shut down `nodemon` using C*trl* + *C*. Now we're back at the regular Terminal.
+接下来，在`notes.js`中，我们将移除`add`函数；这仅用于示范目的，如下图所示。然后我们可以保存`notes.js`和`app.js`文件，`nodemon`将自动重新启动：
 
-And with this in place, now we should move on, figuring out how we can get input from the user, because that's how users can create notes, remove notes, and fetch their notes.
+```js
+console.log('Starting notes.js');
 
-# Getting input
+module.exports.addNote = () => {
+  console.log('addNote');
+  return 'New note';
+};
 
-If a user wants to add a note, we need to know the note's title as well as the body of the note. If they want to fetch a note, we need to know the title of the note they want to fetch, and all this information needs to come into our app. And note apps, don't really do anything cool until they get this dynamic user input. This is what makes your scripts useful and awesome.
+module.exports.add = (a, b) => {
+  return a + b;
+};
+```
 
-Now, throughout the book, we'll be creating note apps that get input from the user in a lot of different ways. We'll be using socket I/O to get real-time info from a web app, we'll be creating our own API so other websites and servers can make Ajax requests to our app, but in this section, we'll start things off with a very basic example of how to get user input.
+现在我们可以删除`greetings.txt`文件。这是用来演示`fs`模块如何工作的，既然我们已经知道它是如何工作的，我们可以删除那个文件。最后但并非最不重要的，我们总是可以使用 C*trl* + *C*关闭`nodemon`。现在我们回到了常规的终端。
 
-We'll be getting input from the user inside the command line. That means when you run the app in the command line, you'll be able to pass in some arguments. These arguments will be available inside Node, and then we can do other things with them, such as create a note, delete a note, or return a note.
+有了这个，现在我们应该继续，弄清楚如何从用户那里获取输入，因为这是用户可以创建笔记、删除笔记和获取他们的笔记的方式。
 
-# Getting input from the user inside the command line
+# 获取输入
 
-To start things off, let's run our app from the Terminal. We'll run it pretty similarly to how we ran it in the earlier sections: we'll start with `node` (I'm not using `nodemon` since we'll be changing the input), then we'll use `app.js`, which is the file we want to run, but then we can still type other variables.
+如果用户想要添加一条笔记，我们需要知道笔记的标题以及笔记的内容。如果他们想要获取一条笔记，我们需要知道他们想要获取的笔记的标题，所有这些信息都需要输入我们的应用程序。而且笔记应用程序在获取动态用户输入之前不会有什么特别之处。这就是使您的脚本变得有用和令人敬畏的原因。
 
-We can pass all sorts of command-line arguments in. We could have a command, and this would tell the app what to do, whether you want to add a note, remove a note, or list a note.
+现在，在本书中，我们将创建多种不同方式从用户那里获取输入的笔记应用程序。我们将使用套接字 I/O 从网络应用程序中实时获取信息，我们将创建我们自己的 API，以便其他网站和服务器可以向我们的应用程序发出 Ajax 请求，但在本节中，我们将以一个非常基本的示例开始解释如何获取用户输入。
 
-If we want to add a note, that might look as a command shown in the following code:
+我们将在命令行内从用户那里获取输入。这意味着当您在命令行中运行应用程序时，您将能够传入一些参数。这些参数将在 Node 内部可用，然后我们可以对它们进行其他操作，例如创建一个笔记、删除一个笔记或返回一个笔记。
 
-[PRE47]
+# 在命令行内获取用户输入
 
-This command will add a note; we can remove a note using the `remove` command, as shown here:
+要开始，让我们从终端运行我们的应用程序。我们将类似于我们在较早的章节中运行它的方式运行它：我们将以`node`开头（我不使用`nodemon`，因为我们将更改输入），然后我们将使用`app.js`，这是我们想要运行的文件，但是我们仍然可以输入其他变量。
 
-[PRE48]
+我们可以传递各种命令行参数。我们可以有一个命令，这将告诉应用程序要做什么，无论您想要添加一个笔记，删除一个笔记，还是列出一个笔记。
 
-And we could list all of our notes using the `list` command:
+如果我们想要添加一条笔记，可能看起来像下面的命令：
 
-[PRE49]
+```js
+node app.js add
+```
 
-Now, when we run this command, the app is still going to work as expected. Just because we passed in a new argument doesn't mean our app is going to crash:
+这条命令会添加一条笔记；我们可以使用`remove`命令来移除一条笔记，如下所示：
+
+```js
+node app.js remove
+```
+
+我们可以使用`list`命令列出所有的笔记：
+
+```js
+node app.js list
+```
+
+现在，当我们运行这条命令时，应用程序仍然会按预期工作。只是因为我们传入了一个新的参数，并不意味着我们的应用程序会崩溃：
 
 ![](img/de190e41-6194-4b7e-ae63-0b7adc259456.png)
 
-And we actually have access to the `list` argument already, we're just not using it inside the application.
+实际上，我们已经可以访问`list`参数了，只是我们没有在应用程序中使用它。
 
-To access the command-line arguments your app was initialized with, you'll want to use that `process` object that we explored in the first chapter.
+要访问应用程序初始化时使用的命令行参数，您需要使用我们在第一章中探讨过的`process`对象。
 
-We can log out all of the arguments using `console.log` to print them to the screen; it's on the process object, and the property we're looking for is `argv`.
+我们可以使用`console.log`将所有的参数打印到屏幕上以输出它们；它在进程对象上，我们要寻找的属性是`argv`。
 
-The `argv` object is short for arguments vector, or in the case of JavaScript, it's more like an arguments array. This will be an array of all the command-line arguments passed in, and we can use them to start creating our application.
+`argv`对象简称为参数向量，或者在 JavaScript 的情况下更像是参数数组。这将是传入的所有命令行参数的数组，我们可以使用它们开始创建我们的应用程序。
 
-Now save `app.js` and it'll look like the following:
+现在保存`app.js`文件，它将如下所示：
 
-[PRE50]
+```js
+console.log('Starting app.js');
 
-Then we'll rerun this file:
+const fs = require('fs');
+const _ = require('lodash');
+
+const notes = require('./notes.js');
+
+console.log(process.argv);
+```
+
+然后我们将重新运行这个文件：
 
 ![](img/d3077eb1-454a-4b2e-ab74-c7c0c8324ce5.png)
 
-Now, as shown in the preceding command output, we have three items which are as follows:
+现在，正如前面的命令输出所示，我们有以下三个条目：
 
-*   The first one points to the executable for Node that was used.
-*   The second one points to the app file that was started; in this case, it was `app.js`.
-*   The third one is where our command-line arguments start to come into play. In it, we have our `list` showing up as a string.
++   第一个指向所使用的 Node 的可执行文件。
 
-That means we can access that third item in the array, and that will be the command for our notes application.
++   第二个指向启动的应用程序文件；在这种情况下，它是`app.js`。
 
-# Accessing the command-line argument for the notes application
++   第三个就是我们的命令行参数开始发挥作用的地方。在其中，我们有我们的`list`显示为字符串。
 
-Let's access the command-line argument in the array now. We'll make a variable called `command`, and set it equal to `process.argv`, and we'll grab the item in the third position (which is `list`, as shown in the preceding command output), which is the index of two as shown here:
+这意味着我们可以访问数组中的第三个项目，那将是我们笔记应用程序的命令。
 
-[PRE51]
+# 访问笔记应用程序的命令行参数
 
-Then we can log that out to the screen by logging out `command` the string. Then, as the second argument, I'll pass in the actual command that was used:
+现在，让我们来访问数组中的命令行参数。我们将创建一个名为`command`的变量，并将其设置为`process.argv`，然后我们将获取第三个位置上的项目（就像前面的命令输出中所示的`list`一样），这在这里显示为了 2：
 
-[PRE52]
+```js
+var command = process.argv[2];
+```
 
-And this is just a simple log to keep track of how the app is getting executed. The cool stuff is going to come when we add if statements that do different things depending on that command.
+然后我们可以通过记录`command`字符串来将其输出到屏幕上。然后，作为第二个参数，我将传入实际使用的命令：
 
-# Adding if/else statements
+```js
+console.log('Command: ' , command);
+```
 
-Let's create an `if/else` block below the `console.log('Command: ', command);`. We'll add `if (command === 'add')`, as shown here:
+这只是一个简单的日志，用于跟踪应用程序的执行情况。酷的东西将在我们添加根据该命令执行不同操作的 if 语句时出现。
 
-[PRE53]
+# 添加 if/else 语句
 
-In this case, we'll go through the process of adding a `new note`. Now, we're not specifying the other arguments here, such as the title or the body (we'll discuss that in later sections). For now, `if` the `command` does equal `add`, we'll use `console.log` to print `Adding new note`, as shown in the following code:
+让我们在`console.log('Command: ', command);`下面创建一个 if/else 块。我们将添加`if (command === 'add')`，如下所示：
 
-[PRE54]
+```js
+console.log('Starting app.js');
 
-And we can do the exact same thing with a command such as `list`. We'll add `else if (command === 'list')`, as shown here:
+const fs = require('fs');
+const _ = require('lodash');
 
-[PRE55]
+const notes = require('./notes.js');
 
-If the command does equal the string `list`, we'll run the following block of code using `console.log` to print `Listing all notes`. We can also add an `else` clause if there is no command, which is `console.log ('Command not recognized')`, as shown here:
+var command = process.argv[2];
+console.log('Command: ', command);
 
-[PRE56]
+if (command === 'add') 
+```
 
-With this in place, we can now rerun our app for a third time, and this time around, you'll see we have the command equal to list, and listing all notes shows up, as shown in the following code:
+在这种情况下，我们将通过添加`new note`的过程来添加一个新的笔记。现在，我们在这里没有指定其他参数，比如标题或正文（我们将在后面的部分中讨论这个问题）。目前，如果命令确实等于`add`，我们将使用`console.log`打印`Adding new note`，如下面的代码所示：
 
-[PRE57]
+```js
+console.log('Starting app.js');
 
-This means we were able to use our argument to run different code. Notice that we didn't run `Adding new note` and we didn't run `Command not recognized`. We could, however, switch the `node app.js` command from `list` to `add`, and in that case, we'll get `Adding new note` printing, as shown in the following screenshot:
+const fs = require('fs');
+const _ = require('lodash');
+
+const notes = require('./notes.js');
+
+var command = process.argv[2];
+console.log('Command: ', command);
+
+if (command === 'add') {
+  console.log('Adding new note');
+}
+```
+
+我们可以使用`list`这样的命令做同样的事情。我们将添加`else if (command === 'list')`，如下所示：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const _ = require('lodash');
+
+const notes = require('./notes.js');
+
+var command = process.argv[2];
+console.log('Command: ', command);
+
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list')
+```
+
+如果命令确实等于字符串`list`，我们将使用`console.log`运行以下代码块打印`Listing all notes`。我们还可以添加一个 else 子句，如果没有命令的话，打印`Command not recognized`，如下所示：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const _ = require('lodash');
+
+const notes = require('./notes.js');
+
+var command = process.argv[2];
+console.log('Command: ', command);
+
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list') {
+  console.log('Listing all notes');
+} else {
+  console.log('Command not recognized');
+}
+```
+
+有了这个设置，我们现在可以第三次运行我们的应用程序，在这一次中，你将会看到我们的命令等于列表，并且所有的笔记都会显示出来，如下面的代码所示：
+
+```js
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list') {
+  console.log('Listing all notes');
+} else {
+  console.log('Command not recognized');
+}
+```
+
+这意味着我们能够使用我们的参数来运行不同的代码。请注意，我们并没有运行`Adding new note`和`Command not recognized`。但是，我们可以将`node app.js`命令从`list`切换到`add`，在这种情况下，我们将会得到`Adding new note`的打印，如下面的截图所示：
 
 ![](img/475401cc-84e9-4785-a2b0-f676f103fba5.png)
 
-And if we run a command that doesn't exist, for example `read`, you can see `Command not recognized` prints as shown in the following screenshot:
+如果我们运行一个不存在的命令，比如`read`，你会看到`Command not recognized`被打印出来，如下面的截图所示：
 
 ![](img/e9b6a001-067d-4224-aac3-449a3cdcbd07.png)
 
-# Exercise – adding two else if clauses to an if block
+# 练习 - 在 if 块中添加两个 else if 子句
 
-Now, what I'd like you to do is add two more `else if` clauses to our `if` block, which will be as follows:
+现在，我想让你在我们的 if 块中添加另外两个`else if`子句，如下所示：
 
-*   One will be for the `read` command, which will be responsible for getting an individual note back
-*   Another one called `remove` will be responsible for removing the note
++   其中一个将用于`read`命令，负责获取个别的笔记
 
-All you have to do is add the `else if` statement for both of them, and then just put a quick `console.log` printing something like `Fetching note` or `Removing note`.
++   另一个叫做`remove`的命令将负责删除笔记
 
-Take a moment to knock that out as your challenge for this section. Once you add those two `else if` clauses, run both of them from the Terminal and make sure your log shows up. If it does show up, you are done, you can move ahead with this section.
+你需要做的就是为它们都添加`else if`语句，然后快速地用`console.log`打印出`Fetching note`或`Removing note`之类的东西。
 
-# Solution to the exercise
+花点时间来解决这个挑战。当您添加了这两个`else if`子句后，从终端运行它们并确保您的日志显示出来。如果显示出来，您就完成了，可以继续进行下一步。
 
-For the solution, the first thing I'll do is to add an `else if` for `read`. I'll open and close my curly braces and hit e*nter* right in the middle so everything gets formatted correctly.
+# 练习的解决方案
 
-In the `else if` statement, I'll check whether the `command` variable equals the string `read`, as shown here:
+对于解决方案，我首先要做的是为`read`添加一个`else if`。我将打开和关闭我的大括号，然后在中间按下*enter*，以便所有内容都被格式化正确。
 
-[PRE58]
+在`else if`语句中，我将检查`command`变量是否等于字符串`read`，如下所示：
 
-In the future, we'll be calling methods that update our local database with the notes.
+```js
+console.log('Starting app.js');
 
-For now, we'll use `console.log` to print `Reading note`:
+const fs = require('fs');
+const _ = require('lodash');
 
-[PRE59]
+const notes = require('./notes.js');
 
-The next thing you need to do is add an `else if` clause that checks whether the `command` equals `remove`. In the `else if`, I'll open and close my condition and hit e*nter* just as I did in the previous `else if` clause; this time, I'll add `if` the `command` equals `remove`, we want to remove the note. And in that case, all we'll do is to use `console.log` to print `Reading note`, as shown in the following code:
+var command = process.argv[2];
+console.log('Command: ', command);
 
-[PRE60]
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list') {
+  console.log('Listing all notes');
+} else if () {
 
-And with this in place, we are done. If we refer to the code block, we've added two new commands we can run over in the Terminal, and we can test those:
+} else {
+  console.log('Command not recognized');
+}
+```
 
-[PRE61]
+在未来，我们将调用更新本地数据库的方法以更新笔记。
 
-First up, I'll run `node app.js` with the `read` command, and `Reading note` shows up:
+目前，我们将使用`console.log`来打印`Reading note`：
 
-[PRE62]
+```js
+console.log('Starting app.js');
 
-Then I'll rerun the command; this time, I'll be using `remove`. And when I do that, `Removing note` prints to the screen, as shown in this screenshot:
+const fs = require('fs');
+const _ = require('lodash');
+
+const notes = require('./notes.js');
+
+var command = process.argv[2];
+console.log('Command: ', command);
+
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list') {
+  console.log('Listing all notes');
+} else if (command === 'read') {
+
+} else {
+  console.log('Command not recognized');
+}
+```
+
+您需要做的下一件事是添加一个`else if`子句，检查`command`是否等于`remove`。在`else if`中，我将打开和关闭我的条件，并按下*enter*，就像我在前一个`else if`子句中所做的那样；这一次，我将添加`if` `command`等于`remove`，我们想要删除笔记。在那种情况下，我们只需使用`console.log`来打印`Reading note`，如下面的代码所示：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const _ = require('lodash');
+
+const notes = require('./notes.js');
+
+var command = process.argv[2];
+console.log('Command: ', command);
+
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list') {
+  console.log('Listing all notes');
+} else if (command === 'read') {
+  console.log('Reading note');
+} else {
+  console.log('Command not recognized');
+}
+```
+
+有了这个，我们就完成了。如果我们参考代码块，我们已经添加了可以在终端上运行的两个新命令，并且我们可以测试这些命令：
+
+```js
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list') {
+  console.log('Listing all notes');
+} else if (command === 'read') {
+  console.log('Reading note');
+} else {
+  console.log('Command not recognized');
+}
+```
+
+首先，我将用`read`命令运行`node app.js`，然后`Reading note`显示出来：
+
+```js
+console.log('Starting app.js');
+
+const fs = require('fs');
+const _ = require('lodash');
+
+const notes = require('./notes.js');
+
+var command = process.argv[2];
+console.log('Command: ', command);
+
+if (command === 'add') {
+  console.log('Adding new note');
+} else if (command === 'list') {
+  console.log('Listing all notes');
+} else if (command === 'read') {
+  console.log('Reading note');
+} else if (command == 'remove') {
+  console.log('Removing note');
+} else {
+  console.log('Command not recognized');
+}
+```
+
+然后我会重新运行命令；这一次，我将使用`remove`。当我这样做时，屏幕上会打印出`Removing note`，就像这个屏幕截图中显示的那样：
 
 ![](img/3f7acc58-ae65-4865-9d47-413e64f16ece.png)
 
-I'll wrap up my testing using a command that doesn't exist, and when I run that, you can see `Command not recognized` shows up.
+我将用一个不存在的命令结束我的测试，当我运行它时，您可以看到`Command not recognized`出现了。
 
-# Getting the specific note information
+# 获取特定的笔记信息
 
-Now, what we did in the previous subsection is step 1\. We now have support for various commands. The next thing we need to figure out is how we'll get more specific information. For example, which note do you want to remove? Which note do you want to read? And what do you want the note text to be in the case of adding a note? This is all information we need to get from the Terminal.
+现在，我们在前面的小节中所做的是第 1 步。我们现在支持各种命令。我们需要弄清楚的下一件事是如何获取更具体的信息。例如，您想删除哪个笔记？您想读哪个笔记？在添加笔记时，您希望笔记文本是什么？我们都需要从终端获取这些信息。
 
-Now, getting it is going to be pretty similar to what we did earlier, and to show you what it looks like, we'll print the entire `argv` object once again, using the following command:
+现在，获取它将与我们早些时候所做的非常相似，为了向您展示它是什么样子，我们将再次使用以下命令打印整个`argv`对象：
 
-[PRE63]
+```js
+console.log(process.argv);
+```
 
-Over in the Terminal, we can now run a more complex command. Let's say we want to remove a note using the `node app.js remove` command, and we'll do that by its title. We might use the `title` argument, which looks like the following code:
+接下来，我们可以在终端运行一个更复杂的命令。假设我们要使用`node app.js remove`命令来删除一个笔记，我们可以通过它的标题来做到这一点。我们可能会使用`title`参数，它看起来像下面的代码：
 
-[PRE64]
+```js
+node app.js remove --title
+```
 
-In this `title` argument, we have `--` (two) hyphens followed by the argument name, which is `title`, followed by the `=` (equals) sign. Then we can type our note title. Maybe the note title is `secrets`. This will pass the title argument into our application.
+在这个`title`参数中，我们有`--`（两个）破折号，后面是参数名`title`，然后是`=`（等号）。然后我们可以输入我们的笔记标题。也许笔记标题是`secrets`。这样就可以将标题参数传递到我们的应用程序中。
 
-Now, there are a couple of different ways you could format the `title` argument, which are as follows:
+现在，你可以以以下方式格式化`title`参数：
 
-*   You could have the title `secrets` like the one in the preceding command
-*   You could have title equals secrets inside quotes, which will let us use spaces in the title:
++   你可以像前面的命令一样拥有标题`secrets`。
 
-[PRE65]
++   你可以将标题等于引号内的`secrets`，这样可以让我们在标题中使用空格：
 
-*   You can remove the `=` (equals) sign altogether and simply put a space:
+```js
+ node app.js remove --title=secrets
+```
 
-[PRE66]
++   你可以完全去掉`=`（等号），只需留下一个空格：
 
-No matter how you choose to format your argument, these are all valid ways to pass in the title.
+```js
+ node app.js remove --title="secrets 2"
+```
 
-As you see in the preceding screenshot, I am using double quotes when wrapping my string. Now, if you switch to single quotes, it will not break on Linux or OS X, but it will break on Windows. That means when you're passing in command-line arguments such as the title or the note body, you'll want to wrap your strings, when you have spaces, in double quotes, not single. So, if you are using Windows and you're getting some sort of unexpected behavior with your arguments, make sure you're using double quotes instead of single; that should fix the issue.
+无论你选择如何格式化你的参数，这都是传递标题的有效方式。
 
-For the moment, I'll keep the `=` (equals) sign and the quotes and rerun the command:
+正如你在前面的截图中看到的那样，当我包装我的字符串时，我使用双引号。现在，如果你切换到单引号，它不会在 Linux 或 OS X 上断开，但在 Windows 上会断开。这意味着当你传递命令行参数，如标题或笔记正文时，如果存在空格，你会想要用双引号而不是单引号。所以，如果你正在使用 Windows，并且在参数方面遇到了一些意外的行为，请确保你使用的是双引号而不是单引号；这应该解决问题。
 
-[PRE67]
+目前，我将保留`=`（等号）和引号，并重新运行命令:
+
+```js
+node app.js remove --title="secrets 2"
+```
 
 当我运行命令时，您可以在以下代码输出中看到我们有两个参数：
 
