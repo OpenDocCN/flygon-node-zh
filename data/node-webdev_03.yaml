@@ -1342,11 +1342,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 转译后的脚本运行如下：
-- en: '```js\1'
+- en: '```js'
   id: totrans-203
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: In other words, it runs the same as the `async` version but on an older Node.js
     release. Using a similar process, you can transpile code written with modern ES2015
     (and so on) constructions so it can run in an older web browser.

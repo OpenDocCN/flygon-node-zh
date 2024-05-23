@@ -44,17 +44,17 @@ Node.js 运行时包括诸如`EventEmitter`、`HTTPServer`和`HTTPClient`等对�
 
 例如，考虑以下类，我们将在本书的后面使用：
 
-```js\1
+```js
 
 This should look familiar to anyone who's implemented a class definition in other languages. The class has a name—`Note`. There is also a constructor method and attributes for each instance of the class.
 
 Once you've defined the class, you can export the class definition to other modules:
 
-```js\1
+```js
 
 使用`get`或`set`关键字标记的函数是 getter 和 setter，用法如下：
 
-```js\1
+```js
 
 New instances of a class are created with `new`. You access a getter or setter function as if it is a simple field on the object. Behind the scenes, the getter/setter function is invoked.
 
@@ -62,11 +62,11 @@ The preceding implementation is not the best because the `_title` and `_body` f
 
 You can test whether a given object is of a certain class by using the `instanceof` operator:
 
-```js\1
+```js
 
 最后，您可以使用`extends`运算符声明一个子类，类似于其他语言中的操作：
 
-```js\1
+```js
 
 In other words, the `LoveNote` class has all the fields of `Note`, plus a new field named `heart`.
 
@@ -78,7 +78,7 @@ The `EventEmitter` object is defined in the `events` module of Node.js. Using th
 
 Create a file named `pulser.mjs`, containing the following code:
 
-```js\1
+```js
 
 这是一个定义了名为`Pulser`的类的 ES6 模块。该类继承自`EventEmitter`并提供了一些自己的方法。
 
@@ -86,25 +86,25 @@ Create a file named `pulser.mjs`, containing the following code:
 
 在我们必须使用`function`而不是箭头函数时，我们必须将`this`分配给另一个变量，如下所示：
 
-```js\1
+```js
 
 What's different is the assignment of `this` to `self`. The value of `this` inside the function is different—it is related to the `setInterval` function—but the value of `self` remains the same in every enclosed scope. You'll see this trick used widely, so remember this in case you come across this pattern in code that you're maintaining.
 
 If you want to use a simple `EventEmitter` object but with your own class name, the body of the extended class can be empty:
 
-```js\1
+```js
 
 `Pulser`类的目的是每秒向任何监听器发送一个定时事件。`start`方法使用`setInterval`来启动重复的回调执行，计划每秒调用`emit`将`pulse`事件发送给任何监听器。
 
 现在，让我们看看如何使用`Pulser`对象。创建一个名为`pulsed.mjs`的新文件，其中包含以下代码：
 
-```js\1
+```js
 
 Here, we create a `Pulser` object and consume its `pulse` events. Calling `pulser.on('pulse')` sets up an event listener for the `pulse` events to invoke the callback function. It then calls the `start` method to get the process going.
 
 When it is run, you should see the following output:
 
-```js\1
+```js
 
 对于每个接收到的`pulse`事件，都会打印一个`pulse received`消息。
 
@@ -124,11 +124,11 @@ When it is run, you should see the following output:
 
 通常，需要在事件中发送数据。要这样做，只需将数据作为参数添加到`.emit`调用中，如下所示：
 
-```js\1
+```js
 
 When the program receives the event, the data appears as arguments to the callback function. Your program listens to this event, as follows:
 
-```js\1
+```js
 
 事件接收器和事件发送器之间没有握手。也就是说，事件发送器只是继续它的业务，不会收到任何关于接收到的事件、采取的任何行动或发生的任何错误的通知。
 
@@ -142,7 +142,7 @@ When the program receives the event, the data appears as arguments to the callba
 
 我们已经在第二章中看到了一个简单的 HTTP 服务器应用程序，*设置 Node.js。*因为`HTTPServer`是一个`EventEmitter`对象，所以可以以另一种方式编写示例，以明确这一事实，通过分别添加事件监听器：
 
-```js\1
+```js
 
 Here, we created an HTTP `server` object, then attached a listener to the `request` event, and then told the server to listen to connections from `localhost` (`127.0.0.1`) on port `8124`. The `listen` function causes the server to start listening and arranges to dispatch an event for every request arriving from a web browser.
 
@@ -152,7 +152,7 @@ Now, let's look at a server application that performs different actions based on
 
 Create a new file named `server.mjs`, containing the following code:
 
-```js\1
+```js
 
 `request`事件是由`HTTPServer`每次从 Web 浏览器接收到请求时发出的。在这种情况下，我们希望根据请求 URL 的不同而有不同的响应，请求 URL 以`req.url`的形式到达。这个值是一个包含来自 HTTP 请求的 URL 的字符串。由于 URL 有许多属性，我们需要解析 URL 以便正确匹配两个路径中的一个的路径名：`/`和`/osinfo`。
 
@@ -170,7 +170,7 @@ Create a new file named `server.mjs`, containing the following code:
 
 要运行它，请输入以下命令：
 
-```js\1
+```js
 
 Then, if we paste the URL into a web browser, we see something like this:
 
@@ -192,15 +192,15 @@ The previous example showed two of the new features introduced with ES2015: mult
 
 The existing JavaScript string representations use single quotes and double quotes. Template strings are delimited with the backtick character, which is also known as the **grave accent**:
 
-```js\1
+```js
 
 在 ES2015 之前，实现多行字符串的一种方法是使用以下结构：
 
-```js\1
+```js
 
 This is an array of strings that uses the `join` function to smash them together into one string. Yes, this is the code used in the same example in previous versions of this book. This is what we can do with ES2015:
 
-```js\1
+```js
 
 这更加简洁和直接。开头引号在第一行，结束引号在最后一行，中间的所有内容都是我们的字符串的一部分。
 
@@ -208,11 +208,11 @@ This is an array of strings that uses the `join` function to smash them together
 
 在 ES2015 之前，程序员会这样编写他们的代码：
 
-```js\1
+```js
 
 Similar to the previous snippet, this relied on the `replace` function to insert values into the string. Again, this is extracted from the same example that was used in previous versions of this book. With template strings, this can be written as follows:
 
-```js\1
+```js
 
 在模板字符串中，`${..}`括号中的部分被解释为表达式。这可以是一个简单的数学表达式、一个变量引用，或者在这种情况下，一个函数调用。
 
@@ -230,23 +230,23 @@ Node.js 的`HTTPServer`对象是一个`EventEmitter`对象，而 HTTP Sniffer �
 
 创建一个名为`httpsniffer.mjs`的文件，其中包含以下代码：
 
-```js\1
+```js
 
 The key here is the `sniffOn` function. When given an `HTTPServer` object, it attaches listener functions to each `HTTPServer` event to print relevant data. This gives us a fairly detailed trace of the HTTP traffic on an application.
 
 In order to use it, make two simple modifications to `server.mjs`. To the top, add the following `import` statement:
 
-```js\1
+```js
 
 然后，按照以下方式更改服务器设置：
 
-```js\1
+```js
 
 Here, we're importing the `sniffOn` function and then using it to attach listener methods to the `server` object.
 
 With this in place, run the server as we did earlier. You can visit `http://localhost:8124/` in your browser and see the following console output:
 
-```js\1
+```js
 
 现在您有一个用于窥探`HTTPServer`事件的工具。这种简单的技术打印出事件数据的详细日志。这种模式可以用于任何`EventEmitter`对象。您可以使用这种技术来检查程序中`EventEmitter`对象的实际行为。
 
@@ -294,7 +294,7 @@ Express 可能是最受欢迎的 Node.js Web 应用程序框架。Express 被描
 
 使用以下命令安装`express-generator`：
 
-```js\1
+```js
 
 This is different from the suggested installation method on the Express website, which says to use the `-g` tag for a global installation. We're also using an explicit version number to ensure compatibility. As of the time of writing, `express-generator@5.x` does not exist, but it should exist sometime in the future. The instructions here are written for Express 4.x, and by explicitly naming the version, we're ensuring that we're all on the same page.
 
@@ -302,33 +302,33 @@ Earlier, we discussed how many people now recommend against installing modules g
 
 The result of this is that an `express` command is installed in the `./node_modules/.bin` directory:
 
-```js\1
+```js
 
 运行`express`命令，如下所示：
 
-```js\1
+```js
 
 We probably don't want to type `./node_modules/.bin/express` every time we run the `express-generator` application, or, for that matter, any of the other applications that provide command-line utilities. Refer back to the discussion we had in Chapter 3, *Exploring Node.js Modules*, about adding this directory to the `PATH` variable. Alternatively, the `npx` command, also described in Chapter 3, *Exploring Node.js Modules*, is useful for this.
 
 For example, try using the following instead of installing `express-generator`:
 
-```js\1
+```js
 
 这样执行完全相同，无需安装`express-generator`，并且（我们马上会看到）在使用命令结束时记得卸载它。
 
 现在，您已经在`fibonacci`目录中安装了`express-generator`，使用它来设置空白框架应用程序：
 
-```js\1
+```js
 
 This creates a bunch of files for us, which we'll walk through in a minute. We asked it to initialize the use of the Handlebars template engine and to initialize a `git` repository. 
 
 The `node_modules` directory still has the `express-generator` module, which is no longer useful. We can just leave it there and ignore it, or we can add it to `devDependencies` of the `package.json` file that it generated. Most likely, we will want to uninstall it:
 
-```js\1
+```js
 
 这将卸载`express-generator`工具。接下来要做的是按照我们被告知的方式运行空白应用程序。`npm start`命令依赖于提供的`package.json`文件的一个部分：
 
-```js\1
+```js
 
 It's cool that the Express team showed us how to run the server by initializing the `scripts` section in `package.json`. The `start` script is one of the scripts that correspond to the `npm` sub-commands. The instructions we were given, therefore, say to run `npm start`.
 
@@ -340,13 +340,13 @@ The steps are as follows:
 
 To install the dependencies and run the application, type the following commands:
 
-```js\1
+```js
 
 以这种方式设置`DEBUG`变量会打开调试输出，其中包括有关监听端口`3000`的消息。否则，我们不会得到这些信息。这种语法是在 Bash shell 中使用环境变量运行命令的方式。如果在运行`npm start`时出错，请参考下一节。
 
 我们可以修改提供的`npm start`脚本，始终使用启用调试的应用程序。将`scripts`部分更改为以下内容：
 
-```js\1
+```js
 
 Since the output says it is listening on port `3000`, we direct our browser to
 `http://localhost:3000/` and see the following output:
@@ -367,11 +367,11 @@ The best solution appears to be using the `cross-env` package in the `npm` repos
 
 With this package installed, commands in the `scripts` section in `package.json` can set environment variables just as in Bash on Linux/macOS. The use of this package looks as follows:
 
-```js\1
+```js
 
 然后，执行以下命令：
 
-```js\1
+```js
 
 We now have a simple way to ensure the scripts in `package.json` are cross-platform. Our next step is a quick walkthrough of the generated application.
 
@@ -395,29 +395,29 @@ The `bin` directory contains the `www` script that we saw earlier. This is a Nod
 
 There's a lot going on in the `www` and `app.js` scripts, so let's start with the application initialization. Let's first take a look at a couple of lines in `app.js`:
 
-```js\1
+```js
 
 这意味着`app.js`是一个 CommonJS 模块，它导出了由`express`模块生成的应用程序对象。我们在`app.js`中的任务是配置该应用程序对象。但是，这个任务不包括启动`HTTPServer`对象。
 
 现在，让我们转向`bin/www`脚本。在这个脚本中启动了 HTTP 服务器。首先要注意的是它以以下行开始：
 
-```js\1
+```js
 
 This is a Unix/Linux technique to make a command script. It says to run the following as a script using the `node` command. In other words, we have Node.js code and we're instructing the operating system to execute that code using the Node.js runtime:
 
-```js\1
+```js
 
 我们还可以看到该脚本是通过`express-generator`可执行的。
 
 它调用`app.js`模块，如下所示：
 
-```js\1
+```js
 
 Namely, it loads the module in `app.js`, gives it a port number to use, creates the `HTTPServer` object, and starts it up.
 
 We can see where port `3000` comes from; it's a parameter to the `normalizePort` function. We can also see that setting the `PORT` environment variable will override the default port `3000`. Finally, we can see that the `HTTPServer` object is created here and is told to use the application instance created in `app.js`. Try running the following command:
 
-```js\1
+```js
 
 通过为`PORT`指定环境变量，我们可以告诉应用程序监听端口`4242`，您可以在那里思考生活的意义。
 
@@ -427,7 +427,7 @@ We can see where port `3000` comes from; it's a parameter to the `normalizePort`
 
 现在让我们更详细地了解`app.js`：
 
-```js\1
+```js
 
 This tells Express to look for templates in the `views` directory and to use the Handlebars templating engine.
 
@@ -435,7 +435,7 @@ The `app.set` function is used to set the application properties. It'll be usefu
 
 Next is a series of `app.use` calls:
 
-```js\1
+```js
 
 `app.use`函数挂载中间件函数。这是 Express 术语中的重要部分，我们很快会讨论。目前，让我们说中间件函数在处理请求时被执行。这意味着`app.js`中启用了这里列出的所有功能：
 
@@ -461,7 +461,7 @@ Next is a series of `app.use` calls:
 
 我们在脚本的最后有一个例子：
 
-```js\1
+```js
 
 The comment says `catch 404 and forward it to the error handler`. As you probably know, an HTTP `404` status means the requested resource was not found. We need to tell the user that their request wasn't satisfied, and maybe show them something such as a picture of a flock of birds pulling a whale out of the ocean. This is the first step in doing this. Before getting to the last step of reporting this error, you need to learn how middleware works.
 
@@ -481,7 +481,7 @@ What happens if `next` is not called? There is one case where we must not call `
 
 What is the one case where we must not call `next`? Consider the following hypothetical router function:
 
-```js\1
+```js
 
 这不调用`next`，而是调用`res.send`。对于`response`对象上的某些函数，如`res.send`或`res.render`，会发送 HTTP 响应。这是通过发送响应(`res.send`)来结束请求-响应循环的正确方法。如果既不调用`next`也不调用`res.send`，则请求永远不会得到响应，请求的客户端将挂起。
 
@@ -507,7 +507,7 @@ What is the one case where we must not call `next`? Consider the following hypot
 
 实际上，`app.use`有一个可选的第一个参数：中间件挂载的路径。该路径是对请求 URL 的模式匹配，并且如果 URL 匹配模式，则触发给定的函数。甚至有一种方法可以在 URL 中提供命名参数：
 
-```js\1
+```js
 
 This path specification has a pattern, `id`, and the value will land in `req.params.id`. In an Express route, this `:id` pattern marks a **route parameter**. The pattern will match a URL segment, and the matching URL content will land and be available through the `req.params` object. In this example, we're suggesting a user profile service and that for this URL, we want to display information about the named user.
 
@@ -515,13 +515,13 @@ As Express scans the available functions to execute, it will try to match this p
 
 It is also possible to match based on the HTTP request method, such as `GET` or `PUT`. Instead of `app.use`, we would write `app.METHOD`—for example, `app.get` or `app.put`. The preceding example would, therefore, be more likely to appear as follows:
 
-```js\1
+```js
 
 `GET`的所需行为是检索数据，而`PUT`的行为是存储数据。然而，如上所述的示例，当处理程序函数仅对`GET`动词正确时，它将匹配任一 HTTP 方法。但是，使用`app.get`，如本例中的情况，确保应用程序正确匹配所需的 HTTP 方法。
 
 最后，我们来到了`Router`对象。这是一种专门用于根据其 URL 路由请求的中间件。看一下`routes/users.js`：
 
-```js\1
+```js
 
 We have a module that creates a `router` object, then adds one or more `router` functions. It makes the `Router` object available through `module.exports` so that `app.js` can use it. This router has only one route, but `router` objects can have any number of routes that you think is appropriate.
 
@@ -529,7 +529,7 @@ This one route matches a `GET` request on the `/` URL. That's fine until you no
 
 Back in `app.js`, `usersRouter` is added, as follows:
 
-```js\1
+```js
 
 这将`router`对象及其零个或多个路由函数挂载到`/users` URL 上。当 Express 寻找匹配的路由函数时，首先扫描附加到`app`对象的函数，对于任何路由器对象，它也会扫描其函数。然后调用与请求匹配的任何路由函数。
 
@@ -547,7 +547,7 @@ Back in `app.js`, `usersRouter` is added, as follows:
 
 在我们正在检查的`app.js`中，以下是我们的错误处理程序，由`express-generator`提供：
 
-```js\1
+```js
 
 Error handler functions take four parameters, with `err` added to the familiar `req`, `res`, and `next` functions.
 
@@ -557,13 +557,13 @@ Using `res.status` sets the HTTP response status code. In the simple applicati
 
 The `res.render` function takes data and renders it through a template. In this case, we're using the template named `error`. This corresponds to the `views/error.hbs` file, which looks as follows:
 
-```js\1
+```js
 
 在 Handlebars 模板中，`{{value}}`标记意味着将表达式或变量的值替换到模板中。此模板引用的`message`和`error`是通过设置`res.locals`提供的，如下所示。
 
 要查看错误处理程序的操作，请将以下内容添加到`routes/index.js`：
 
-```js\1
+```js
 
 This is a route handler, and going by what we've said, it simply generates an error indication. In a real route handler, the code would make some kind of query, gathering up data to show to the user, and it would indicate an error only if something happened along the way. However, we want to see the error handler in action.
 
@@ -589,7 +589,7 @@ Let's start with the blank application we created in the previous step. We named
 
 In `app.js`, make the following changes to the top portion of the file:
 
-```js\1
+```js
 
 这大部分是`express-generator`给我们的。`var`语句已更改为`const`，以获得更多的舒适度。我们明确导入了`hbs`模块，以便进行一些配置。我们还导入了一个`Fibonacci`的路由模块，我们马上就会看到。
 
@@ -597,27 +597,27 @@ In `app.js`, make the following changes to the top portion of the file:
 
 在顶级目录中，创建一个名为`math.js`的文件，其中包含以下极其简单的斐波那契实现：
 
-```js\1
+```js
 
 In the `views` directory, look at the file named `layout.hbs`, which was created by `express-generator`:
 
-```js\1
+```js
 
 该文件包含我们将用于 HTML 页面的结构。根据 Handlebars 语法，我们可以看到`{{title}}`出现在 HTML`title`标记中。这意味着当我们调用`res.render`时，我们应该提供一个`title`属性。`{{{body}}}`标记是`view`模板内容的落脚点。
 
 将`views/index.hbs`更改为只包含以下内容：
 
-```js\1
+```js
 
 This serves as the front page of our application. It will be inserted in place of `{{{body}}}` in `views/layout.hbs`. The marker, `{{> navbar}}`, refers to a partially named `navbar` object. Earlier, we configured a directory named `partials` to hold partials. Now, let's create a file, `partials/navbar.html`, containing the following:
 
-```js\1
+```js
 
 这将作为包含在每个页面上的导航栏。
 
 创建一个名为`views/fibonacci.hbs`的文件，其中包含以下代码：
 
-```js\1
+```js
 
 If `fiboval` is set, this renders a message that for a given number (`fibonum`), we have calculated the corresponding Fibonacci number. There is also an HTML form that we can use to enter a `fibonum` value.
 
@@ -627,13 +627,13 @@ Remember that the files in `views` are templates into which data is rendered. 
 
 In `routes/index.js`, change the `router` function to the following:
 
-```js\1
+```js
 
 传递给`res.render`的匿名对象包含我们提供给布局和视图模板的数据值。我们现在传递了一个新的欢迎消息。
 
 最后，在`routes`目录中，创建一个名为`fibonacci.js`的文件，其中包含以下代码：
 
-```js\1
+```js
 
 This route handler says it matches the `/` route. However, there is a route handler in `index.js` that matches the same route. We haven't made a mistake, however. The `router` object created by this module becomes `fibonacciRouter` when it lands in `app.js`. Refer back to `app.js` and you will see that `fibonacciRouter` is mounted on `/fibonacci`. The rule is that the actual URL path matched by a router function is the path that the router is mounted on plus the path given for the router function. In this case, that is `/fibonacci` plus `/`, and for a URL, that equates to `/fibonacci`. 
 
@@ -643,7 +643,7 @@ If this value is present, then we call `res.render('fibonacci')` with data inclu
 
 The `package.json` file is already set up, so we can use `npm start` to run the script and always have debugging messages enabled. Now, we're ready to do this:
 
-```js\1
+```js
 
 正如这个示例所暗示的，您可以访问`http://localhost:3000/`，看看我们有什么：
 
@@ -667,11 +667,11 @@ The `package.json` file is already set up, so we can use `npm start` to run the
 
 为了更清楚地看到这一点，创建一个名为`fibotimes.js`的文件，其中包含以下代码：
 
-```js\1
+```js
 
 Now, run it. You will get the following output:
 
-```js\1
+```js
 
 这个方法可以快速计算斐波那契数列的前 40 个成员，但是在第 40 个成员之后，每个结果开始花费几秒钟的时间，并且很快就会变得更糟。在依赖快速返回到事件循环的单线程系统上执行这种代码是不可行的。包含这种代码的 Web 服务会给用户带来糟糕的性能。
 
@@ -687,13 +687,13 @@ Now, run it. You will get the following output:
 
 为了证明我们手头上有一个人为的问题，这里有一个更有效的斐波那契函数：
 
-```js\1
+```js
 
 If we substitute a call to `math.fibonacciLoop` in place of `math.fibonacci`, the `fibotimes` program runs much faster. Even this isn't the most efficient implementation; for example, a simple, prewired lookup table is much faster at the cost of some memory.
 
 Edit `fibotimes.js` as follows and rerun the script. The numbers will fly by so fast that your head will spin:
 
-```js\1
+```js
 
 有时，你的性能问题会很容易优化，但有时则不会。
 
@@ -701,25 +701,25 @@ Edit `fibotimes.js` as follows and rerun the script. The numbers will fly by so 
 
 可以将计算分成块，然后通过事件循环分派这些块的计算。将以下代码添加到`math.js`中： 
 
-```js\1
+```js
 
 This converts the `fibonacci` function from a synchronous function into a traditional callback-oriented asynchronous function. We're using `setImmediate` at each stage of the calculation to ensure that the event loop executes regularly and that the server can easily handle other requests while churning away on a calculation. It does nothing to reduce the computation required; this is still the inefficient Fibonacci algorithm. All we've done is spread the computation through the event loop.
 
 In `fibotimes.js`, we can use the following:
 
-```js\1
+```js
 
 我们又回到了一个低效的算法，但是其中的计算是通过事件循环分布的。运行这个`fibotimes.js`版本会展示它的低效性。为了在服务器中展示它，我们需要做一些改变。
 
 因为它是一个异步函数，我们需要更改我们的路由器代码。创建一个名为`routes/fibonacci-async1.js`的新文件，其中包含以下代码：
 
-```js\1
+```js
 
 This is the same code as earlier, just rewritten for an asynchronous Fibonacci calculation. The Fibonacci number is returned via a callback function, and even though we have the beginnings of a callback pyramid, it is still manageable.
 
 In `app.js`, make the following change to the application wiring:
 
-```js\1
+```js
 
 有了这个改变，服务器在计算一个大的斐波那契数时不再冻结。当然，计算仍然需要很长时间，但至少应用程序的其他用户不会被阻塞。
 
@@ -739,7 +739,7 @@ Node.js 包括一个`HTTPClient`对象，用于进行 HTTP 请求非常有用。
 
 让我们从受`wget`或`curl`命令启发的一些代码开始，以便进行 HTTP 请求并显示结果。创建一个名为`wget.js`的文件，其中包含以下代码：
 
-```js\1
+```js
 
 We invoke an HTTP request by using `http.request`, passing in an `options` object describing the request. In this case, we're making a `GET` request to the server described in a URL we provide on the command line. When the response arrives, the `response` event is fired and we can print out the response. Likewise, an `error` event is fired on errors, and we can print out the error.
 
@@ -747,13 +747,13 @@ This corresponds to the HTTP protocol, where the client sends a request and rece
 
 You can run the script as follows:
 
-```js\1
+```js
 
 是的，`example.com`是一个真实的网站——有一天去访问它。在打印输出中还有更多内容，即`http://example.com/`页面的 HTML。我们所做的是演示如何使用`http.request`函数调用 HTTP 请求。
 
 `options`对象非常简单，`host`、`port`和`path`字段指定了请求的 URL。`method`字段必须是 HTTP 动词之一（`GET`、`PUT`、`POST`等）。你还可以为 HTTP 请求中的头部提供一个`headers`数组。例如，你可能需要提供一个 cookie：
 
-```js\1
+```js
 
 The `response` object is itself an `EventEmitter` object that emits the `data` and `error` events. The `data` event is called as data arrives and the `error` event is, of course, called on errors.
 
@@ -773,7 +773,7 @@ While Express can also be used to implement a simple REST service, the parameter
 
 Now, create a file named `fiboserver.js`, containing the following code:
 
-```js\1
+```js
 
 这是一个简化的 Express 应用程序，直接提供 Fibonacci 计算服务。它支持的一个路由使用了我们已经使用过的相同函数来处理 Fibonacci 计算。
 
@@ -781,7 +781,7 @@ Now, create a file named `fiboserver.js`, containing the following code:
 
 在`package.json`中，将以下内容添加到`scripts`部分：
 
-```js\1
+```js
 
 This automates launching our Fibonacci service.
 
@@ -789,29 +789,29 @@ Note that we're specifying the TCP/IP port via an environment variable and using
 
 Now, let's run it:
 
-```js\1
+```js
 
 然后，在一个单独的命令窗口中，我们可以使用`curl`程序对这个服务发出一些请求：
 
-```js\1
+```js
 
 Over in the window where the service is running, we'll see a log of `GET` requests and how long each request took to process:
 
-```js\1
+```js
 
 这很简单——使用`curl`，我们可以发出 HTTP `GET`请求。现在，让我们创建一个简单的客户端程序`fiboclient.js`，以编程方式调用 Fibonacci 服务：
 
-```js\1
+```js
 
 This is our good friend `http.request` with a suitable `options` object. We're executing it in a loop, so pay attention to the order that the requests are made versus the order the responses arrive.
 
 Then, in `package.json`, add the following to the `scripts` section:
 
-```js\1
+```js
 
 然后，运行`client`应用程序：
 
-```js\1
+```js
 
 We're building our way toward adding the REST service to the web application. At this point, we've proved several things, one of which is the ability to call a REST service in our program.
 
@@ -825,17 +825,17 @@ We now have enough on our hands to offload Fibonacci calculation to a backend se
 
 Now that we've implemented a REST-based server, we can return to the Fibonacci application, applying what we've learned to improve it. We will lift some of the code from `fiboclient.js` and transplant it into the application to do this. Create a new file, `routes/fibonacci-rest.js`, with the following code:
 
-```js\1
+```js
 
 这是 Fibonacci 路由处理程序的一个新变体，这次调用 REST 后端服务。我们将`fiboclient.js`中的`http.request`调用移植过来，并将来自`client`对象的事件与 Express 路由处理程序集成。在正常的执行路径中，`HTTPClient`发出一个`response`事件，包含一个`response`对象。当该对象发出一个`data`事件时，我们就有了结果。结果是 JSON 文本，我们可以解析然后作为响应返回给浏览器。
 
 在`app.js`中，进行以下更改：
 
-```js\1
+```js
 
 This, of course, reconfigures it to use the new route handler. Then, in `package.json`, change the `scripts` entry to the following:
 
-```js\1
+```js
 
 我们如何为所有三个`scripts`条目设置相同的`SERVERPORT`值？答案是该变量在不同的地方使用方式不同。在`startrest`中，该变量用于`routes/fibonacci-rest.js`中，以知道 REST 服务运行在哪个端口。同样，在`client`中，`fiboclient.js`使用该变量来达到相同的目的。最后，在`server`中，`fiboserver.js`脚本使用`SERVERPORT`变量来知道要监听哪个端口。
 
@@ -843,17 +843,17 @@ This, of course, reconfigures it to use the new route handler. Then, in `package
 
 在命令窗口中，启动后端服务器，在另一个窗口中，启动应用程序。像之前一样，打开一个浏览器窗口，并发出一些请求。你应该会看到类似以下的输出：
 
-```js\1
+```js
 
 The output looks like this for the application:
 
-```js\1
+```js
 
 因为我们没有改变模板，所以屏幕看起来和之前一样。
 
 我们可能会在这个解决方案中遇到另一个问题。我们低效的 Fibonacci 算法的异步实现可能会导致 Fibonacci 服务进程耗尽内存。在 Node.js 的 FAQ 中，[`github.com/nodejs/node/wiki/FAQ`](https://github.com/nodejs/node/wiki/FAQ)，建议使用`--max_old_space_size`标志。你可以将这个标志添加到`package.json`中，如下所示：
 
-```js\1
+```js
 
 然而，FAQ 中还说，如果你遇到最大内存空间问题，你的应用程序可能需要重构。这回到了我们之前提到的一点，解决性能问题有几种方法，其中之一是对应用程序进行算法重构。
 

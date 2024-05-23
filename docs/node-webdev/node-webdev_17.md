@@ -136,7 +136,7 @@ NGINX 配置将同时处理 HTTP-01 挑战并为 HTTPS 连接使用反向代理�
 
 在`compose-stack`目录中，编辑`docker-compose.yml`如下：
 
-```js\1
+```js
 
 Because the `svc-notes` container will not be handling inbound traffic, we start by disabling its `ports` tag. This has the effect of ensuring it does not export any ports to the public. Instead, notice that in the `cronginx` container we export both port `80` (HTTP) and port `443` (HTTPS). That container will take over interfacing with the public internet.
 
@@ -170,7 +170,7 @@ What we need to do is create an NGINX configuration file suitable for handling r
 
 Create a file for your domain named `initial-YOUR-DOMAIN.conf`, named this way because it's the initial configuration file for the domain. It will contain this:
 
-```js\1
+```js
 
 正如我们所说，NGINX 配置文件相对简单。这声明了一个服务器，本例中监听端口为`80`（HTTP）。如果需要，可以轻松开启 IPv6 支持。
 
@@ -188,7 +188,7 @@ Create a file for your domain named `initial-YOUR-DOMAIN.conf`, named this way b
 
 在`terraform-swarm`中，编辑`ec2-public.tf`并进行以下更改：
 
-```js\1
+```js
 
 There is an existing shell script that performs the Docker setup. These three lines are appended to that script and create the directories.
 
@@ -198,7 +198,7 @@ With this in place, we can redeploy the EC2 cluster, and the directories will be
 
 Assuming that the EC2 cluster is currently not deployed, we can set it up as we did in Chapter 12, *Deploying a Docker Swarm to AWS EC2 with Terraform*. In `terraform-swarm`, run this command:
 
-```js\1
+```js
 
 到目前为止，你已经做了几次这样的事情，知道该怎么做。等待部署完成，记录 IP 地址和其他数据，然后初始化 swarm 集群并设置远程控制访问，这样你就可以在笔记本上运行 Docker 命令。
 
@@ -206,7 +206,7 @@ Assuming that the EC2 cluster is currently not deployed, we can set it up as we 
 
 我们需要将 NGINX 配置文件复制到`/home/ubuntu/nginx-conf-d`，操作如下：
 
-```js\1
+```js
 
 The `chown` command is required because when Terraform created that directory it became owned by the `root` user. It needs to be owned by the `ubuntu` user for the `scp` command to work.
 
@@ -214,7 +214,7 @@ At this point make sure that, in `compose-swarm/docker-compose.yml`, the `TWITT
 
 With those things set up, we can run this:
 
-```js\1
+```js
 
 这将向 swarm 添加所需的秘密，并部署 Notes 堆栈。几分钟后，所有服务应该都已启动。请注意，Cronginx 是其中之一。
 
@@ -228,11 +228,11 @@ With those things set up, we can run this:
 
 在`cronginx`容器内启动 shell 可能会很容易：
 
-```js\1
+```js
 
 You see there is a file named `register.sh` containing the following:
 
-```js\1
+```js
 
 该脚本旨在创建`/webroots`中所需的目录，并使用 Certbot 注册域名并提供 SSL 证书。参考配置文件，您将看到`/webroots`目录的使用方式。
 
@@ -244,13 +244,13 @@ You see there is a file named `register.sh` containing the following:
 
 脚本的执行方式如下：
 
-```js\1
+```js
 
 We run the shell script using `sh -x register.sh` and supply our chosen domain name as the first argument. Notice that it creates the `/webroots` directory, which is required for the Let's Encrypt validation. It then runs `certbot certonly`, and the tool starts asking questions required for registering with the service.
 
 The registration process ends with this message:
 
-```js\1
+```js
 
 关键数据是构成 SSL 证书的两个 PEM 文件的路径名。它还告诉您定期运行`certbot renew`来更新证书。我们已经通过安装 Cron 作业来处理了这个问题。
 
@@ -264,7 +264,7 @@ The registration process ends with this message:
 
 在`compose-stack/cronginx`中创建一个新文件，`YOUR-DOMAIN.conf`，例如`notes.geekwisdom.net.conf`。之前的文件有一个前缀`initial`，因为它在实现 HTTPS 的初始阶段为我们提供了服务。现在域名已经注册到 Let's Encrypt，我们需要一个不同的配置文件：
 
-```js\1
+```js
 
 This reconfigures the HTTP server to do permanent redirects to the HTTPS site. When an HTTP request results in a 301 status code, that is a permanent redirect. Any redirect tells web browsers to visit a URL provided in the redirect. There are two kinds of redirects, temporary and permanent, and the 301 code makes this a permanent redirect. For permanent redirects, the browser is supposed to remember the redirect and apply it in the future. In this case, the redirect URL is computed to be the request URL, rewritten to use the HTTPS protocol.
 
@@ -272,7 +272,7 @@ Therefore our users will silently be sent to the HTTPS version of Notes, with no
 
 To implement the HTTPS server, add this to the config file:
 
-```js\1
+```js
 
 这是 NGINX 中的 HTTPS 服务器实现。与 HTTP 服务器声明有许多相似之处，但也有一些特定于 HTTPS 的项目。它在端口`443`上监听，这是 HTTPS 的标准端口，并告诉 NGINX 使用 SSL。它具有相同的服务器名称和日志配置。
 
@@ -286,33 +286,33 @@ To implement the HTTPS server, add this to the config file:
 
 创建了一个新的配置文件后，我们可以将其上传到`notes-public` EC2 实例中，方法如下：
 
-```js\1
+```js
 
 The next question is how do we restart the NGINX server so it reads the new configuration file? One way is to send a SIGHUP signal to the NGINX process, causing it to reload the configuration:
 
-```js\1
+```js
 
 `nginx.pid`文件包含 NGINX 进程的进程 ID。许多 Unix/Linux 系统上的后台服务都将进程 ID 存储在这样的文件中。这个命令向该进程发送 SIGHUP 信号，NGINX 在接收到该信号时会重新读取其配置。SIGHUP 是标准的 Unix/Linux*信号*之一，通常用于导致后台进程重新加载其配置。有关更多信息，请参见`signal(2)`手册页。
 
 但是，使用 Docker 命令，我们可以这样做：
 
-```js\1
+```js
 
 That will kill the existing container and start a new one.
 
 Instead of that rosy success message, you might get this instead:
 
-```js\1
+```js
 
 这表示 Docker swarm 看到容器退出了，因此无法重新启动服务。
 
 在 NGINX 配置文件中很容易出错。首先仔细查看配置，看看可能出了什么问题。诊断的下一阶段是查看 NGINX 日志。我们可以使用`docker logs`命令来做到这一点，但我们需要知道容器的名称。因为容器已经退出，我们必须运行这个命令：
 
-```js\1
+```js
 
 The `-a` option causes `docker ps` to return information about every container, even the ones that are not currently running. With the container name in hand, we can run this:
 
-```js\1
+```js
 
 事实上，问题是语法错误，它甚至会友好地告诉您行号。
 
@@ -340,7 +340,7 @@ The `-a` option causes `docker ps` to return information about every contain
 
 完成了这项任务后，您可能希望关闭 AWS EC2 集群。在这样做之前，最好先从 Let's Encrypt 中注销域名。这也只需要运行带有正确命令的 Certbot：
 
-```js\1
+```js
 
 As before, we run `docker ps` to find out the exact container name. With that name, we start a command shell inside the container. The actual act is simple, we just run `certbot delete` and specify the domain name.
 
@@ -362,11 +362,11 @@ Using Helmet is largely a matter of importing the library into `node_modules`, m
 
 In the `notes` directory, install the package like so:
 
-```js\1
+```js
 
 然后将此添加到`notes/app.mjs`中：
 
-```js\1
+```js
 
 That's enough for most applications. Using Helmet out of the box provides a reasonable set of default security options. We could be done with this section right now, except that it's useful to examine closely what Helmet does, and its options.
 
@@ -380,19 +380,19 @@ We would be remiss to not point out a glaring problem with services such as the 
 
 To try this out, edit a note and enter something like this:
 
-```js\1
+```js
 
 单击保存按钮，您将看到此代码显示为文本。Notes 的危险版本将在 notes 视图页面中插入`<script>`标签，以便加载恶意 JavaScript 并为访问者造成问题。相反，`<script>`标签被编码为安全的 HTML，因此它只会显示为屏幕上的文本。我们并没有为这种行为做任何特殊处理，Handlebars 为我们做了这个。
 
 实际上，这更有趣一些。如果我们查看 Handlebars 文档，[`handlebarsjs.com/expressions.html`](http://handlebarsjs.com/expressions.html)，我们会了解到这个区别：
 
-```js\1
+```js
 
 In Handlebars, a value appearing in a template using two curly braces (`{{encoded}}`) is encoded using HTML coding. For the previous example, the angle bracket is encoded as `&lt;` and so on for display, rendering that JavaScript code as neutral text rather than as HTML elements. If instead, you use three curly braces (`{{{notEncoded}}}`), the value is not encoded and is instead presented as is. The malicious JavaScript would be executed in your visitor's browser, causing problems for your users.
 
 We can see this problem by changing `views/noteview.hbs` to use raw HTML output:
 
-```js\1
+```js
 
 我们不建议这样做，除非作为一个实验来看看会发生什么。效果是，正如我们刚才说的，允许用户输入 HTML 代码并将其原样显示。如果 Notes 以这种方式行事，任何笔记都可能携带恶意 JavaScript 片段或其他恶意软件。
 
@@ -404,7 +404,7 @@ We can see this problem by changing `views/noteview.hbs` to use raw HTML outpu
 
 有很多选项。例如，您可以导致浏览器将任何违规行为报告给您的服务器，这样您就需要为`/report-violation`实现一个路由处理程序。这段代码对 Notes 来说已经足够了：
 
-```js\1
+```js
 
 For better or for worse, the Notes application implements one security best practice—all CSS and JavaScript files are loaded from the same server as the application. Therefore, for the most part, we can use the `'self'` policy. There are several exceptions:
 
@@ -420,7 +420,7 @@ Obviously, the ContentSecurityPolicy settings shown here should be configurable.
 
 To experiment with this problem, change the hard coded string to a different domain name then redeploy it to your server. In the JavaScript console in your browser you will get an error like this:
 
-```js\1
+```js
 
 发生的情况是，静态定义的常量不再与 Notes 部署的域兼容。您已重新配置此设置，以限制连接到不同域，例如`notes.newdomain.xyz`，但服务仍托管在现有域，例如`notes.geekwisdom.net`。浏览器不再相信连接到`notes.geekwisdom.net`是安全的，因为您的配置说只信任`notes.newdomain.xyz`。
 
@@ -428,13 +428,13 @@ To experiment with this problem, change the hard coded string to a different dom
 
 在`app.mjs`中，将`contentSecurityPolicy`部分更改为以下内容：
 
-```js\1
+```js
 
 This lets us define an environment variable, `CSP_CONNECT_SRC_URL`, which will supply a URL to be added into the array passed to the `connectSrc` parameter. Otherwise, the `connectSrc` setting will be limited to `"'self'"`.
 
 Then in `compose-swarm/docker-compose.yml`, we can declare that variable like so:
 
-```js\1
+```js
 
 我们现在可以在配置中设置它，根据需要进行更改。
 
@@ -450,7 +450,7 @@ DNS Prefetch 是一些浏览器实现的一种便利，其中浏览器将预先�
 
 使用以下内容设置 DNS 预取控制：
 
-```js\1
+```js
 
 In this case, we learned about preventing the browser from making premature DNS queries. The risk is that excess DNS queries give a false impression of which websites someone has visited.
 
@@ -462,7 +462,7 @@ Web browsers nowadays have a long list of features that can be enabled, such as 
 
 For Notes we don't need any of those features, though some look intriguing as future possibilities. For instance, we could pivot to taking on Instagram if we allowed people to upload photos, maybe? In any case, this configuration is very strict:
 
-```js\1
+```js
 
 要启用一个功能，要么将其设置为`'self'`以允许网站启用该功能，要么将其设置为第三方网站的域名，以允许启用该功能。例如，启用支付功能可能需要添加`'paypal.com'`或其他支付处理器。
 
@@ -476,7 +476,7 @@ For Notes we don't need any of those features, though some look intriguing as fu
 
 Helmet 的`frameguard`模块将设置一个标头，指示浏览器如何处理`<iframe>`。有关文档，请参阅[`helmetjs.github.io/docs/frameguard/`](https://helmetjs.github.io/docs/frameguard/)。
 
-```js\1
+```js
 
 This setting controls which domains are allowed to put this page into an `<iframe>`. Using `deny`, as shown here, prevents all sites from embedding this content using an `<iframe>`. Using `sameorigin` allows the site to embed its own content. We can also list a single domain name to be allowed to embed this content.
 
@@ -490,15 +490,15 @@ The `X-Powered-By` header can give malicious actors a clue about the software st
 
 Express can disable this feature on its own:
 
-```js\1
+```js
 
 或者您可以使用 Helmet 来这样做：
 
-```js\1
+```js
 
 Another option is to masquerade as some other stack like so:
 
-```js\1
+```js
 
 没有什么比让坏人迷失方向更好的了。
 
@@ -512,13 +512,13 @@ Another option is to masquerade as some other stack like so:
 
 我们设置严格传输安全性如下：
 
-```js\1
+```js
 
 This tells the browser to stick with the HTTPS version of the site for the next 60 days, and never visit the HTTP version.
 
 And, as long as we're on this issue, let's learn about `express-force-ssl`, which is another way to implement a redirect so the users use HTTPS. After adding a dependency to that package in `package.json`, add this in `app.mjs`:
 
-```js\1
+```js
 
 安装了这个软件包后，用户不必被鼓励使用 HTTPS，因为我们在默默地强制他们这样做。
 
@@ -532,7 +532,7 @@ And, as long as we're on this issue, let's learn about `express-force-ssl`, whi
 
 XSS 攻击试图将 JavaScript 代码注入到网站输出中。通过在另一个网站中注入恶意代码，攻击者可以访问他们本来无法检索的信息，或者引起其他类型的麻烦。 X-XSS-Protection 标头可以防止某些 XSS 攻击，但并非所有类型的 XSS 攻击，因为 XSS 攻击有很多种类型：
 
-```js\1
+```js
 
 This causes an X-XSS-Protection header to be sent specifying `1; mode=block`. This mode tells the browser to look for JavaScript in the request URL that also matches JavaScript on the page, and it then blocks that code. This is only one type of XSS attack, and therefore this is of limited usefulness. But it is still useful to have this enabled.
 
@@ -546,13 +546,13 @@ CSRF attacks are similar to XSS attacks in that both occur across multiple sites
 
 The `csurf` package is designed to be used with Express [`www.npmjs.com/package/csurf`](https://www.npmjs.com/package/csurf) . In the `notes` directory, run this:
 
-```js\1
+```js
 
 这将安装`csurf`软件包，并在`package.json`中记录依赖关系。
 
 然后像这样安装中间件：
 
-```js\1
+```js
 
 The `csurf` middleware must be installed following the `cookieParser` middleware.
 
@@ -560,13 +560,13 @@ Next, for every page that includes a FORM, we must generate and send a token wit
 
 In `routes/notes.mjs,` add the following as a parameter to the `res.render` call for the `/add`, `/edit`, `/view`, and `/destroy` routes:
 
-```js\1
+```js
 
 这将生成 CSRF 令牌，确保它与其他数据一起发送到模板。同样，在`routes/users.mjs`中的`/login`路由也要这样做。我们的下一个任务是确保相应的模板将令牌呈现为隐藏的输入。 
 
 在`views/noteedit.hbs`和`views/notedestroy.hbs`中，添加以下内容：
 
-```js\1
+```js
 
 This is a hidden INPUT, and whenever the FORM containing this is submitted this value will be carried along with the FORM parameters.
 
@@ -574,11 +574,11 @@ The result is that code on the server generates a token that is added to each FO
 
 In `views/login.hbs`, make the same addition but adding it inside the FORM like so:
 
-```js\1
+```js
 
 在`views/noteview.hbs`中，有一个用于提交评论的表单。做出以下更改：
 
-```js\1
+```js
 
 In every case, we are adding a hidden INPUT field. These fields are not visible to the user and are therefore useful for carrying a wide variety of data that will be useful to receive on the server. We've already used hidden INPUT fields in Notes, such as in `noteedit.hbs` for the `docreate` flag.
 
@@ -592,13 +592,13 @@ SQL injection is another large class of security exploits, where the attacker pu
 
 The best practice for avoiding this problem is to use parameterized database queries, allowing the database driver to prevent SQL injections simply by correctly encoding all SQL parameters. For example, we do this in the SQLite3 model:
 
-```js\1
+```js
 
 这使用了一个参数化字符串，`key`的值被编码并插入到问号的位置。大多数数据库驱动程序都有类似的功能，并且它们已经知道如何将值编码到查询字符串中。即使坏人将一些 SQL 注入到`key`的值中，因为驱动程序正确地对`key`的内容进行了编码，最坏的结果也只是一个 SQL 错误消息。这自动使任何尝试的 SQL 注入攻击无效。
 
 与我们本可以编写的另一种选择形成对比：
 
-```js\1
+```js
 
 The template strings feature of ES6 is very tempting to use everywhere. But it is not appropriate in all circumstances. In this case, the database query parameter would not be screened nor encoded, and if a miscreant can get a custom string to that query it could cause havoc in the database.
 
@@ -618,7 +618,7 @@ The `audit` command consults the vulnerability data collected by the auditing t
 
 When running `npm install`, the output might include a message like this:
 
-```js\1
+```js
 
 这告诉我们，当前安装的软件包中有八个已知的漏洞。每个漏洞在这个规模上被分配了一个严重性等级（[`docs.npmjs.com/about-audit-reports`](https://docs.npmjs.com/about-audit-reports)）：
 
@@ -632,7 +632,7 @@ When running `npm install`, the output might include a message like this:
 
 在这种情况下，运行`npm audit`告诉我们，所有低优先级问题都在`minimist`软件包中。例如，报告中包括了这样的内容：
 
-```js\1
+```js
 
 In this case, `minimist` is reported because `hbs` uses `handlebars`, which uses `optimist`, which uses `minimist`. There are six more instances where `minimist` is used by some package that's used by another package that our application is using.
 
@@ -640,13 +640,13 @@ In this case, we're given a recommendation, to upgrade to `hbs@4.1.1`, because t
 
 In another case, the chain of dependencies is this:
 
-```js\1
+```js
 
 在这种情况下，没有推荐的修复方法，因为这些软件包都没有发布依赖于正确版本的`minimist`的新版本。这种情况的推荐解决方案是向每个相应的软件包团队提交问题，要求他们将其依赖项更新为有问题软件包的后续版本。
 
 在最后一种情况下，是我们的应用直接依赖于有漏洞的软件包：
 
-```js\1
+```js
 
 Therefore it is our responsibility to fix this problem because it is in our code. The good news is that this particular package is not executed on the server side since jQuery is a client-side library that just so happens to be distributed through the npm repository.
 
@@ -674,7 +674,7 @@ Taken together, an attacker can't exploit any known vulnerability that relies on
 
 But there is more customization we can do to the cookie used with `express-session`. That package has a few options available for improving security. See [`www.npmjs.com/package/express-session`](https://www.npmjs.com/package/express-session), and then consider this change to the configuration:
 
-```js\1
+```js
 
 这些是看起来有用的额外属性。`secure`属性要求 Cookie 只能通过 HTTPS 连接发送。这确保了 Cookie 数据通过 HTTPS 加密进行加密。`maxAge`属性设置了 Cookie 有效的时间，以毫秒表示。
 
@@ -690,7 +690,7 @@ Cookie 在 Web 浏览器中是一个非常有用的工具，即使有很多对�
 
 对于`ec2-public-sg`安全组，编辑`ec2-public.tf`并将其更改为以下内容：
 
-```js\1
+```js
 
 This declares many specific network ports used for specific protocols. Each rule names the protocol in the `description` attribute. The `protocol` attribute says whether it is a UDP or TCP protocol. Remember that TCP is a stream-oriented protocol that ensures packets are delivered, and UDP, by contrast, is a packet-oriented protocol that does not ensure delivery. Each has characteristics making them suitable for different purposes.
 
@@ -702,7 +702,7 @@ An issue to ponder is whether the SSH port should be left open to the entire int
 
 In `ec2-private.tf`, we must make a similar change to `ec2-private-sg`:
 
-```js\1
+```js
 
 这基本上是相同的，但有一些具体的区别。首先，因为私有 EC2 实例可以有 MySQL 数据库，我们声明了端口`3306`的规则。其次，除了一个规则外，所有规则都限制流量到 VPC 内的 IP 地址。
 

@@ -1573,11 +1573,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 我们可能会在这个解决方案中遇到另一个问题。我们低效的Fibonacci算法的异步实现可能会导致Fibonacci服务进程耗尽内存。在Node.js的FAQ中，[https://github.com/nodejs/node/wiki/FAQ](https://github.com/nodejs/node/wiki/FAQ)，建议使用`--max_old_space_size`标志。你可以将这个标志添加到`package.json`中，如下所示：
-- en: '```js\1'
+- en: '```js'
   id: totrans-238
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: However, the FAQs also say that if you're running into maximum memory space
     problems, your application should probably be refactored. This goes back to the
     point we made earlier that there are several approaches to addressing performance

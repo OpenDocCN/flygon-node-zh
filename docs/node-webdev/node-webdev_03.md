@@ -32,7 +32,7 @@ Node.js 现在可以通过包管理系统获得，无需从源代码编译和安
 
 MacPorts 项目（[`www.macports.org/`](http://www.macports.org/)）多年来一直在为 macOS 打包大量开源软件包，他们已经打包了 Node.js。它默认管理的命令安装在`/opt/local/bin`上。安装 MacPorts 后，安装 Node.js 非常简单，可以在 MacPorts 安装命令的目录中找到 Node.js 二进制文件：
 
-```js\1
+```js
 
 If you have followed the directions for setting up MacPorts, the MacPorts directory is already in your PATH environment variable. Running the `node`, `npm`, or `npx` commands is then simple. This proves Node.js has been installed and the installed version matched what you asked for.
 
@@ -42,15 +42,15 @@ MacPorts isn't the only tool for managing open source software packages on macOS
 
 Homebrew is another open source software package manager for macOS, which some say is the perfect replacement for MacPorts. It is available through their home page at [`brew.sh/`](http://brew.sh/). After installing Homebrew using the instructions on their website and ensuring that it is correctly set up, use the following code:
 
-```js\1
+```js
 
 然后，像这样安装：
 
-```js\1
+```js
 
 Like MacPorts, Homebrew installs commands on a public directory, which defaults to `/usr/local/bin`. If you have followed the Homebrew instructions to add that directory to your `PATH` variable, run the Node.js command as follows:
 
-```js\1
+```js
 
 这证明 Node.js 已经安装，并且安装的版本与您要求的版本相匹配。
 
@@ -62,13 +62,13 @@ Node.js 现在可以通过大多数包管理系统获得。Node.js 网站上的�
 
 例如，在 Debian 和其他基于 Debian 的 Linux 发行版（如 Ubuntu）上，使用以下命令：
 
-```js\1
+```js
 
 This adds the NodeSource APT repository to the system, updates the package data, and prepares the system so that you can install Node.js packages. It also instructs us on how to install Node.js and the required compiler and developer tools.
 
 To download other Node.js versions (this example shows version 14.x), modify the URL to suit you:
 
-```js\1
+```js
 
 命令将安装在`/usr/bin`中，我们可以测试下载的版本是否符合我们的要求。
 
@@ -142,7 +142,7 @@ To download other Node.js versions (this example shows version 14.x), modify th
 
 有三个先决条件：C 编译器、Python 和 OpenSSL 库。Node.js 编译过程会检查它们的存在，如果 C 编译器或 Python 不存在，将会失败。这些命令将检查它们的存在：
 
-```js\1
+```js
 
 Go to [`github.com/nodejs/node/blob/master/BUILDING.md`](https://github.com/nodejs/node/blob/master/BUILDING.md) for details on the requirements.
 
@@ -158,7 +158,7 @@ Developer tools (such as GCC) are an optional installation on macOS. Fortunatel
 
 You start with Xcode, which is available for free through the Macintosh app store. Simply search for `Xcode` and click on the Get button. Once you have Xcode installed, open a Terminal window and type the following:
 
-```js\1
+```js
 
 这将安装 Xcode 命令行工具：
 
@@ -180,19 +180,19 @@ You start with Xcode, which is available for free through the Macintosh app stor
 
 源代码包可以通过浏览器下载，或者按照以下步骤进行替换您喜欢的版本：
 
-```js\1
+```js
 
 Now, we configure the source so that it can be built. This is just like with many other open source packages and there is a long list of options to customize the build:
 
-```js\1
+```js
 
 要使安装到您的`home`目录中，以这种方式运行它：
 
-```js\1
+```js
 
 If you're going to install multiple Node.js versions side by side, it's useful to put the version number in the path like this. That way, each version will sit in a separate directory. It will then be a simple matter of switching between Node.js versions by changing the `PATH` variable appropriately:
 
-```js\1
+```js
 
 安装多个 Node.js 版本的更简单方法是使用`nvm`脚本，稍后将进行描述。
 
@@ -202,23 +202,23 @@ If you're going to install multiple Node.js versions side by side, it's useful t
 
 配置脚本满意后，您可以编译软件：
 
-```js\1
+```js
 
 If you are installing on a system-wide directory, perform the last step this way instead:
 
-```js\1
+```js
 
 安装完成后，您应该确保将安装目录添加到您的`PATH`变量中，如下所示：
 
-```js\1
+```js
 
 Alternatively, for `csh` users, use this syntax to make an exported environment variable:
 
-```js\1
+```js
 
 安装完成后，它会创建一个目录结构，如下所示：
 
-```js\1
+```js
 
 Now that we've learned how to install Node.js from the source on UNIX-like systems, we get to do the same on Windows.
 
@@ -248,7 +248,7 @@ Earlier, while discussing building Node.js from the source, we noted that you 
 
 Switching between Node.js versions is simply a matter of changing the `PATH` variable (on POSIX systems), as in the following code, using the directory where you installed Node.js:
 
-```js\1
+```js
 
 在一段时间后，维护这个变得有点乏味。对于每个发布，您都必须在 Node.js 安装中设置 Node.js、npm 和任何第三方模块。此外，显示更改`PATH`的命令并不是最佳的。富有创造力的程序员已经创建了几个版本管理器，以简化管理多个 Node.js/npm 版本，并提供智能更改`PATH`的命令：
 
@@ -260,7 +260,7 @@ Switching between Node.js versions is simply a matter of changing the `PATH` var
 
 例如，使用`nvm`，您可以运行这样的命令：
 
-```js\1
+```js
 
 In this example, we first listed the available versions. Then, we demonstrated how to switch between Node.js versions, verifying the version changed each time. We also installed and used a new version using `nvm`. Finally, we showed the directory where nvm installs Node.js packages versus Node.js versions that are installed using MacPorts or Homebrew.
 
@@ -293,7 +293,7 @@ The `node-gyp` tool is a cross-platform command-line tool written in Node.js f
 
 You can easily see this in action by running these commands:
 
-```js\1
+```js
 
 这是在临时目录中完成的，所以之后可以删除它。如果您的系统没有安装编译本地代码模块的工具，您将看到错误消息。否则，您将看到`node-gyp`的执行输出，然后是许多明显与编译 C/C++文件相关的文本行。
 
@@ -331,7 +331,7 @@ npm 的作用是确保我们的软件包在正确的 Node.js 版本上执行。�
 
 我们可以在`package.json`中添加条目如下：
 
-```js\1
+```js
 
 This means exactly what it implies—that the given package is compatible with Node.js version 8.x or later.
 
@@ -367,7 +367,7 @@ The basic installation of Node.js includes two commands: `node` and `npm`. We'
 
 The easiest way to verify that your Node.js installation works is also the best way to get help with Node.js. Type the following command:
 
-```js\1
+```js
 
 输出很多，但不要过于仔细研究。关键是`node --help`提供了很多有用的信息。
 
@@ -377,7 +377,7 @@ The easiest way to verify that your Node.js installation works is also the best 
 
 在没有参数的情况下运行 Node.js 会将您放在一个交互式 JavaScript shell 中：
 
-```js\1
+```js
 
 Any code you can write in a Node.js script can be written here. The command interpreter gives a good terminal-oriented user experience and is useful for interactively playing with your code. You do play with your code, don't you? Good!
 
@@ -391,15 +391,15 @@ For this and other examples in this book, it doesn't truly matter where you put 
 
 First, create a text file named `ls.js` with the following content:
 
-```js\1
+```js
 
 接下来，通过输入以下命令来运行它：
 
-```js\1
+```js
 
 This is a pale and cheap imitation of the Unix `ls` command (as if you couldn't figure that out from the name!). The `readdir` function is a close analog to the Unix `readdir` system call used to list the files in a directory. On Unix/Linux systems, we can run the following command to learn more:
 
-```js\1
+```js
 
 当然，`man`命令让你阅读手册页，第`3`节涵盖了 C 库。
 
@@ -411,15 +411,15 @@ This is a pale and cheap imitation of the Unix `ls` command (as if you couldn't 
 
 命令行参数会落入一个名为`process.argv`的全局数组中。因此，我们可以修改`ls.js`，将其复制为`ls2.js`（如下所示）来看看这个数组是如何工作的：
 
-```js\1
+```js
 
 You can run it as follows:
 
-```js\1
+```js
 
 我们只是检查了命令行参数是否存在，`if (process.argv[2])`。如果存在，我们会覆盖`dir`变量的值，`dir = process.argv[2]`，然后将其用作`readdir`的参数：
 
-```js\1
+```js
 
 If you give it a non-existent directory pathname, an error will be thrown and printed using the `catch` clause. 
 
@@ -429,19 +429,19 @@ There is a different way to write these examples that some feel is more concise.
 
 Combined with the `async` keyword, an async arrow function looks like this:
 
-```js\1
+```js
 
 你可以在任何地方使用这个；例如，该函数可以被分配给一个变量，或者它可以作为回调传递给另一个函数。当与`async`关键字一起使用时，箭头函数的主体具有所有`async`函数的行为。
 
 为了这些示例的目的，可以将异步箭头函数包装为立即执行：
 
-```js\1
+```js
 
 The final parenthesis causes the inline function to immediately be invoked.
 
 Then, because `async` functions return a Promise, it is necessary to add a `.catch` block to catch errors. With all that, the example looks as follows:
 
-```js\1
+```js
 
 也许这种风格或者之前的风格更可取。然而，你会发现这两种风格都在使用中，了解这两种风格的工作方式是必要的。
 
@@ -475,11 +475,11 @@ Node.js 10 中的一个新功能就是这样的转换的一个例子。在`fs`�
 
 创建一个名为`app.js`的文件，其中包含以下内容：
 
-```js\1
+```js
 
 Run it as follows:
 
-```js\1
+```js
 
 这是你可以用 Node.js 构建的最简单的网络服务器。如果你对它的工作原理感兴趣，请翻到第四章，*HTTP 服务器和客户端*，第五章，*你的第一个 Express 应用程序*，和第六章，*实现移动优先范式*。但现在，只需在浏览器中键入`http://127.0.0.1:8124`，就可以看到 Hello, World!的消息：
 
@@ -501,17 +501,17 @@ Node.js 作为一个具有一些有趣的异步 I/O 库的 JavaScript 解释器�
 
 现在我们已经安装了`npm`，让我们快速试一下。**hexy**程序是一个用于打印文件的十六进制转储的实用程序。这是一个非常 70 年代的事情，但它仍然非常有用。它现在正好符合我们的目的，因为它可以让我们快速安装和尝试：
 
-```js\1
+```js
 
 Adding the `-g` flag makes the module available globally, irrespective of the present working directory of your command shell. A global install is most useful when the module provides a command-line interface. When a package provides a command-line script, `npm` sets that up. For a global install, the command is installed correctly for use by all users of the computer.
 
 Depending on how Node.js is installed for you, it may need to be run with `sudo`:
 
-```js\1
+```js
 
 安装完成后，您可以以以下方式运行新安装的程序：
 
-```js\1
+```js
 
 The `hexy` command was installed as a global command, making it easy to run.
 
@@ -529,7 +529,7 @@ Some packages in the npm repository are command-line tools, such as the `hexy` p
 
 The previous example could have been run this way:
 
-```js\1
+```js
 
 在底层，`npx`使用`npm`将包下载到缓存目录，除非包已经安装在当前项目目录中。因为包然后在缓存目录中，所以只下载一次。
 
@@ -559,7 +559,7 @@ JavaScript 有很多新功能，但让我们快速浏览其中两个我们将大
 
 第一个是称为箭头函数的轻量级函数语法：
 
-```js\1
+```js
 
 This is more than the syntactic sugar of replacing the `function` keyword with the fat arrow. Arrow functions are lighter weight as well as being easier to read. The lighter weight comes at the cost of changing the value of `this` inside the arrow function. In regular functions, `this` has a unique value inside the function. In an arrow function, `this` has the same value as the scope containing the arrow function. This means that, when using an arrow function, we don't have to jump through hoops to bring `this` into the callback function because `this` is the same at both levels of the code.
 
@@ -570,31 +570,31 @@ The next feature is the `Promise` class, which is used for deferred and asynchro
 
 While convenient, these conventions have resulted in multilayer code pyramids that can be difficult to understand and maintain:
 
-```js\1
+```js
 
 您不需要理解代码；这只是实践中发生的概述，因为我们使用回调。根据特定任务所需的步骤数量，代码金字塔可能会变得非常深。Promise 将让我们解开代码金字塔，并提高可靠性，因为错误处理更直接，可以轻松捕获所有错误。
 
 `Promise`类的创建如下：
 
-```js\1
+```js
 
 Rather than passing in a callback function, the caller receives a `Promise` object. When properly utilized, the preceding pyramid can be coded as follows:
 
-```js\1
+```js
 
 这是因为`Promise`类支持链接，如果`then`函数返回一个`Promise`对象。
 
 `async/await`功能实现了`Promise`类的承诺，简化了异步编码。这个功能在`async`函数中变得活跃：
 
-```js\1
+```js
 
 An `async` arrow function is as follows: 
 
-```js\1
+```js
 
 为了看到`async`函数范式给我们带来了多大的改进，让我们将之前的示例重新编码如下：
 
-```js\1
+```js
 
 Again, we don't need to understand the code but just look at its shape. Isn't this a breath of fresh air compared to the nested structure we started with?
 
@@ -602,7 +602,7 @@ The `await` keyword is used with a Promise. It automatically waits for the Promi
 
 This example also shows another ES2015 feature: destructuring. The fields of an object can be extracted using the following code:
 
-```js\1
+```js
 
 这演示了一个具有三个字段的对象，但只提取了两个字段。
 
@@ -628,13 +628,13 @@ Node Green 网站明确表示 Node.js 支持几乎所有的 ES2015、2016 和 20
 
 在包含`ls.js`和`ls2.js`的目录中，输入以下命令：
 
-```js\1
+```js
 
 This installs the Babel software, along with a couple of transformation plugins. Babel has a plugin system so that you can enable the transformations required by your project. Our primary goal in this example is converting the `async` functions shown earlier into Generator functions. Generators are a new sort of function introduced with ES2015 that form the foundation for the implementation of `async` functions.
 
 Because Node.js 6.x does not have either the `fs.promises` function or `util.promisify`, we need to make some substitutions to create a file named `ls2-old-school.js`:
 
-```js\1
+```js
 
 我们有之前看过的相同示例，但有一些更改。`fs_readdir`函数创建一个 Promise 对象，然后调用`fs.readdir`，确保根据我们得到的结果要么`reject`要么`resolve`Promise。这基本上是`util.promisify`函数所做的。
 
@@ -644,27 +644,27 @@ Because Node.js 6.x does not have either the `fs.promises` function or `util.pr
 
 接下来，创建一个名为`.babelrc`的文件，其中包含以下内容：
 
-```js\1
+```js
 
 This file instructs Babel to use the named transformation plugins that we installed earlier. As the name implies, it will transform the `async` functions to `generator` functions.
 
 Because we installed `babel-cli`, a `babel` command is installed, such that we can type the following:
 
-```js\1
+```js
 
 要转译您的代码，请运行以下命令：
 
-```js\1
+```js
 
 This command transpiles the named file, producing a new file. The new file is as follows:
 
-```js\1
+```js
 
 这段代码并不是为了人类易读。相反，它意味着你编辑原始源文件，然后将其转换为目标 JavaScript 引擎。要注意的主要事情是转译后的代码使用了生成器函数（`function*`表示生成器函数）代替`async`函数，使用`yield`关键字代替`await`关键字。生成器函数是什么，以及`yield`关键字的确切作用并不重要；唯一需要注意的是`yield`大致相当于`await`，而`_asyncToGenerator`函数实现了类似于 async 函数的功能。否则，转译后的代码相当清晰，看起来与原始代码相似。
 
 转译后的脚本运行如下：
 
-```js\1
+```js
 
 换句话说，它在旧的 Node.js 版本上运行与`async`版本相同。使用类似的过程，您可以转译使用现代 ES2015（等等）构造编写的代码，以便在旧的 Web 浏览器中运行。
 

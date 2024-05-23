@@ -880,11 +880,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 但正如我们之前所看到的，这是在Node.js中编写异步代码的新首选方式：
-- en: '```js\1'
+- en: '```js'
   id: totrans-115
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: Instead, ES2017 `async` functions return us to this very natural expression
     of programming intent. Results and errors land in the correct location while preserving
     the excellent event-driven asynchronous programming model that made Node.js great.

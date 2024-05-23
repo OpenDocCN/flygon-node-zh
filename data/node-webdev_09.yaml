@@ -1410,11 +1410,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 我们可以验证MongoDB数据库最终是否具有正确的值。首先，这样启动MongoDB客户端程序：
-- en: '```js\1'
+- en: '```js'
   id: totrans-210
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: Again, this is assuming the MongoDB configuration presented so far, and if your
     configuration differs then add the URL on the command line. This starts the interactive
     MongoDB shell, connected to the database configured for use by Notes. To inspect

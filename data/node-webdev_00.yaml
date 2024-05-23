@@ -405,11 +405,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 任何命令行输入或输出都以以下形式编写：
-- en: '```js\1'
+- en: '```js'
   id: totrans-58
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: '**Bold**: Indicates a new term, an important word, or words that you see onscreen.
     For example, words in menus or dialog boxes appear in the text like this. Here
     is an example: "Click on the Submit button."'

@@ -48,7 +48,7 @@
 
 当我们使用 Express 生成器最初创建`Notes`应用程序时，它使用以下代码配置了一个活动日志系统，使用了`morgan`：
 
-```js\1
+```js
 
 This module is what prints messages about HTTP requests on the terminal window. We'll look at how to configure this in the next section.
 
@@ -73,11 +73,11 @@ As it stands, `Notes` uses the `dev` format, which is described as a concise sta
 
 To enable changing the logging format, simply change the following line in `app.mjs`:
 
-```js\1
+```js
 
 这是我们在整本书中遵循的模式；即将默认值嵌入应用程序，并使用环境变量来覆盖默认值。如果我们没有通过环境变量提供配置值，程序将使用`dev`格式。接下来，我们需要运行`Notes`，如下所示：
 
-```js\1
+```js
 
 To revert to the previous logging output, simply do not set this environment variable. If you've looked at Apache access logs, this logging format will look familiar. The `::1` notation at the beginning of the line is IPV6 notation for `localhost`, which you may be more familiar with as `127.0.0.1`.
 
@@ -87,7 +87,7 @@ We could declare victory on request logging and move on to debugging messages. H
 
 The `morgan` documentation suggests the following:
 
-```js\1
+```js
 
 然而，这存在一个问题；无法在不关闭和重新启动服务器的情况下执行日志轮换。术语“日志轮换”指的是 DevOps 实践，其中每个快照覆盖了几小时的活动。通常，应用服务器不会持续打开文件句柄到日志文件，DevOps 团队可以编写一个简单的脚本，每隔几个小时运行一次，并使用`mv`命令移动日志文件，使用`rm`命令删除旧文件。不幸的是，`morgan`在这里配置时，会持续打开文件句柄到日志文件。
 
@@ -97,11 +97,11 @@ The `morgan` documentation suggests the following:
 
 首先，安装包：
 
-```js\1
+```js
 
 Then, add the following code to `app.mjs`:
 
-```js\1
+```js
 
 在顶部的`import`部分，我们将`rotating-file-stream`加载为`rfs`。如果设置了`REQUEST_LOG_FILE`环境变量，我们将把它作为要记录的文件名。`morgan`的`stream`参数只需接受一个可写流。如果`REQUEST_LOG_FILE`没有设置，我们使用`?:`运算符将`process.stdout`的值作为可写流。如果设置了，我们使用`rfs.createStream`创建一个可写流，通过`rotating-file-stream`模块处理日志轮换。
 
@@ -109,17 +109,17 @@ Then, add the following code to `app.mjs`:
 
 可以设置多个日志。例如，如果我们想要将日志记录到控制台，除了记录到文件中，我们可以添加以下`logger`声明：
 
-```js\1
+```js
 
 If the `REQUEST_LOG_FILE` variable is set, the other logger will direct logging to the file. Then, because the variable is set, this logger will be created and will direct logging to the console. Otherwise, if the variable is not set, the other logger will send logging to the console and this logger will not be created.
 
 We use these variables as before, specifying them on the command line, as follows:
 
-```js\1
+```js
 
 使用这个配置，将在`log.txt`中创建一个 Apache 格式的日志。在进行一些请求后，我们可以检查日志：
 
-```js\1
+```js
 
 As expected, our log file has entries in Apache format. Feel free to add one or both of these environment variables to the script in `package.json` as well.
 
@@ -133,19 +133,19 @@ For the documentation on the `debug` package, refer to [`www.npmjs.com/package/
 
 The Express team uses `DEBUG` internally, and we can generate quite a detailed trace of what Express does by running `Notes` this way:
 
-```js\1
+```js
 
 如果要调试 Express，这非常有用。但是，我们也可以在我们自己的代码中使用这个。这类似于插入`console.log`语句，但无需记住注释掉调试代码。
 
 要在我们的代码中使用这个，需要在任何想要调试输出的模块顶部添加以下声明：
 
-```js\1
+```js
 
 This creates two functions—`debug` and `dbgerror`—which will generate debugging traces if enabled. The Debug package calls functions *debuggers*. The debugger named `debug` has a `notes:debug` specifier, while `dbgerror` has a `notes:error` specifier. We'll talk in more detail about specifiers shortly.
 
 Using these functions is as simple as this:
 
-```js\1
+```js
 
 当为当前模块启用调试时，这会导致消息被打印出来。如果当前模块未启用调试，则不会打印任何消息。再次强调，这类似于使用`console.log`，但您可以动态地打开和关闭它，而无需修改您的代码，只需适当设置`DEBUG`变量。
 
@@ -155,25 +155,25 @@ Using these functions is as simple as this:
 
 要向`Notes`添加调试，让我们添加一些代码。将以下内容添加到`app.mjs`的底部：
 
-```js\1
+```js
 
 This is adapted from the `httpsniffer.mjs` example from Chapter 4, *HTTP Servers and Clients*, and for every HTTP request, a little bit of information will be printed.
 
 Then, in `appsupport.mjs`, let's make two changes. Add the following to the top of the `onError` function:
 
-```js\1
+```js
 
 这将在 Express 捕获的任何错误上输出错误跟踪。
 
 然后，将`onListening`更改为以下内容：
 
-```js\1
+```js
 
 This changes the `console.log` call to a `debug` call so that a `Listening on` message is printed only if debugging is enabled.
 
 If we run the application with the `DEBUG` variable set appropriately, we get the following output:
 
-```js\1
+```js
 
 仔细看一下，你会发现输出既是来自`morgan`的日志输出，也是来自`debug`模块的调试输出。在这种情况下，调试输出以`notes:debug`开头。由于`REQUEST_LOG_FORMAT`变量，日志输出是以 Apache 格式的。
 
@@ -199,7 +199,7 @@ Node.js 通过进程对象发送的事件指示这些条件，`uncaughtException
 
 要实现这些处理程序，请将以下内容添加到`appsupport.mjs`中：
 
-```js\1
+```js
 
 Because these are events that are emitted from the `process` object, the way to handle them is to attach an event listener to these events. That's what we've done here.
 
@@ -215,7 +215,7 @@ Filesystems are an often-overlooked database engine. While filesystems don't hav
 
 Let's start by adding two functions to the `Note` class in `models/Notes.mjs`:
 
-```js\1
+```js
 
 我们将使用这个将`Note`对象转换为 JSON 格式的文本，以及从 JSON 格式的文本转换为`Note`对象。
 
@@ -225,13 +225,13 @@ Let's start by adding two functions to the `Note` class in `models/Notes.mjs`:
 
 这两个函数可以如下使用：
 
-```js\1
+```js
 
 This example code snippet produces a simple `Note` instance and then generates the JSON version of the note. Then, a new note is instantiated from that JSON string using `from JSON()`.
 
 Now, let's create a new module, `models/notes-fs.mjs`, to implement the filesystem datastore:
 
-```js\1
+```js
 
 这导入了所需的模块；一个额外的添加是使用 `fs-extra` 模块。这个模块被用来实现与核心 `fs` 模块相同的 API，同时添加了一些有用的额外函数。在我们的情况下，我们对 `fs.ensureDir` 感兴趣，它验证指定的目录结构是否存在，如果不存在，则创建一个目录路径。如果我们不需要 `fs.ensureDir`，我们将简单地使用 `fs.promises`，因为它也提供了在 `async` 函数中有用的文件系统函数。
 
@@ -239,13 +239,13 @@ Now, let's create a new module, `models/notes-fs.mjs`, to implement the filesyst
 
 现在，将以下内容添加到 `models/notes-fs.mjs` 中：
 
-```js\1
+```js
 
 The `FSNotesStore` class is an implementation of `AbstractNotesStore`, with a focus on storing the `Note` instances as JSON in a directory. These methods implement the API that we defined in Chapter 5, *Your First Express Application*. This implementation is incomplete since a couple of helper functions still need to be written, but you can see that it relies on files in the filesystem. For example, the `destroy` method simply uses `fs.unlink` to delete the note from the disk. In `keylist`, we use `fs.readdir` to read each `Note` object and construct an array of keys for the notes.
 
 Let's add the helper functions:
 
-```js\1
+```js
 
 `crupdate` 函数用于支持 `update` 和 `create` 方法。对于这个 `Notes` 存储，这两种方法都是相同的，它们将内容写入磁盘作为一个 JSON 文件。
 
@@ -259,7 +259,7 @@ Let's add the helper functions:
 
 我们还添加了另一个依赖项：
 
-```js\1
+```js
 
 We're now almost ready to run the `Notes` application, but there's an issue that first needs to be resolved with the `import()` function.
 
@@ -271,41 +271,41 @@ In `Notes`, we refer to the `Notes` datastore module from several places. To cha
 
 There are several possible ways to do this. For example, in a CommonJS module, it's possible to compute the pathname to the module for a `require` statement. It would consult the environment variable, `NOTES_MODEL`, to calculate the pathname for the datastore module, as follows:
 
-```js\1
+```js
 
 然而，我们的意图是使用 ES6 模块，因此让我们看看在这种情况下它是如何工作的。因为在常规的 `import` 语句中，模块名不能像这样是一个表达式，所以我们需要使用 `动态导入` 来加载模块。`动态导入` 功能——即 `import()` 函数——允许我们动态计算要加载的模块名。
 
 为了实现这个想法，让我们创建一个新文件 `models/notes-store.mjs`，其中包含以下内容：
 
-```js\1
+```js
 
 This is what we might call a factory function. It uses `import()` to load a module whose filename is calculated from the `model` parameter. We saw in `notes-fs.mjs` that the `FSNotesStore` class is the default export. Therefore, the `NotesStoreClass` variable gets that class, then we call the constructor to create an instance, and then we stash that instance in a global scope variable. That global scope variable is then exported as `NotesStore`.
 
 We need to make one small change in `models/notes-memory.mjs`:
 
-```js\1
+```js
 
 任何实现 `AbstractNotesStore` 的模块都将默认导出定义的类。
 
 在 `app.mjs` 中，我们需要对调用这个 `useModel` 函数进行另一个更改。在第五章中，*你的第一个 Express 应用程序*，我们让 `app.mjs` 导入 `models/notes-memory.mjs`，然后设置 `NotesStore` 包含 `InMemoryNotesStore` 的一个实例。具体来说，我们有以下内容：
 
-```js\1
+```js
 
 We need to remove these two lines of code from `app.mjs` and then add the following:
 
-```js\1
+```js
 
 我们导入 `useModel`，将其重命名为 `useNotesModel`，然后通过传入 `NOTES_MODEL` 环境变量来调用它。如果 `NOTES_MODEL` 变量未设置，我们将默认使用“memory” `NotesStore`。由于 `useNotesModel` 是一个 `async` 函数，我们需要处理生成的 Promise。`.then` 处理成功的情况，但由于没有需要执行的操作，所以我们提供了一个空函数。重要的是任何错误都会关闭应用程序，因此我们添加了 `.catch`，它调用 `onError` 来处理错误。
 
 为了支持这个错误指示器，我们需要在 `appsupport.mjs` 的 `onError` 函数中添加以下内容：
 
-```js\1
+```js
 
 This added error handler will also cause the application to exit.
 
 These changes also require us to make another change. The `NotesStore` variable is no longer in `app.mjs`, but is instead in `models/notes-store.mjs`. This means we need to go to `routes/index.mjs` and `routes/notes.mjs`, where we make the following change to the imports:
 
-```js\1
+```js
 
 我们从`notes-store.mjs`中导入`NotesStore`导出，并将其重命名为`notes`。因此，在两个路由模块中，我们将进行诸如`notes.keylist()`的调用，以访问动态选择的`AbstractNotesStore`实例。
 
@@ -317,13 +317,13 @@ These changes also require us to make another change. The `NotesStore` variable 
 
 在`package.json`中，将以下内容添加到`scripts`部分：
 
-```js\1
+```js
 
 When you add these entries to `package.json`, make sure you use the correct JSON syntax. In particular, if you leave a comma at the end of the `scripts` section, it will fail to parse and `npm` will throw an error message.
 
 With this code in place, we can now run the `Notes` application, as follows:
 
-```js\1
+```js
 
 我们可以像以前一样在`http://localhost:3000`上使用应用程序。因为我们没有更改任何模板或 CSS 文件，所以应用程序看起来与您在第六章结束时一样。
 
@@ -347,13 +347,13 @@ With this code in place, we can now run the `Notes` application, as follows:
 
 要安装数据库引擎，请运行以下命令：
 
-```js\1
+```js
 
 This installs the version of `level` that the following code was written against.
 
 Then, create the `models/notes-level.mjs` module, which will contain the `AbstractNotesStore` implementation:
 
-```js\1
+```js
 
 我们从`import`语句和一些声明开始模块。`connectDB`函数用于连接数据库，`createIfMissing`选项也是如其名所示，如果不存在具有所使用名称的数据库，则创建一个数据库。从模块`level`导入的是一个构造函数，用于创建与第一个参数指定的数据库连接的`level`实例。这个第一个参数是文件系统中的位置，换句话说，是数据库将被存储的目录。
 
@@ -363,7 +363,7 @@ Then, create the `models/notes-level.mjs` module, which will contain the `Abstr
 
 现在，让我们添加这个模块的其余部分：
 
-```js\1
+```js
 
 As expected, we're creating a `LevelNotesStore` class to hold the functions.  
 
@@ -381,11 +381,11 @@ For `count`, we use a similar process, and in this case, we simply increment a c
 
 Then, we add the following to `package.json` in the `scripts` section:
 
-```js\1
+```js
 
 最后，您可以运行`Notes`应用程序：
 
-```js\1
+```js
 
 The printout in the console will be the same, and the application will also look the same. You can put it through its paces to check whether everything works correctly.
 
@@ -401,7 +401,7 @@ Node.js provides a mechanism to catch signals sent by the operating system. What
 
  Add the following code to `appsupport.mjs`:
 
-```js\1
+```js
 
 我们导入`NotesStore`以便可以调用其方法，`server`已经在其他地方导入。
 
@@ -411,7 +411,7 @@ Node.js provides a mechanism to catch signals sent by the operating system. What
 
 让我们试一下运行`Notes`应用程序，然后立即按下*Ctrl* + *C*：
 
-```js\1
+```js
 
 Sure enough, upon pressing *Ctrl* + *C*, the `exit` and `catchProcessDeath` listeners are called.
 
@@ -429,7 +429,7 @@ The primary advantage of SQLite3 is that it doesn't require a server; it is a se
 
 The first step is to install the module:
 
-```js\1
+```js
 
 当然，这会安装`sqlite3`包。
 
@@ -445,21 +445,21 @@ The first step is to install the module:
 
 我们将使用以下的 SQL 表定义作为模式（将其保存为`models/schema-sqlite3.sql`）：
 
-```js\1
+```js
 
 To initialize the database table, we run the following command:
 
-```js\1
+```js
 
 虽然我们可以这样做，但最佳实践是自动化所有管理过程。为此，我们应该编写一小段脚本来初始化数据库。
 
 幸运的是，`sqlite3`命令为我们提供了一种方法来做到这一点。将以下内容添加到`package.json`的`scripts`部分：
 
-```js\1
+```js
 
 Run the setup script:
 
-```js\1
+```js
 
 这并不是完全自动化，因为我们必须在`sqlite`提示符下按*Ctrl* + *D*，但至少我们不必费心去记住如何做。我们本可以轻松地编写一个小的 Node.js 脚本来做到这一点；然而，通过使用软件包提供的工具，我们在自己的项目中需要维护的代码更少。
 
@@ -471,7 +471,7 @@ Run the setup script:
 
 创建`models/notes-sqlite3.mjs`文件：
 
-```js\1
+```js
 
 This imports the required packages and makes the required declarations. The `connectDB` function has a similar purpose to the one in `notes-level.mjs`: to manage the database connection. If the database is not open, it'll go ahead and open it, and it will even make sure that the database file is created (if it doesn't exist). If the database is already open, it'll simply be returned.
 
@@ -479,15 +479,15 @@ Since the API used in the `sqlite3` package requires callbacks, we will have to 
 
 Now, add the following to `models/notes-sqlite3.mjs`:
 
-```js\1
+```js
 
 由于有许多成员函数，让我们逐个讨论它们：
 
-```js\1
+```js
 
 In `close`, the task is to close the database. There's a little dance done here to make sure the global `db` variable is unset while making sure we can close the database by saving `db` as `_db`. The `sqlite3` package will report errors from `db.close`, so we're making sure we report any errors:
 
-```js\1
+```js
 
 我们现在有理由定义`Notes`模型的`create`和`update`操作是分开的，因为每个函数的 SQL 语句是不同的。`create`函数当然需要一个`INSERT INTO`语句，而`update`函数当然需要一个`UPDATE`语句。
 
@@ -497,23 +497,23 @@ In `close`, the task is to close the database. There's a little dance done here
 
 `db.run`函数只是运行它所给出的 SQL 查询，并不检索任何数据。
 
-```js\1
+```js
 
 To retrieve data using the `sqlite3` module, you use the `db.get`, `db.all`, or `db.each` functions. Since our `read` method only returns one item, we use the `db.get` function to retrieve just the first row of the result set. By contrast, the `db.all` function returns all of the rows of the result set at once, and the `db.each` function retrieves one row at a time, while still allowing the entire result set to be processed.
 
 By the way, this `read` function has a bug in it—see whether you can spot the error. We'll read more about this in Chapter 13, *Unit Testing and Functional Testing*, when our testing efforts uncover the bug:
 
-```js\1
+```js
 
 在我们的`destroy`方法中，我们只需使用`db.run`执行`DELETE FROM`语句来删除相关笔记的数据库条目：
 
-```js\1
+```js
 
 In `keylist`, the task is to collect the keys for all of the `Note` instances. As we said, `db.get` returns only the first entry of the result set, while the `db.all` function retrieves all the rows of the result set. Therefore, we use `db.all`, although `db.each` would have been a good alternative.
 
 The contract for this function is to return an array of note keys. The `rows` object from `db.all` is an array of results from the database that contains the data we are to return, but we use the `map` function to convert the array into the format required by this function:
 
-```js\1
+```js
 
 在`count`中，任务类似，但我们只需要表中行的计数。SQL 提供了一个`count()`函数来实现这个目的，我们已经使用了，然后因为这个结果只有一行，我们可以再次使用`db.get`。
 
@@ -523,13 +523,13 @@ The contract for this function is to return an array of note keys. The `rows` ob
 
 我们现在准备使用 SQLite3 运行`Notes`应用程序。将以下代码添加到`package.json`的`scripts`部分：
 
-```js\1
+```js
 
 This sets up the commands that we'll use to test `Notes` on SQLite3.
 
 We can run the server as follows:
 
-```js\1
+```js
 
 现在你可以在`http://localhost:3000`上浏览应用程序，并像以前一样运行它。
 
@@ -537,7 +537,7 @@ We can run the server as follows:
 
 当然，你可以使用`sqlite`命令，或其他 SQLite3 客户端应用程序来检查数据库：
 
-```js\1
+```js
 
 The advantage of installing the SQLite3 command-line tools is that we can perform any database administration tasks without having to write any code.  
 
@@ -555,7 +555,7 @@ A prerequisite to most SQL database engines is having access to a database serve
 
 Before we start on the code, let's install two modules:
 
-```js\1
+```js
 
 第一个安装了 Sequelize 包。第二个`js-yaml`是安装的，以便我们可以实现一个以 YAML 格式存储 Sequelize 连接配置的文件。YAML 是一种人类可读的**数据序列化语言**，这意味着它是一种易于使用的文本文件格式，用于描述数据对象。
 
@@ -569,7 +569,7 @@ Before we start on the code, let's install two modules:
 
 有了这个想法，让我们创建一个文件`models/sequlz.mjs`，来保存管理 Sequelize 连接的代码：
 
-```js\1
+```js
 
 As with the SQLite3 module, the `connectDB` function manages the connection through Sequelize to a database server. Since the configuration of the Sequelize connection is fairly complex and flexible, we're not using environment variables for the whole configuration, but instead we use a YAML-formatted configuration file that will be specified in an environment variable. Sequelize uses four items of data—the database name, the username, the password, and a parameters object.
 
@@ -579,7 +579,7 @@ We also allow overriding any of the fields in this file using environment variab
 
 For a simple SQLite3-based database, we can use the following YAML file for configuration and name it `models/sequelize-sqlite.yaml`:
 
-```js\1
+```js
 
 `params.dialect`的值决定了要使用的数据库类型；在这种情况下，我们使用的是 SQLite3。根据方言的不同，`params`对象可以采用不同的形式，比如连接到数据库的连接 URL。在这种情况下，我们只需要一个文件名，就像这样给出的。
 
@@ -589,13 +589,13 @@ For a simple SQLite3-based database, we can use the following YAML file for conf
 
 有了这个设计，我们可以很容易地通过添加一个运行时配置文件来更改数据库以使用其他数据库服务器。例如，很容易设置一个 MySQL 连接；我们只需创建一个新文件，比如 `models/sequelize-mysql.yaml`，其中包含类似以下代码的内容：
 
-```js\1
+```js
 
 This is straightforward. The `username` and `password` fields must correspond to the database credentials, while `host` and `port` will specify where the database is hosted. Set the database's `dialect` parameter and other connection information and you're good to go.
 
 To use MySQL, you will need to install the base MySQL driver so that Sequelize can use MySQL:
 
-```js\1
+```js
 
 运行 Sequelize 对其支持的其他数据库，如 PostgreSQL，同样简单。只需创建一个配置文件，安装 Node.js 驱动程序，并安装/配置数据库引擎。
 
@@ -607,7 +607,7 @@ To use MySQL, you will need to install the base MySQL driver so that Sequelize c
 
 让我们创建一个新文件，`models/notes-sequelize.mjs`：
 
-```js\1
+```js
 
 The database connection is stored in the `sequelize` object, which is established by the `connectDB` function that we just looked at (which we renamed `connectSequlz`) to instantiate a Sequelize instance. We immediately return if the database is already connected.
 
@@ -622,7 +622,7 @@ Sequelize class: [`docs.sequelizejs.com/en/latest/api/sequelize/`](http://docs.
 
 That manages the database connection and sets up the schema. Now, let's add the `SequelizeNotesStore` class to `models/notes-sequelize.mjs`:
 
-```js\1
+```js
 
 首先要注意的是，在每个函数中，我们调用在 `SQNote` 类中定义的静态方法来执行数据库操作。Sequelize 模型类就是这样工作的，它的文档中有一个全面的这些静态方法的列表。
 
@@ -634,7 +634,7 @@ That manages the database connection and sets up the schema. Now, let's add the 
 
 Sequelize 的 `where` 子句提供了一个全面的匹配操作符列表。如果您仔细考虑这一点，很明显它大致对应于以下 SQL：
 
-```js\1
+```js
 
 That's what Sequelize and other ORM libraries do—convert the high-level API into database operations such as SQL queries.
 
@@ -654,13 +654,13 @@ Having set up the functions to manage the database connection and defined the `S
 
 Now, we can get ready to run the `Notes` application using Sequelize. We can run it against any database server, but let's start with SQLite3\. Add the following declarations to the `scripts` entry in `package.json`:
 
-```js\1
+```js
 
 这设置了命令以运行单个服务器实例（或两个）。
 
 然后，按以下方式运行它：
 
-```js\1
+```js
 
 As before, the application looks exactly the same because we haven't changed the `View` templates or CSS files. Put it through its paces and everything should work.
 
@@ -697,13 +697,13 @@ Once installed, it's not necessary to set up MongoDB as a background service. In
 
 In a command window, run the following:
 
-```js\1
+```js
 
 这将创建一个数据目录，然后运行 MongoDB 守护程序来对该目录进行操作。
 
 在另一个命令窗口中，您可以按以下方式进行测试：
 
-```js\1
+```js
 
 This runs the Mongo client program with which you can run commands. The command language used here is JavaScript, which is comfortable for us.
 
@@ -717,13 +717,13 @@ With a working MongoDB installation in our hands, let's get started with impleme
 
 The official Node.js MongoDB driver ([`www.npmjs.com/package/mongodb`](https://www.npmjs.com/package/mongodb)) is created by the MongoDB team. It is very easy to use, as we will see, and its installation is as simple as running the following command:
 
-```js\1
+```js
 
 这为我们设置了驱动程序包，并将其添加到 `package.json`。
 
 现在，创建一个新文件，`models/notes-mongodb.mjs`：
 
-```js\1
+```js
 
 This sets up the required imports, as well as the functions to manage a connection with the MongoDB database.
 
@@ -739,7 +739,7 @@ The `db` function is a simple wrapper around the client object to access the dat
 
 Now, we can implement the `MongoDBNotesStore` class:
 
-```js\1
+```js
 
 MongoDB 将所有文档存储在集合中。*集合* 是一组相关文档，类似于关系数据库中的表。这意味着创建一个新文档或更新现有文档始于将其构造为 JavaScript 对象，然后要求 MongoDB 将对象保存到数据库中。MongoDB 自动将对象编码为其内部表示形式。
 
@@ -781,13 +781,13 @@ MongoDB 有许多基本操作的变体。例如，`findOne`是基本`find`方法
 
 我们准备使用 MongoDB 数据库测试`Notes`。到目前为止，你知道该怎么做；将以下内容添加到`package.json`的`scripts`部分：
 
-```js\1
+```js
 
 The `MONGO_URL` environment variable is the URL to connect with your MongoDB database. This URL is the one that you need to use to run MongoDB on your laptop, as outlined at the top of this section. If you have a MongoDB server somewhere else, you'll be provided with the relevant URL to use.
 
 You can start the `Notes` application as follows:
 
-```js\1
+```js
 
 `MONGO_URL`环境变量应包含与您的 MongoDB 数据库连接的 URL。这里显示的 URL 对于在本地机器上启动 MongoDB 服务器是正确的，就像您在本节开始时在命令行上启动 MongoDB 一样。否则，如果您在其他地方提供了 MongoDB 服务器，您将被告知访问 URL 是什么，您的`MONGO_URL`变量应该有该 URL。
 
@@ -795,7 +795,7 @@ You can start the `Notes` application as follows:
 
 我们可以验证 MongoDB 数据库最终是否具有正确的值。首先，这样启动 MongoDB 客户端程序：
 
-```js\1
+```js
 
 再次强调，这是基于迄今为止所呈现的 MongoDB 配置，如果您的配置不同，请在命令行上添加 URL。这将启动与 Notes 配置的数据库连接的交互式 MongoDB shell。要检查数据库的内容，只需输入命令：`db.notes.find()`。这将打印出每个数据库条目。
 

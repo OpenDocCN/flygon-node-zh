@@ -1215,11 +1215,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 正如我们已经看到的，在服务器上，`delete-message`事件调用`destroyMessage`函数。该函数从数据库中删除消息，并发出一个`destroymessage`事件。`routes/notes.mjs`中接收到该事件，并将消息转发到浏览器。因此，我们需要在浏览器中添加一个事件监听器来接收`destroymessage`事件：
-- en: '```js\1'
+- en: '```js'
   id: totrans-177
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: Refer back and see that every message display `card` has an `id` parameter fitting
     the pattern shown here. Therefore, the jQuery `remove` function takes care of
     removing the message from the display.

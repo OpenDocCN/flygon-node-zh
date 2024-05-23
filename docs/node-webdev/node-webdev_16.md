@@ -36,7 +36,7 @@ Node.js 有一个有用的内置测试工具，称为`assert`模块。其功能�
 
 考虑以下代码片段，你可以将其保存在名为`deleteFile.mjs`的文件中：
 
-```js\1
+```js
 
 The first thing to notice is this contains several layers of asynchronous callback functions. This presents a couple of challenges:  
 
@@ -45,13 +45,13 @@ The first thing to notice is this contains several layers of asynchronous callba
 
 The following is an example of using `assert` for testing. Create a file named `test-deleteFile.mjs` containing the following:
 
-```js\1
+```js
 
 这就是所谓的负面测试场景，它测试的是请求删除一个不存在的文件是否会抛出正确的错误。如果要删除的文件不存在，`deleteFile`函数会抛出一个包含*不存在*文本的错误。这个测试确保正确的错误被抛出，如果抛出了错误的错误，或者没有抛出错误，测试将失败。
 
 如果您正在寻找一种快速测试的方法，`assert`模块在这种用法下可能很有用。每个测试用例都会调用一个函数，然后使用一个或多个`assert`语句来测试结果。在这种情况下，`assert`语句首先确保`err`具有某种值，然后确保该值是`Error`实例，最后确保`message`属性具有预期的文本。如果运行并且没有消息被打印，那么测试通过。但是如果`deleteFile`回调从未被调用会发生什么？这个测试用例会捕获到这个错误吗？
 
-```js\1
+```js
 
 No news is good news, meaning it ran without messages and therefore the test passed.
 
@@ -81,7 +81,7 @@ Mocha ([`mochajs.org/`](http://mochajs.org/)) is one of many test frameworks ava
 
 While in the `notes/test` directory, type the following to install Mocha and Chai:
 
-```js\1
+```js
 
 当然，这会设置一个`package.json`文件并安装所需的软件包。
 
@@ -105,7 +105,7 @@ While in the `notes/test` directory, type the following to install Mocha and Cha
 
 在`test`目录中，创建一个名为`test-model.mjs`的文件，其中包含以下内容。这将是测试套件的外壳：
 
-```js\1
+```js
 
 This loads in the required modules and implements the first test case.
 
@@ -141,19 +141,19 @@ Now that we have a test case written, let's learn how to run tests.
 
 Now that we have a test case, let's run the test. In the `package.json` file, add the following `scripts` section:
 
-```js\1
+```js
 
 我们在这里做的是创建一个`test-all`脚本，它将针对各个 NotesStore 实现运行测试套件。我们可以运行此脚本来运行每个测试组合，或者我们可以运行特定脚本来测试只有一个组合。例如，`test-notes-sequelize-sqlite`将针对使用 SQLite3 数据库的`SequelizeNotesStore`运行测试。
 
 它使用`npm-run-all`来支持按顺序运行测试。通常，在`package.json`脚本中，我们会这样写：
 
-```js\1
+```js
 
 This runs a series of steps one after another, relying on a feature of the Bash shell. The `npm-run-all` tool serves the same purpose, namely running one `package.json` script after another in the series. The first advantage is that the code is simpler and more compact, making it easier to read, while the other advantage is that it is cross-platform. We're using `cross-env` for the same purpose so that the test scripts can be executed on Windows as easily as they can be on Linux or macOS.
 
 For the `test-notes-sequelize-sqlite` test, look closely. Here, you can see that we need a database configuration file named `sequelize-sqlite.yaml`. Create that file with the following code:
 
-```js\1
+```js
 
 正如测试脚本名称所示，这使用 SQLite3 作为底层数据库，并将其存储在指定的文件中。
 
@@ -161,7 +161,7 @@ For the `test-notes-sequelize-sqlite` test, look closely. Here, you can see that
 
 自动运行所有测试组合后，我们可以尝试一下：
 
-```js\1
+```js
 
 If all has gone well, you'll get this result for every test combination currently supported in the `test-all` script.
 
@@ -173,7 +173,7 @@ That was easy, but if we want to find what bugs we created, we need to test some
 
 What does that mean? Remember that the `describe` function is the container for a test suite and that the `it` function is the container for a test case. By simply nesting `describe` functions, we can contain a test suite within a test suite. It will be clearer what that means after we implement this:
 
-```js\1
+```js
 
 在这里，我们有一个`describe`函数，它定义了一个包含另一个`describe`函数的测试套件。这是嵌套测试套件的结构。
 
@@ -187,7 +187,7 @@ What does that mean? Remember that the `describe` function is the container for 
 
 在`before`和`after`钩子函数之间，添加以下测试用例：
 
-```js\1
+```js
 
 As suggested by the description for this test suite, the functions all test the `keylist` method.
 
@@ -195,7 +195,7 @@ For each test case, we start by calling `keylist`, then using `assert` methods t
 
 Now, we can run the tests and get the following:
 
-```js\1
+```js
 
 将输出与`describe`和`it`函数中的描述字符串进行比较。您会发现，此输出的结构与测试套件和测试用例的结构相匹配。换句话说，我们应该将它们结构化，使其具有良好结构化的测试输出。
 
@@ -205,7 +205,7 @@ Now, we can run the tests and get the following:
 
 这还不足以进行太多测试，所以让我们继续添加一些测试：
 
-```js\1
+```js
 
 These tests check the `read` method. In the first test case, we check whether it successfully reads a known Note, while in the second test case, we have a negative test of what happens if we read a non-existent Note.
 
@@ -215,7 +215,7 @@ The Chai Assertions API includes some very expressive assertions. In this case, 
 
 After running the tests, we get the following output:
 
-```js\1
+```js
 
 这就是失败的测试样子。没有勾号，而是一个数字，数字对应下面的报告。在失败报告中，`deepEqual`函数为我们提供了关于对象字段差异的清晰信息。在这种情况下，这是我们故意让`deepEqual`函数失败的测试，因为我们想看看它是如何工作的。
 
@@ -225,7 +225,7 @@ After running the tests, we get the following output:
 
 我们可以添加更多的测试，因为显然，这些测试还不足以能够将 Notes 发布给公众。这样做之后，运行测试以针对不同的测试组合，我们将在 SQLite3 组合的结果中找到这个结果：
 
-```js\1
+```js
 
 Our test suite found two errors, one of which is the error we mentioned in Chapter 7, *Data Storage and Retrieval*. Both failures came from the negative test cases. In one case, the test calls `store.read("badkey12")`, while in the other, it calls `store.delete("badkey12")`.
 
@@ -237,29 +237,29 @@ However, we defined `read` to throw an error if no such Note exists. This means 
 
 There is a difference between the `read` functions in `models/notes-sqlite3.mjs` and `models/notes-sequelize.mjs`. On the day we wrote `SequelizeNotesStore`, we must have thought through this function more carefully than we did on the day we wrote `SQLITE3NotesStore`. In `SequelizeNotesStore.read`, there is an error that's thrown when we receive an empty result set, and it has a check that we can adapt. Let's rewrite the `read` function in `models/notes-sqlite.mjs` so that it reads as follows:
 
-```js\1
+```js
 
 如果这收到一个空结果，就会抛出一个错误。虽然数据库不会将空结果集视为错误，但 Notes 会。此外，Notes 已经知道如何处理这种情况下抛出的错误。进行这个更改，那个特定的测试用例就会通过。
 
 `destroy`逻辑中还有第二个类似的错误。在 SQL 中，如果这个 SQL（来自`models/notes-sqlite3.mjs`）没有删除任何内容，这显然不是一个 SQL 错误：
 
-```js\1
+```js
 
 Unfortunately, there isn't a method in the SQL option to fail if it does not delete any records. Therefore, we must add a check to see if a record exists, namely the following:
 
-```js\1
+```js
 
 因此，我们读取笔记，并且作为副产品，我们验证笔记是否存在。如果笔记不存在，`read`将抛出一个错误，而`DELETE`操作甚至不会运行。
 
 当我们运行`test-notes-sequelize-sqlite`时，它的`destroy`方法也出现了类似的失败。在`models/notes-sequelize.mjs`中，进行以下更改：
 
-```js\1
+```js
 
 This is the same change; that is, to first `read` the Note corresponding to the given `key`, and if the Note does not exist, to throw an error.
 
 Likewise, when running `test-level`, we get a similar failure, and the solution is to edit `models/notes-level.mjs` to make the following change:
 
-```js\1
+```js
 
 与其他 NotesStore 实现一样，在销毁之前先读取 Note。如果`read`操作失败，那么测试用例会看到预期的错误。
 
@@ -301,7 +301,7 @@ Docker 给我们带来的一个优势是能够在我们的笔记本电脑上安�
 
 在本节中，我们将将 Stack 文件重新用作部署到 Docker Swarm 的测试基础设施。一种方法是简单地运行相同的部署，到 AWS EC2，并替换`var.project_name`和`var.vpc_name`变量的新值。换句话说，EC2 基础设施可以这样部署：
 
-```js\1
+```js
 
 This would deploy a second VPC with a different name that's explicitly for test execution and that would not disturb the production deployment. It's quite common in Terraform to customize the deployment this way for different targets.
 
@@ -317,13 +317,13 @@ We had a great experience using Docker Compose and Swarm to orchestrate Notes ap
 
 To configure the Docker installation on our laptop for swarm mode, simply type the following:
 
-```js\1
+```js
 
 与以前一样，这将打印有关加入令牌的消息。如果需要的话，如果你的办公室有多台电脑，你可能会对设置本地 Swarm 进行实验感兴趣。但对于这个练习来说，这并不重要。这是因为我们可以用单节点 Swarm 完成所有需要的工作。
 
 这不是单行道，这意味着当你完成这个练习时，关闭 swarm 模式是很容易的。只需关闭部署到本地 Swarm 的任何内容，并运行以下命令：
 
-```js\1
+```js
 
 Normally, this is used for a host that you wish to detach from an existing swarm. If there is only one host remaining in a swarm, the effect will be to shut down the swarm.
 
@@ -333,7 +333,7 @@ Create a new directory, `compose-stack-test-local`, as a sibling to the `notes`,
 
 Make every `deploy` tag look like this:
 
-```js\1
+```js
 
 这将删除我们在 AWS EC2 上声明的放置约束，并将其设置为每个服务的一个副本。对于单节点集群，当然我们不用担心放置，也没有必要多个服务实例。
 
@@ -341,7 +341,7 @@ Make every `deploy` tag look like this:
 
 对于`svc-notes`和`svc-userauth`服务，进行以下更改：
 
-```js\1
+```js
 
 This injects the files required for testing into the `svc-notes` container. Obviously, this is the `test` directory that we created in the previous section for the Notes service. Those tests also require the SQLite3 schema file since it is used by the corresponding test script. In both cases, we can use `bind` mounts to inject the files into the running container.
 
@@ -371,25 +371,25 @@ We've repurposed our Docker Stack file so that it describes deploying to a singl
 
 To set it up, run the following commands:
 
-```js\1
+```js
 
 我们运行`swarm init`在我们的笔记本上打开 swarm 模式，然后将两个`TWITTER`秘密添加到 swarm 中。由于它是单节点 swarm，我们不需要运行`docker swarm join`命令来添加新节点到 swarm 中。
 
 然后，在`compose-stack-test-local`目录中，我们可以运行这些命令：
 
-```js\1
+```js
 
 Because a Stack file is also a Compose file, we can run `docker-compose build` to build the images. Because of the `image` tags, this will automatically tag the images so that they match the image names we specified.
 
 Then, we use `docker stack deploy`, as we did when deploying to AWS EC2\. Unlike the AWS deployment, we do not need to push the images to repositories, which means we do not need to use the `--with-registry-auth` option. This will behave almost identically to the swarm we deployed to EC2, so we explore the deployed services in the same way:
 
-```js\1
+```js
 
 因为这是单主机 swarm，我们不需要使用 SSH 访问 swarm 节点，也不需要使用`docker context`设置远程访问。相反，我们运行 Docker 命令，它们会在本地主机上的 Docker 实例上执行。 
 
 `docker ps`命令将告诉我们每个服务的精确容器名称。有了这个知识，我们可以运行以下命令来获得访问权限：
 
-```js\1
+```js
 
 Because, in swarm mode, the containers have unique names, we have to run `docker ps` to get the container name, then paste it into this command to start a Bash shell inside the container.
 
@@ -397,29 +397,29 @@ Inside the container, we see the `test` directory is there as expected. But we h
 
 Having done this, we can run the tests:
 
-```js\1
+```js
 
 测试应该像在我们的笔记本电脑上一样执行，但是它们是在容器内运行的。但是，MySQL 测试不会运行，因为`package.json`脚本没有设置自动运行。因此，我们可以将其添加到`package.json`中：
 
-```js\1
+```js
 
 This is the command that's required to execute the test suite against the MySQL database.
 
 Then, we can run the tests against MySQL, like so:
 
-```js\1
+```js
 
 测试应该对 MySQL 执行正确。
 
 为了自动化这一过程，我们可以创建一个名为`run.sh`的文件，其中包含以下代码：
 
-```js\1
+```js
 
 The script executes each script in `notes/test/package.json` individually. If you prefer, you can replace these with a single line that executes `npm run test-all`.
 
 This script takes a command-line argument for the container name holding the `svc-notes` service. Since the tests are located in that container, that's where the tests must be run. The script can be executed like so:
 
-```js\1
+```js
 
 这运行了前面的脚本，将每个测试组合单独运行，并确保`DEBUG`变量未设置。这个变量在 Dockerfile 中设置，会导致在测试结果输出中打印调试信息。在脚本中，`--workdir`选项将命令的当前目录设置为`test`目录，以简化运行测试脚本。
 
@@ -435,7 +435,7 @@ This script takes a command-line argument for the container name holding the `sv
 
 将以下代码添加到`compose-stack-test-local/docker-compose.yml`中：
 
-```js\1
+```js
 
 That's all that's required to add a MongoDB container to a Docker Compose/Stack file. We've connected it to `frontnet` so that the database is accessible by `svc-notes`. If we wanted the `svc-notes` container to use MongoDB, we'd need some environment variables (`MONGO_URL`, `MONGO_DBNAME`, and `NOTES_MODEL`) to tell Notes to use MongoDB. 
 
@@ -445,7 +445,7 @@ Because we were careful, we can execute code in `models/notes-mongodb.mjs` witho
 
 Then, in `notes/test/package.json`, we can add a line to facilitate running tests on MongoDB:
 
-```js\1
+```js
 
 我们只是将 MongoDB 容器添加到了`frontnet`，使得数据库可以在此处显示的 URL 上使用。因此，现在可以简单地使用 Notes MongoDB 模型运行测试套件。
 
@@ -453,15 +453,15 @@ Then, in `notes/test/package.json`, we can add a line to facilitate running test
 
 最后的要求是将以下一行添加到`run.sh`（或`run.ps1`适用于 Windows）中：
 
-```js\1
+```js
 
 This ensures MongoDB can be tested alongside the other test combinations. But when we run this, an error might crop up:
 
-```js\1
+```js
 
 问题在于 MongoClient 对象的初始化程序略有变化。因此，我们必须修改`notes/models/notes-mongodb.mjs`，使用这个新的`connectDB`函数：
 
-```js\1
+```js
 
 This adds a pair of useful configuration options, including the option explicitly named in the error message. Otherwise, the code is unchanged.
 
@@ -498,7 +498,7 @@ For the documentation on SuperTest, look here: [`www.npmjs.com/package/superte
 
 Create a directory named `compose-stack-test-local/userauth`. This directory will contain a test suite for the user authentication REST service. In that directory, create a file named `test.mjs` that contains the following code:
 
-```js\1
+```js
 
 这设置了 Mocha 和 SuperTest 客户端。`URL_USERS_TEST`环境变量指定了要针对其运行测试的服务器的基本 URL。鉴于我们之前使用的配置，您几乎肯定会使用`http://localhost:5858`，但它可以是指向任何主机的任何 URL。SuperTest 的初始化方式与 SuperAgent 略有不同。
 
@@ -508,7 +508,7 @@ Create a directory named `compose-stack-test-local/userauth`. This directory wil
 
 最后，这是 Mocha 测试套件的外壳。所以，让我们开始填写`before`和`after`测试用例：
 
-```js\1
+```js
 
 These are our `before` and `after` tests. We'll use them to establish a user and then clean them up by removing the user at the end.
 
@@ -516,7 +516,7 @@ This gives us a taste of how the `SuperTest` API works. If you refer back to `cl
 
 The `post` and `delete` methods we can see here declare the HTTP verb to use. The `send` method provides an object for the `POST` operation. The `set` method sets header values, while the `auth` method sets up authentication:
 
-```js\1
+```js
 
 现在，我们可以测试一些 API 方法，比如`/list`操作。
 
@@ -526,7 +526,7 @@ The `post` and `delete` methods we can see here declare the HTTP verb to use. Th
 
 添加以下测试用例：
 
-```js\1
+```js
 
 We are checking the `/find` operation in two ways:
 
@@ -535,7 +535,7 @@ We are checking the `/find` operation in two ways:
 
 Add the following test case:
 
-```js\1
+```js
 
 最后，我们应该检查`/destroy`操作。这个操作已经在`after`方法中检查过，我们在那里`destroy`了一个已知的用户帐户。我们还需要执行负面测试，并验证其对我们知道不存在的帐户的行为。
 
@@ -545,19 +545,19 @@ Add the following test case:
 
 在`compose-stack-test-local/docker-compose.yml`中，我们需要将`test.js`脚本注入到`svc-userauth-test`容器中。我们将在这里添加：
 
-```js\1
+```js
 
 This injects the `userauth` directory into the container as the `/userauth/test` directory. As we did previously, we then must get into the container and run the test script.
 
 The next step is creating a `package.json` file to hold any dependencies and a script to run the test:
 
-```js\1
+```js
 
 在依赖项中，我们列出了 Mocha，Chai，SuperTest 和 cross-env。然后，在`test`脚本中，我们运行 Mocha 以及所需的环境变量。这应该运行测试。
 
 我们可以从我们的笔记本电脑使用这个测试套件。因为测试目录被注入到容器中，我们也可以在容器内运行它们。要这样做，将以下代码添加到`run.sh`中：
 
-```js\1
+```js
 
 This adds a second argument – in this case, the container name for `svc-userauth`. We can then run the test suite, using this script to run them inside the container. The first two commands ensure the installed packages were installed for the operating system in this container, while the last runs the test suite.
 
@@ -565,7 +565,7 @@ Now, if you run the `run.sh` test script, you'll see the required packages get i
 
 The result will look like this:
 
-```js\1
+```js
 
 因为`URL_USERS_TEST`可以使用任何 URL，我们可以针对用户认证服务的任何实例运行测试套件。例如，我们可以使用适当的`URL_USERS_TEST`值从我们的笔记本电脑上测试在 AWS EC2 上部署的实例。
 
@@ -583,15 +583,15 @@ Mocha 使用所谓的**Reporter**来报告测试结果。Mocha Reporter 是一�
 
 您将找到当前可用的`reporters`列表如下：
 
-```js\1
+```js
 
 Then, you can use a specific Reporter, like so:
 
-```js\1
+```js
 
 在`npm run script-name`命令中，我们可以注入命令行参数，就像我们在这里所做的那样。`--`标记告诉 npm 将其命令行的其余部分附加到执行的命令上。效果就像我们运行了这个命令：
 
-```js\1
+```js
 
 For Mocha, the `--reporter` option selects which Reporter to use. In this case, we selected the TAP reporter, and the output follows that format.
 
@@ -619,19 +619,19 @@ First, let's set up a directory to work in.
 
 First, let's set up the directory that we'll install Puppeteer in, as well as the other packages that will be required for this project:
 
-```js\1
+```js
 
 这不仅安装了 Puppeteer，还安装了 Mocha、Chai 和 Supertest。我们还将使用`package.json`文件记录脚本。
 
 在安装过程中，您会发现 Puppeteer 会导致 Chromium 被下载，就像这样：
 
-```js\1
+```js
 
 The Puppeteer package will launch that Chromium instance as needed, managing it as a background process and communicating with it using the DevTools protocol.
 
 The approach we'll follow is to test against the Notes stack we've deployed in the test Docker infrastructure. Therefore, we need to launch that infrastructure:
 
-```js\1
+```js
 
 根据您的需求，可能还需要执行`docker-compose build`。无论如何，这都会启动测试基础架构，并让您看到运行中的系统。
 
@@ -661,23 +661,23 @@ The approach we'll follow is to test against the Notes stack we've deployed in t
 
 在`notesui`目录中，创建一个名为`uitest.mjs`的文件，其中包含以下代码：
 
-```js\1
+```js
 
 This imports and configures the required modules. This includes setting up `bcrypt` support in the same way that is used in the authentication server. We've also copied in the authentication key for the user authentication backend service. As we did for the REST test suite, we will use the `SuperTest` library to add, verify, and remove the test user using the REST API snippets copied from the REST tests.
 
 Add the following test block:
 
-```js\1
+```js
 
 这将向身份验证服务添加一个用户。回顾一下，您会发现这与 REST 测试套件中的测试用例类似。如果您需要验证阶段，还有另一个测试用例调用`/find/testme`端点来验证结果。由于我们已经验证了身份验证系统，因此我们不需要在这里重新验证它。我们只需要确保我们有一个已知的测试用户，可以在需要浏览器登录的场景中使用。
 
 将此代码放在`uitest.mjs`的最后：
 
-```js\1
+```js
 
 At the end of the test execution, we should run this to delete the test user. The policy is to clean up after we execute the test. Again, this was copied from the user authentication service test suite. Between those two, add the following:
 
-```js\1
+```js
 
 记住，在`describe`中，测试是`it`块。`before`块在所有`it`块之前执行，`after`块在之后执行。
 
@@ -697,13 +697,13 @@ At the end of the test execution, we should run this to delete the test user. Th
 
 我们已经启动了使用`docker-compose`的测试基础设施。要运行测试脚本，请将以下内容添加到`package.json`文件的脚本部分：
 
-```js\1
+```js
 
 The test infrastructure we deployed earlier exposes the user authentication service on port `5858` and the Notes application on port `3000`. If you want to test against a different deployment, adjust these URLs appropriately. Before running this, the Docker test infrastructure must be launched, which should have already happened.
 
 Let's try running this initial test suite:
 
-```js\1
+```js
 
 我们已经成功地创建了可以运行这些测试的结构。我们已经设置了 Puppeteer 和相关的包，并创建了一个有用的测试。主要的收获是有一个结构可以在其基础上构建更多的测试。
 
@@ -725,7 +725,7 @@ Let's try running this initial test suite:
 
 在`uitest.js`中，插入以下测试代码：
 
-```js\1
+```js
 
 This is our test implementation for logging in and out. We have to specify the `timeout` value because it is a new `describe` block.
 
@@ -747,7 +747,7 @@ The `$` method searches the DOM for elements matching the selector, returning an
 
 To log out, we click on the Logout button. Then, to verify the application logged out, we wait for the page to refresh and show a Login button:
 
-```js\1
+```js
 
 有了这些，我们的新测试都通过了。请注意，执行一些测试所需的时间相当长。在调试测试时观察到了更长的时间，这就是我们设置长超时时间的原因。
 
@@ -777,19 +777,19 @@ To log out, we click on the Logout button. Then, to verify the application logge
 
 在`最外层`的描述块中，添加以下两个函数：
 
-```js\1
+```js
 
 This is the same code as the code for the body of the test cases shown previously, but we've moved the code to their own functions. With this change, any test case that wishes to log into the test user can use these functions.
 
 Then, we need to change the login/logout tests to this:
 
-```js\1
+```js
 
 我们所做的只是将此处的代码移动到它们自己的函数中。这意味着我们可以在其他测试中重用这些函数，从而避免重复的代码。
 
 将以下代码添加到`uitest.mjs`中的笔记创建测试套件：
 
-```js\1
+```js
 
 These are our test cases for adding and deleting Notes. We start with the `doLogin` and `checkLogin` functions to ensure the browser is logged in.
 
@@ -805,7 +805,7 @@ To delete the note, we start by verifying that the **Delete** button is on the s
 
 Notice that to find the Delete button, we need to refer to `a#notedestroy`. As it stands, the template in question does not have that ID anywhere. Because the HTML for the Delete button was not set up so that we could easily create a CSS selector, we must edit `views/noteedit.hbs` to change the Delete button to this:
 
-```js\1
+```js
 
 我们所做的就是添加了 ID 属性。这是改进可测试性的一个例子，我们稍后会讨论。
 
@@ -815,7 +815,7 @@ Notice that to find the Delete button, we need to refer to `a#notedestroy`. As i
 
 创建了这些测试用例后，我们可以再次运行测试套件：
 
-```js\1
+```js
 
 We have more passing tests and have made good progress. Notice how one of the test cases took 18 seconds to finish. That's partly because we slowed text entry down to make sure it is correctly received in the browser, and there is a fair amount of text to enter. There was a reason we increased the timeout.
 
@@ -840,13 +840,13 @@ To make this crystal clear, by using a unique random string, we ensure that we d
 
 In `uitest.mjs`, add the following to the imports:
 
-```js\1
+```js
 
 `uuid`包支持几种方法，`v4`方法是生成随机字符串的方法。
 
 然后，添加以下场景：
 
-```js\1
+```js
 
 This starts with the login scenario. Instead of a fixed username and password, we instead use the results of calling `uuidv4()`, or the random UUID string.
 
@@ -860,7 +860,7 @@ Our next negative test is to try a bad URL in Notes. We coded Notes to return a 
 
 Add the following test case:
 
-```js\1
+```js
 
 通过获取主页的 URL（`NOTES_HOME_URL`）并将 URL 的*pathname*部分设置为`/bad-unknown-url`来计算错误的 URL。由于在笔记中没有这条路径，我们肯定会收到一个错误。如果我们想要更确定，似乎可以使用`uuidv4()`函数使 URL 变得随机。
 

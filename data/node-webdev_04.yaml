@@ -1870,11 +1870,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 这个依赖在`package.json`中使用`engines`标签声明：
-- en: '```js\1'
+- en: '```js'
   id: totrans-278
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: The version string is similar to what we can use in `dependencies` and `devDependencies`.
     In this case, we've defined that the package is compatible with Node.js 8.x, 9.x,
     and 10.x.

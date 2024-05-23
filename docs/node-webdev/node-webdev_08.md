@@ -34,7 +34,7 @@
 
 要在移动屏幕上看到真正的 UI 问题，请编辑`views/noteedit.hbs`并进行以下更改：
 
-```js\1
+```
 
 What's changed is that we've added the `cols=80` parameter to set its width to be fixed at 80 columns. We want this `textarea` element to be overly large so that you can experience how a non-responsive web app appears on a mobile device. View the application on a mobile device and you'll see something like one of the screens in this screenshot:
 
@@ -64,7 +64,7 @@ The stylesheet starts with a number of **resets**, where the stylesheet override
 
 It does this with the following two media queries:
 
-```js\1
+```
 
 样式表的第一部分配置了所有设备的页面布局。接下来，对于任何至少宽度为`600px`的浏览器视口，重新配置页面以在较大屏幕上显示。然后，对于任何至少宽度为`960px`的浏览器视口，再次重新配置。样式表有一个最终的媒体查询来覆盖打印设备。
 
@@ -114,7 +114,7 @@ Bootstrap 是一个移动优先的框架，包括 HTML5、CSS3 和 JavaScript �
 
 我们使用以下命令安装包：
 
-```js\1
+```
 
 As we can see here, when we install Bootstrap, it helpfully tells us the corresponding versions of jQuery and Popper.js to use. But according to the Bootstrap website, we are to use a different version of jQuery than what's shown here. Instead, we are to use jQuery 3.5.x instead of 1.9.1, because 3.5.x has many security issues fixed.
 
@@ -124,7 +124,7 @@ The Bootstrap *Getting Started* documentation explicitly says to use jQuery 3.5.
 
 What's most important is to see what got downloaded:
 
-```js\1
+```
 
 在每个目录中都有用于在浏览器中使用的 CSS 和 JavaScript 文件。更重要的是，这些文件位于已知路径名的特定目录中，具体来说，就是我们刚刚检查过的目录。
 
@@ -140,7 +140,7 @@ What's most important is to see what got downloaded:
 
 我们将修改`views/layout.hbs`以匹配 Bootstrap 推荐的模板，通过进行粗体文本中显示的更改：
 
-```js\1
+```
 
 This is largely the template shown on the Bootstrap site, incorporated into the previous content of `views/layout.hbs`. Our own stylesheet is loaded following the Bootstrap stylesheet, giving us the opportunity to override anything in Bootstrap we want to change. What's different is that instead of loading Bootstrap, Popper.js, and jQuery packages from their respective CDNs, we use the path `/assets/vendor/product-name` instead.
 
@@ -148,7 +148,7 @@ This is the same as recommended on the Bootstrap website except the URLs point t
 
 This `/assets/vendor` URL is not currently recognized by the *Notes* application. To add this support, edit `app.mjs` to add these lines:
 
-```js\1
+```
 
 我们再次使用`express.static`中间件来为访问*Notes*应用程序的浏览器提供资产文件。每个路径名都是 npm 安装的 Bootstrap、jQuery 和 Popper 库的位置。
 
@@ -156,13 +156,13 @@ Popper.js 库有一个特殊的考虑。在`popper.js/dist`目录中，团队以
 
 在`public`目录中，我们需要做一些整理。当`express-generator`设置初始项目时，它生成了`public/images`、`public/javascripts`和`public/stylesheets`目录。因此，每个的 URL 都以`/images`、`/javascripts`和`/stylesheets`开头。给这些文件一个以`/assets`目录开头的 URL 更清晰。要实现这个改变，首先要移动文件如下：
 
-```js\1
+```
 
 We now have our asset files, including Bootstrap, Popper.js, and jQuery, all available to the *Notes* application under the `/assets` directory. Referring back to `views/layout.hbs`, notice that we said to change the URL for our stylesheet to `/assets/stylesheets/style.css`, which matches this change.
 
 We can now try this out by running the application:
 
-```js\1
+```
 
 屏幕上的差异很小，但这是 CSS 和 JavaScript 文件被加载的必要证明。我们已经实现了第一个主要目标——使用现代的、移动友好的框架来实现移动优先设计。
 
@@ -226,7 +226,7 @@ Bootstrap 使用 12 列网格系统来控制布局，为应用程序提供了一
 
 Bootstrap 中的基本布局模式如下：
 
-```js\1
+```
 
 This is a generic Bootstrap layout example, not anything we're putting into the *Notes* app. Notice how each layer of the layout relies on different class declarations. This fits Bootstrap's pattern of declaring behavior by using classes.
 
@@ -250,7 +250,7 @@ The column count is appended to the class name. That means using `col-#` when no
 
 It's possible to mix and match to target multiple breakpoints:
 
-```js\1
+```
 
 这声明了三种不同的布局，一种用于超小设备，另一种用于中等设备，最后一种用于大型设备。
 
@@ -262,7 +262,7 @@ It's possible to mix and match to target multiple breakpoints:
 
 我们可以对*Notes*进行整个用户体验分析，或者让设计师参与，并为*Notes*应用程序的每个屏幕设计完美的页面设计。但是当前*Notes*应用程序的设计是开发人员编写的功能性而不是丑陋的页面设计的结果。让我们从讨论我们拥有的页面设计结构的逻辑开始。考虑以下结构：
 
-```js\1
+```
 
 This is the general structure of the pages in *Notes*. The page content has two visible rows: the header and the main content. At the bottom of the page are invisible things such as the JavaScript files for Bootstrap and jQuery.
 
@@ -280,23 +280,23 @@ There are several icon libraries that can be used on a website. The Bootstrap te
 
 To install the package, run this command:
 
-```js\1
+```
 
 然后您可以检查已下载的包，看到`./node_modules/feather-icons/dist/feather.js`包含了浏览器端的代码，使得使用图标变得容易。
 
 我们通过在`app.mjs`中挂载它来使该目录可用，就像我们为 Bootstrap 和 jQuery 库所做的那样。将此代码添加到`app.mjs`中：
 
-```js\1
+```
 
 Going by the documentation, we must put this at the bottom of `views/layout.hbs` to enable `feather-icons` support:
 
-```js\1
+```
 
 这会加载浏览器端的库，然后调用该库来使用图标。
 
 要使用其中一个图标，使用`data-feather`属性指定其中一个图标名称，就像这样：
 
-```js\1
+```
 
 As suggested by the icon name, this will display a circle. The Feather Icons library looks for elements with the `data-feather` attribute, which the Feather Icons library uses to identify the SVG file to use. The Feather Icons library completely replaces the element where it finds the `data-feather` attribute. Therefore, if you want the icon to be a clickable link, it's necessary to wrap the icon definition with an `<a>` tag, rather than adding `data-feather` to the `<a>` tag.
 
@@ -308,7 +308,7 @@ The header section we designed before contains a page title and a little navigat
 
 In `views/header.hbs`, make this change:
 
-```js\1
+```
 
 添加`class="page-header"`告诉 Bootstrap 这是页面标题。在其中，我们有与之前一样的`<h1>`标题，提供页面标题，然后是一个响应式的 Bootstrap `navbar`。
 
@@ -328,7 +328,7 @@ In `views/header.hbs`, make this change:
 
 按照以下方式编辑`views/index.hbs`，修改的行用粗体显示：
 
-```js\1
+```
 
 The first change is to switch away from using a list and to use a vertical button group. The button group is a Bootstrap component that's what it sounds like, a group of buttons. By making the text links look and behave like buttons, we're improving the UI, especially its touch-friendliness. We chose the `btn-outline-dark` button style because it looks good in the UI. We use large buttons (`btn-lg`) that fill the width of the container (`btn-block`).
 
@@ -342,7 +342,7 @@ There's still something more to do with this since the header area is taking up 
 
 Edit `partials/header.hbs` with the following line in bold:
 
-```js\1
+```
 
 这会移除页眉区域顶部的`<h1>`标签，立即收紧演示。
 
@@ -360,7 +360,7 @@ Edit `partials/header.hbs` with the following line in bold:
 
 在`views/noteview.hbs`中进行以下更改：
 
-```js\1
+```
 
 We have declared two rows, one for the note, and another for buttons for actions related to the note. Both are declared to consume all 12 columns, and therefore take up the full available width. The buttons are again contained within a button group, but this time a horizontal group rather than vertical.
 
@@ -378,11 +378,11 @@ The next major glaring problem is the form for adding and editing notes. As we s
 
 Change the `form` in `views/noteedit.hbs` to this:
 
-```js\1
+```
 
 这里有很多事情要做。我们重新组织了`form`，以便 Bootstrap 可以对其进行正确处理。首先要注意的是我们有几个这样的实例：
 
-```js\1
+```
 
 The entire form is contained within a `container-fluid`, meaning that it will automatically stretch to fit the screen. The form has three of these rows with the `form-group` class. 
 
@@ -408,7 +408,7 @@ The window used to verify the user's choice to delete a note doesn't look bad, b
 
 Edit `views/notedestroy.hbs` to contain the following:
 
-```js\1
+```
 
 我们重新设计了它，以使用类似的 Bootstrap 表单标记。关于删除笔记的问题被包裹在`class="form-text"`中，以便 Bootstrap 可以正确显示它。
 
@@ -418,7 +418,7 @@ Edit `views/notedestroy.hbs` to contain the following:
 
 存在一个问题，即导航栏中的标题文本没有使用单词`Delete`。在`routes/notes.mjs`中，我们可以进行这个更改：
 
-```js\1
+```
 
 What we've done is to change the `title` parameter passed to the template. We'd done this in the `/notes/edit` route handler and seemingly missed doing so in this handler.
 
@@ -442,13 +442,13 @@ To start, we need a script for downloading the Bootstrap source tree from [`git
 
 With `theme/package.json` can contain this `scripts` section:
 
-```js\1
+```
 
 这将自动下载并解压 Bootstrap 源代码分发包，然后`postdownload`步骤将运行`npm install`来安装 Bootstrap 项目声明的依赖项。这样就可以设置好源代码树，准备修改和构建。
 
 输入以下命令：
 
-```js\1
+```
 
 This executes the steps to download and unpack the Bootstrap source tree. The scripts we gave will work for a Unix-like system, but if you are on Windows it will be easiest to run this in the Windows Subsystem for Linux.
 
@@ -456,7 +456,7 @@ This much only installs the tools necessary to build Bootstrap. The documentatio
 
 To build Bootstrap, let's add the following lines to the `scripts` section in our `theme/package.json` file:
 
-```js\1
+```
 
 显然，当发布新的 Bootstrap 版本时，您需要调整这些目录名称。
 
@@ -464,13 +464,13 @@ To build Bootstrap, let's add the following lines to the `scripts` section in ou
 
 为了避免将 Bootstrap 源代码检入到 Git 存储库中，添加一个`theme/.gitignore`文件：
 
-```js\1
+```
 
 This will tell Git to not commit the Bootstrap source tree to the source repository. There's no need to commit third-party sources to your source tree since we have recorded in the `package.json` file the steps required to download the sources.
 
 Now run a build with this command:
 
-```js\1
+```
 
 构建文件位于`theme/bootstrap-4.5.0/dist`目录中。该目录的内容将与 Bootstrap 的 npm 包的内容相匹配。
 
@@ -480,7 +480,7 @@ Now run a build with this command:
 
 例如，这些定义确定了主要的颜色值：
 
-```js\1
+```
 
 These are similar to normal CSS statements. The `!default` attribute designates these values as the default. Any `!default` values can be overridden without editing `_values.scss`.
 
@@ -488,29 +488,29 @@ To create a custom theme we could change `_variables.scss`, then rerun the build
 
 With that in mind, create a file, `theme/_custom.scss`, containing the following:
 
-```js\1
+```
 
 这会颠倒`_variables.scss`中`$body-bg`和`$body-color`设置的值。Notes 应用现在将使用黑色背景上的白色文本，而不是默认的白色背景和黑色文本。因为这些声明没有使用`!default`，它们将覆盖`_variables.scss`中的值。
 
 然后，在`theme`目录中复制`scss/bootstrap.scss`并进行修改：
 
-```js\1
+```
 
 This adds an `@import` header for the `_custom.scss` file we just created. That way, Bootstrap will load our definitions during the build process.
 
 Finally, add this line to the `scripts` section of `theme/package.json`:
 
-```js\1
+```
 
 使用这些脚本，在构建 Bootstrap 之前，这两个文件将被复制到指定位置，之后，构建后的文件将被复制到名为`dist`的目录中。`prebuild`步骤让我们可以将`_custom.scss`和`bootstrap.scss`的副本提交到我们的源代码库中，同时可以随时删除 Bootstrap 源。同样，`postbuild`步骤让我们可以将构建的自定义主题提交到源代码库中。
 
 接下来，重新构建 Bootstrap：
 
-```js\1
+```
 
 While that's building, let's modify `notes/app.mjs` to mount the build directory:
 
-```js\1
+```
 
 我们所做的是从`node_modules`中的 Bootstrap 配置切换到我们刚在`theme`目录中构建的内容。
 
@@ -520,11 +520,11 @@ While that's building, let's modify `notes/app.mjs` to mount the build directory
 
 要更改按钮，在`views/index.hbs`中进行以下更改：
 
-```js\1
+```
 
 Make a similar change in `views/noteview.hbs`:
 
-```js\1
+```
 
 很酷，我们现在可以按自己的意愿重新设计 Bootstrap 的颜色方案。不要向您的用户体验团队展示这一点，因为他们会大发雷霆。我们这样做是为了证明我们可以编辑`_custom.scss`并改变 Bootstrap 主题。
 
@@ -536,23 +536,23 @@ Make a similar change in `views/noteview.hbs`:
 
 让我们使用 Bootswatch 的**Minty**主题来探索所需的更改。您可以从网站下载主题，或者将以下内容添加到`package.json`的`scripts`部分：
 
-```js\1
+```
 
 This will download the prebuilt CSS files for our chosen theme. In passing, notice that the Bootswatch website offers `_variables.scss` and `_bootswatch.scss` files, which should be usable with a workflow similar to what we implemented in the previous section. The GitHub repository matching the Bootswatch website has a complete build procedure for building custom themes.
 
 Perform the download with the following command:
 
-```js\1
+```
 
 在`app.mjs`中，我们需要更改 Bootstrap 挂载点，分别挂载 JavaScript 和 CSS 文件。使用以下内容：
 
-```js\1
+```
 
 Instead of one mount for `/vendor/bootstrap`, we now have two mounts for each of the subdirectories. While the Bootswatch team provides `bootstrap.css` and `bootstrap.min.css`, they do not provide the JavaScript source. Therefore, we use the `/vendor/bootstrap/css` mount point to access the CSS files you downloaded from the theme provider, and the `/vendor/bootstrap/js` mount point to access the JavaScript files in the Bootstrap npm package.
 
 Because Minty is a light-colored theme, the buttons now need to use the dark style. We had earlier changed the buttons to use a light style because of the dark background. We must now switch from `btn-outline-light` back to `btn-outline-dark`. In `partials/header.hbs`, the color scheme requires a change in the `navbar` content:
 
-```js\1
+```
 
 我们选择了`text-dark`和`btn-dark`类来提供一些与背景的对比。
 

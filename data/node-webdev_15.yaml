@@ -2402,11 +2402,11 @@
   prefs: []
   type: TYPE_NORMAL
   zh: 这是由`docker-swarm/docker-compose.yml`中的以下设置引起的：
-- en: '```js\1'
+- en: '```js'
   id: totrans-353
   prefs: []
   type: TYPE_NORMAL
-  zh: '```js\1'
+  zh: '```js'
 - en: This says to publish port `80` and to map it to port `3000` on the containers.
   id: totrans-354
   prefs: []
