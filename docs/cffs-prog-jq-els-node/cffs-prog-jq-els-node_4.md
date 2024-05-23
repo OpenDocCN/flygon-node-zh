@@ -1,4 +1,4 @@
-# 第四章。CoffeeScript 和 Rails
+# 第四章：CoffeeScript 和 Rails
 
 Ruby on Rails 是一个于 2004 年出现的 Web 框架。它是由 David Heinemeier Hansson 编写的，并从**Basecamp**中提取出来，这是他为他的公司**37signals**用 Ruby 编写的项目管理 Web 应用程序。
 

@@ -1,4 +1,4 @@
-# 第七章：*第七章*：学习 Redux 和 React Router
+# 第七章：学习 Redux 和 React Router
 
 在本章中，我们将学习 Redux 和 React Router。Redux 仍然是管理 React 应用程序中共享的全局状态的最常见方法。使用 Redux 全局状态，我们可以减少大量样板代码并简化应用程序。React Router 也是管理客户端 URL 路由的最流行框架。客户端 URL 路由允许 SPA 应用程序以用户期望的经典样式 Web 应用程序的方式行为。这两种技术对于构建外观和感觉像标准 Web 应用程序的 SPA 应用程序是必不可少的。
 

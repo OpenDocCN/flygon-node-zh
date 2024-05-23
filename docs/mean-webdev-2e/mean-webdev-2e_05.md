@@ -1,4 +1,4 @@
-# 第五章。Mongoose 简介
+# 第五章：Mongoose 简介
 
 Mongoose 是一个强大的 Node.js ODM 模块，为您的 Express 应用程序添加了 MongoDB 支持。它使用模式来对实体进行建模，提供预定义验证以及自定义验证，允许您定义虚拟属性，并使用中间件钩子来拦截操作。Mongoose 的设计目标是弥合 MongoDB 无模式方法与现实世界应用程序开发要求之间的差距。在本章中，您将了解 Mongoose 的以下基本特性：
 

@@ -1,4 +1,4 @@
-# 第七章：*第七章*：从 Node-RED 调用 Web API
+# 第七章：从 Node-RED 调用 Web API
 
 在本章中，让我们从 Node-RED 调用 Web API。基本上，在 Node-RED 中，处理是根据创建的流程进行的，但连接处理的是 JSON 数据。从这个意义上说，它与 Web API 非常兼容。
 

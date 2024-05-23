@@ -1,4 +1,4 @@
-# 第一章。使用 Zombie.js 入门
+# 第一章：使用 Zombie.js 入门
 
 > "Zombie.js 是一个轻量级的框架，用于在模拟环境中测试客户端 JavaScript 代码。无需浏览器。"
 

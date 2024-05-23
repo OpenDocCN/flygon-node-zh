@@ -1,4 +1,4 @@
-# 第十五章。使用 Angular Universal 进行服务器端渲染
+# 第十五章：使用 Angular Universal 进行服务器端渲染
 
 如果您对用于客户端应用程序开发的 Angular 平台不熟悉，值得一看。Nest.js 与 Angular 有着独特的共生关系，因为它们都是用 TypeScript 编写的。这允许在 Nest.js 服务器和 Angular 应用程序之间进行一些有趣的代码共享，因为 Angular 和 Nest.js 都使用 TypeScript，可以在两者之间创建一个共享的包中的类。然后可以将这些类包含在任一应用程序中，并帮助保持在客户端和服务器之间通过 HTTP 请求发送和接收的对象一致。当我们引入 Angular Universal 时，这种关系被提升到另一个层次。Angular Universal 是一种技术，允许在服务器上预渲染您的 Angular 应用程序。这有许多好处，比如：
 

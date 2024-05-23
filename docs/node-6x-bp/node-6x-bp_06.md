@@ -1,4 +1,4 @@
-# 第六章。使用 Restful API 和 Loopback.io 构建客户反馈应用程序
+# 第六章：使用 Restful API 和 Loopback.io 构建客户反馈应用程序
 
 如前所述，Node.js 生态系统有各种框架用于开发强大的 Web 应用程序。在之前的章节中，我们使用了最流行的 Express 框架。
 

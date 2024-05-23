@@ -1,4 +1,4 @@
-# 第三章 安装 Zombie.js 和 Mocha
+# 第三章：安装 Zombie.js 和 Mocha
 
 在本章结束时，您应该能够为使用 Zombie.js 和 Mocha 的应用程序设置测试环境的基本结构。
 

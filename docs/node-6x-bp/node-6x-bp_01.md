@@ -1,4 +1,4 @@
-# 第一章。使用 MVC 设计模式构建类似 Twitter 的应用程序
+# 第一章：使用 MVC 设计模式构建类似 Twitter 的应用程序
 
 **模型** **视图** **控制器**（**MVC**）设计模式在八十年代在软件行业非常流行。这种模式帮助了许多工程师和公司一段时间内构建更好的软件，而且在 Node.js 的兴起和一些 Node 框架如**Express.js**（有关 Express.js 及其 API 的更多信息，请访问[`expressjs.com/`](http://expressjs.com/)）时仍然有用。
 

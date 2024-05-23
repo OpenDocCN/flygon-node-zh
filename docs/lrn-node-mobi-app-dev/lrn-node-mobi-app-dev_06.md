@@ -1,4 +1,4 @@
-# 第六章。介绍 Ionic
+# 第六章：介绍 Ionic
 
 Ionic 是一个免费且开源的移动优化 HTML、CSS 和 JavaScript 组件、手势和工具库，可用于构建高度交互式的移动应用程序。Ionic 围绕着广泛使用的**Syntactically Awesome Stylesheets**（**Sass**）和 AngularJS 技术构建，为具有 HTML、CSS 和 JavaScript 基础知识的 Web 开发人员提供了开发跨平台移动应用程序的机会。
 

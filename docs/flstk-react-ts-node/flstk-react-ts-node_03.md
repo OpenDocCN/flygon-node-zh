@@ -1,4 +1,4 @@
-# 第二章：*第二章*：探索 TypeScript
+# 第二章：探索 TypeScript
 
 在本章中，我们将深入了解 TypeScript 语言。我们将学习 TypeScript 的显式类型声明语法，以及 TypeScript 中许多内置类型及其用途。
 

@@ -1,4 +1,4 @@
-# 第十一章。OpenAPI（Swagger）规范
+# 第十一章：OpenAPI（Swagger）规范
 
 OpenAPI 规范，最著名的是其前身 Swagger，是一个 JSON 模式，可用于构建一组 RESTful API 的 JSON 或 YAML 定义。OpenAPI 本身是与语言无关的，这意味着底层 API 可以使用开发人员喜欢的任何语言、任何工具或框架来构建。OpenAPI 文档的唯一关注点是描述 API 端点的输入和输出等内容。在这方面，OpenAPI 文档充当了一个文档工具，使开发人员能够轻松地以广泛已知、理解和支持的格式描述其公共 API。
 

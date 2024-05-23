@@ -1,4 +1,4 @@
-# 第二章 运行 CoffeeScript
+# 第二章：运行 CoffeeScript
 
 在本章中，我们将讨论如何在开发环境中安装和运行 CoffeeScript。
 

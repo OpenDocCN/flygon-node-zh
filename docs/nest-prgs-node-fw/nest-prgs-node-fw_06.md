@@ -1,4 +1,4 @@
-# 第六章。Sequelize
+# 第六章：Sequelize
 
 Sequelize 是一个基于承诺的 ORM，适用于 Node.js v4 及更高版本。这个 ORM 支持许多方言，比如：
 

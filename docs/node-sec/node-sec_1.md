@@ -1,4 +1,4 @@
-# 第一章。Node.js 简介
+# 第一章：Node.js 简介
 
 Node.js 已经开启了服务器端 JavaScript 的时代，这是客户端 JavaScript 在过去几年中经历的复兴的下一个逻辑步骤。虽然 Node.js 不是第一个服务器端 JavaScript 实现，但它肯定成为了最受欢迎的。通过利用 JavaScript 作为一种语言的最佳特性并培养一个充满活力的社区，Node.js 已经成为一个非常受欢迎的平台和框架，而且没有放缓的迹象。关于 Node 是什么的很好描述可以在[`nodejs.org/`](http://nodejs.org/)找到：
 

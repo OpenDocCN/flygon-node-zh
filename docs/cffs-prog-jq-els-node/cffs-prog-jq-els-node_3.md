@@ -1,4 +1,4 @@
-# 第三章。CoffeeScript 和 jQuery
+# 第三章：CoffeeScript 和 jQuery
 
 **jQuery**是一个跨浏览器兼容的库，旨在简化 HTML 应用程序开发人员的生活。它由 John Resig 于 2006 年首次发布，自那以后已成为世界上最流行的 JavaScript 库，并在数百万个网站中使用。
 

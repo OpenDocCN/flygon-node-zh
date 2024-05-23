@@ -1,4 +1,4 @@
-# 第十章。使用不仅仅是 JavaScript
+# 第十章：使用不仅仅是 JavaScript
 
 在整本书中，我们只使用了 JavaScript。嗯，它不就是叫 Node.js 吗？
 

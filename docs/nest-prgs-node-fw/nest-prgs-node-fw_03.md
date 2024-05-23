@@ -1,4 +1,4 @@
-# 第三章 Nest.js 认证
+# 第三章：Nest.js 认证
 
 Nest.js，在版本 5 中，`@nestjs/passport` 软件包允许您实现所需的认证策略。当然，您也可以使用 `passport` 手动执行此操作。
 

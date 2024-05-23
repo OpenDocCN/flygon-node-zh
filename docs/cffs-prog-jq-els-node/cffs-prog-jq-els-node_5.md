@@ -1,4 +1,4 @@
-# 第五章。CoffeeScript 和 Node.js
+# 第五章：CoffeeScript 和 Node.js
 
 Ryan Dahl 于 2009 年创建了 Node.js。他的目标是创建一个可以使用 JavaScript 编写高性能网络服务器应用程序的系统。当时，JavaScript 主要在浏览器中运行，因此需要一种在没有浏览器的情况下运行 JavaScript 的服务器端框架。Node 使用了 Google 的 V8 JavaScript 引擎，最初是为 Chrome 浏览器编写的，但由于它是一个独立的软件，因此可以在任何地方运行 JavaScript 代码。Node.js 允许您编写可以在服务器上执行的 JavaScript 代码。它可以充分利用您的操作系统、数据库和其他外部网络资源。
 

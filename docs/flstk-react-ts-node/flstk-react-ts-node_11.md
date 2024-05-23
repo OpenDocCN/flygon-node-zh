@@ -1,4 +1,4 @@
-# 第八章：*第八章*：学习使用 Node.js 和 Express 进行服务器端开发
+# 第八章：学习使用 Node.js 和 Express 进行服务器端开发
 
 在本章中，我们将学习有关 Node 和 Express 的知识。我们将了解 Node 如何帮助我们创建高性能的 Web 服务。我们还将了解 Node 和 Express 之间的关系以及如何将它们一起使用来构建我们的 Web API。
 

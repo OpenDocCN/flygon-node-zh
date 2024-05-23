@@ -1,4 +1,4 @@
-# 第十章：*第十章*：使用 TypeScript 和 GraphQL 依赖项设置 Express 项目
+# 第十章：使用 TypeScript 和 GraphQL 依赖项设置 Express 项目
 
 学习现代 JavaScript 编程的最大障碍之一是庞大的包和依赖项数量。尝试为项目选择正确的一组包可能会让人不知所措。在本章中，我们将学习如何设置一个配置良好的 TypeScript、Express 和 GraphQL 项目。我们将看到哪些依赖项受欢迎，以及我们如何通过使用它们来使我们的项目受益。
 

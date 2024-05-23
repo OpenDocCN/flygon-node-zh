@@ -1,4 +1,4 @@
-# 第八章。使用 Keystone CMS 创建博客
+# 第八章：使用 Keystone CMS 创建博客
 
 在本章中，我们讨论了完全使用 Node.js 制作的 CMS，称为**Keystone**的用法。
 

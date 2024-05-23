@@ -1,4 +1,4 @@
-# 第五章。超越 AJAX：使用 WebSocket
+# 第五章：超越 AJAX：使用 WebSocket
 
 在本章中，我们将涵盖：
 

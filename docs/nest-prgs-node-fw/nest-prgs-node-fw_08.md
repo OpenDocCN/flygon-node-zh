@@ -1,4 +1,4 @@
-# 第八章。Web 套接字
+# 第八章：Web 套接字
 
 正如您所见，Nest.js 通过`@nestjs/websockets`包提供了一种在应用程序中使用 Web 套接字的方法。此外，在框架内使用`Adapter`允许您实现所需的套接字库。默认情况下，Nest.js 自带适配器，允许您使用`socket.io`，这是一个众所周知的 Web 套接字库。
 

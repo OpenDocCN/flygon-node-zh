@@ -1,4 +1,4 @@
-# 第一章 为什么使用 CoffeeScript？
+# 第一章：为什么使用 CoffeeScript？
 
 CoffeeScript 编译成 JavaScript，并且紧密遵循其习惯用法。完全可以将任何 CoffeeScript 代码重写为 JavaScript，它们看起来并不会有很大的不同。那么为什么要使用 CoffeeScript 呢？
 

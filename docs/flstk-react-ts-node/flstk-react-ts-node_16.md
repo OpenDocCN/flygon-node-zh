@@ -1,4 +1,4 @@
-# 第十三章：*第十三章*：使用 Express 和 Redis 设置会话状态。
+# 第十三章：使用 Express 和 Redis 设置会话状态。
 
 在本章中，我们将学习如何使用 Express 和 Redis 数据存储创建会话状态。Redis 是最流行的内存数据存储之一。它被 Twitter、GitHub、Stack Overflow、Instagram 和 Airbnb 等公司使用。我们将使用 Express 和 Redis 来创建我们的会话状态，这将成为我们应用程序身份验证功能的基础。
 

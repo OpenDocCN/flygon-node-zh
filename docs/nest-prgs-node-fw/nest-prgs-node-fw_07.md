@@ -1,4 +1,4 @@
-# 第七章 Mongoose
+# 第七章：Mongoose
 
 Mongoose 是本书中将要介绍的第三个也是最后一个数据库映射工具。它是 JavaScript 世界中最知名的 MongoDB 映射工具。
 
