@@ -1,3 +1,4 @@
++   [NodeJS 开发学习手册](README.md)
 +   [前言](lrn-node-dev_00.md)
 +   [第一章：设置](lrn-node-dev_01.md)
 +   [第二章：Node 基础-第一部分](lrn-node-dev_02.md)

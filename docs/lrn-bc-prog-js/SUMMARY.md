@@ -1,3 +1,4 @@
++   [JavaScript 区块链编程学习手册](README.md)
 +   [前言](lrn-bc-prog-js_0.md)
 +   [第一章：设置项目](lrn-bc-prog-js_1.md)
 +   [第二章：构建区块链](lrn-bc-prog-js_2.md)
