@@ -1,3 +1,4 @@
++   [现代 JavaScript Web 开发秘籍](README.md)
 +   [前言](mod-js-webdev-cb_00.md)
 +   [第一章：使用 JavaScript 开发工具](mod-js-webdev-cb_01.md)
 +   [第二章：使用现代 JavaScript 特性](mod-js-webdev-cb_02.md)
