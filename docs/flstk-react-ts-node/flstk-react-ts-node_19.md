@@ -2015,7 +2015,51 @@ public thread: Thread
 
 1.  现在，如果我们创建了一些`ThreadItem`帖子，我们应该会看到类似这样的东西：
 
-![图 16.9 - 提交的 ThreadItem 响应图 16.9 - 提交的 ThreadItem 响应这就是 Thread 路由屏幕的全部内容。我们几乎完成了，到目前为止你做得非常出色。我们已经涵盖了很多材料和代码，以达到这个阶段。你应该为自己的进步感到很棒。我们还有一个部分要完成，然后我们就完成了我们的应用程序！我们需要配置的最后一项是`RightMenu`。在这个菜单中，我们将列出最多三个顶级 ThreadCategories，根据每个`ThreadCategory`所归属的 Threads 的数量。这将涉及一个更长的多部分查询，是一个很好的练习：1.  首先，我们需要在`typeDefs`文件中添加一个名为`CategoryThread`的新类型，就像这样：```ts    type CategoryThread {        threadId: ID!        categoryId: ID!        categoryName: String!        title: String!        titleCreatedOn: Date!      }    ```请注意，`titleCreatedOn`只是用于检查排序。我们不会在客户端代码中使用它。1.  现在，在我们的存储库文件夹中添加一个名为`CategoryThread.ts`的新模型，并添加以下代码。请注意，这个类不会成为我们数据库中的实体。相反，它将是一个聚合类，将包含来自多个实体的字段：```ts    export default class CategoryThread {      constructor(        public threadId: string,        public categoryId: string,        public categoryName: string,        public title: string,        public titleCreatedOn: Date      ) {}    }    ```1.  现在，从源代码中获取代码，并创建`CategoryThreadRepo.ts`文件。从头开始，首先，我们通过使用`ThreadCategory.createQueryBuilder("threadCategory")`从数据库中获取`ThreadCategory`数据进行了初始查询。请注意，我们还包括了与 Threads 表的关系。现在，我们将对查询进行后处理，以获得我们想要的结果。我们没有在 TypeORM 查询中进行此工作，因为对于更复杂的排序和过滤，TypeORM 有时很难处理。使用标准的 JavaScript 将更容易地得到我们需要的内容。在第 14 行调用`categories.sort`时，我们根据每个`ThreadCategory`包含的 Thread 记录数量进行降序排序。然后，我们只取结果的前三条记录。然后，我们将获取的结果按照`createdOn`时间戳的降序对实际的 Thread 记录进行排序。通过这样做，我们最多会得到每个类别的三条 Thread 记录，按照它们的`createdOn`时间戳排序。1.  现在，让我们使用 GraphQL Playground 进行测试：![图 16.10 – 获取热门分类主题排序结果](img/Figure_16.10_B15508.jpg)
+![图 16.9 - 提交的 ThreadItem 响应图](img/Figure_16.09_B15508.jpg)
+
+这就是 Thread 路由屏幕的全部内容。我们几乎完成了，到目前为止你做得非常出色。我们已经涵盖了很多材料和代码，以达到这个阶段。你应该为自己的进步感到很棒。我们还有一个部分要完成，然后我们就完成了我们的应用程序！
+
+我们需要配置的最后一项是`RightMenu`。在这个菜单中，我们将列出最多三个顶级 ThreadCategories，根据每个`ThreadCategory`所归属的 Threads 的数量。这将涉及一个更长的多部分查询，是一个很好的练习：
+
+1.  首先，我们需要在`typeDefs`文件中添加一个名为`CategoryThread`的新类型，就像这样：
+
+```ts
+    type CategoryThread {        
+        threadId: ID!        
+        categoryId: ID!        
+        categoryName: String!        
+        title: String!        
+        titleCreatedOn: Date!      
+    }    
+```
+
+请注意，`titleCreatedOn`只是用于检查排序。我们不会在客户端代码中使用它。
+
+1.  现在，在我们的存储库文件夹中添加一个名为`CategoryThread.ts`的新模型，并添加以下代码。请注意，这个类不会成为我们数据库中的实体。相反，它将是一个聚合类，将包含来自多个实体的字段：
+
+```ts
+    export default class CategoryThread {      
+        constructor(        
+            public threadId: string,        
+            public categoryId: string,        
+            public categoryName: string,        
+            public title: string,        
+            public titleCreatedOn: Date      
+        ) {}    
+    }    
+```
+
+1.  现在，从源代码中获取代码，并创建`CategoryThreadRepo.ts`文件。从头开始，首先，我们通过使用`ThreadCategory.createQueryBuilder("threadCategory")`从数据库中获取`ThreadCategory`数据进行了初始查询。请注意，我们还包括了与 Threads 表的关系。
+
+现在，我们将对查询进行后处理，以获得我们想要的结果。我们没有在 TypeORM 查询中进行此工作，因为对于更复杂的排序和过滤，TypeORM 有时很难处理。使用标准的 JavaScript 将更容易地得到我们需要的内容。
+
+在第 14 行调用`categories.sort`时，我们根据每个`ThreadCategory`包含的 Thread 记录数量进行降序排序。然后，我们只取结果的前三条记录。然后，我们将获取的结果按照`createdOn`时间戳的降序对实际的 Thread 记录进行排序。
+
+通过这样做，我们最多会得到每个类别的三条 Thread 记录，按照它们的`createdOn`时间戳排序。
+
+1.  现在，让我们使用 GraphQL Playground 进行测试：
+
+![图 16.10 – 获取热门分类主题排序结果](img/Figure_16.10_B15508.jpg)
 
 图 16.10 – 获取热门分类主题排序结果
 
