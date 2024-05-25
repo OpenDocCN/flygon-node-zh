@@ -4,7 +4,6 @@
 +   [跨平台桌面应用开发](docs/dev-msvc-node/README.md)
 +   [NodeJS 微服务开发](docs/flstk-dev-vue-node/README.md)
 +   [React TypeScript Node 全栈开发](docs/flstk-react-ts-node/README.md)
-+   [JavaScript 区块链编程学习手册](docs/lrn-bc-prog-js/README.md)
 +   [NodeJS 开发学习手册](docs/lrn-node-dev/README.md)
 +   [NodeJS 移动应用开发学习手册](docs/lrn-node-mobi-app-dev/README.md)
 +   [NodeJS 移动应用开发学习手册](docs/mean-qk-st-gd/README.md)
